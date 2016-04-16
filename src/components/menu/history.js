@@ -1,12 +1,12 @@
 import React from 'react';
-import lang from '../../lang.js';
+import lang from '../../lang';
 
 import ListItem from 'material-ui/lib/lists/list-item';
 
 
-import Actions from '../../actions/actions.js';
+import Actions from '../../actions/actions';
 
-import SimpleList from '../common/list.jsx';
+import SimpleList from '../common/list';
 
 
 const History = React.createClass({

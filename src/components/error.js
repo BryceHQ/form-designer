@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Dialog from 'material-ui/lib/dialog';
 import RaisedButton from 'material-ui/lib/raised-button';
 
-import Alert from './common/alert.jsx';
+import Alert from './common/alert';
 
 const styles = {
   actions: {

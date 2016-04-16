@@ -1,0 +1,36 @@
+.input {
+  background-color: @input-bg-color;
+  background-image: none;
+  border-radius: @border-radius-base;
+  border: 1px solid @input-border-color;
+  border-top-color: darken(@input-border-color, 4%);
+  border-bottom-color: lighten(@input-border-color, 4%);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  color: @text-color;
+  // font-size: @font-size-base;
+  line-height: 1.2;
+  height: @component-height;
+  padding: 0 @input-padding-horizontal;
+  // -webkit-appearance: none;
+  // -moz-appearance: none;
+
+  // states
+
+  &:hover {
+    border-color: @input-border-color-hover;
+    outline: 0;
+  }
+  &.focus,
+  &.is-focused,
+  &:focus {
+    border-color: @input-border-color-focus;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px fade(@input-border-color-focus, 10%);
+    // box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px fade(@input-border-color-focus, 33%);
+    outline: 0;
+  }
+
+  &.editable-text{
+    margin-bottom: 6px;
+    vertical-align: middle;
+  }
+}

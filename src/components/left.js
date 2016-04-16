@@ -4,16 +4,14 @@ import Drag from './draggable/Drag';
 import Alert from './common/alert';
 
 const styles = {
-  root: {
-    width: '200px',
-  }
+
 };
 
-const Left = React.createClass({
+const Center = React.createClass({
 
   render() {
     return (
-      <div style={styles.root}>
+      <div className="left" >
         <Drag uniqueKey="a">
           <input/>
         </Drag>
@@ -25,4 +23,4 @@ const Left = React.createClass({
   },
 });
 
-export default Left;
+export default Center;

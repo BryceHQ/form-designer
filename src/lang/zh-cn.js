@@ -1,5 +1,5 @@
 const lang = {
-  name: 'Web Presentation',
+  name: '表单设计器',
   sidebar: '浏览',
   menu: {
     "new": '新建',

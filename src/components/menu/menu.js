@@ -1,18 +1,17 @@
 import React from 'react';
-import lang from '../../lang.js';
+import lang from '../../lang';
 
 import ListItem from 'material-ui/lib/lists/list-item';
 import Colors from 'material-ui/lib/styles/colors';
 
-import history from '../../history.js';
+import history from '../../history';
 
+import Actions from '../../actions/actions';
 
-import Actions from '../../actions/actions.js';
+import SelectableList from '../common/selectableList.js';
 
-import SelectableList from '../common/selectableList.jsx';
-
-import History from './history.jsx';
-import Open from './open.jsx';
+import History from './history.js';
+// import Open from './open.js';
 
 const styles = {
   list: {
@@ -32,8 +31,8 @@ const Menu = React.createClass({
 
   _renderBody(index) {
     switch (index) {
-      case 2:
-        return (<Open data = {this.props.recent} placeholder = {this.props.placeholder}/>);
+      // case 2:
+      //   return (<Open data = {this.props.recent} placeholder = {this.props.placeholder}/>);
 
       // case 3:
       //   return (<div style={{padding: '20px'}}>保存到本地...</div>);
@@ -55,8 +54,8 @@ const Menu = React.createClass({
         <SelectableList value = {current} onSelectedChange = {this._handleMenuSelect}
           style={styles.list}
         >
-          <ListItem value={1} primaryText={lang.menu.new} />
-          <ListItem value={2} primaryText={lang.menu.open} />
+          {/*<ListItem value={1} primaryText={lang.menu.new} />*/}
+          {/*<ListItem value={2} primaryText={lang.menu.open} />*/}
           {/*<ListItem value={3} primaryText={lang.menu.saveAs} />*/}
           <ListItem value={4} primaryText={lang.menu.history} />
         </SelectableList>

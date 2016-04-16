@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import base64 from 'base-64';
+import base64 from 'base64-js';
 import _ from 'lodash';
 
 const Ajax = {
@@ -48,7 +48,7 @@ function errorHandle(options) {
 
     if ($.type(errorHeaderVal) === "string") {
       try {
-        serverError = JSON.parse(base64.decode(errorHeaderVal));
+        serverError = JSON.parse(base64.fromByteArray(errorHeaderVal));
       } catch (e) {}
 
       if (serverError) {

@@ -11,11 +11,13 @@ const LinkButton = React.createClass({
 		isActive: React.PropTypes.bool,
 		submit: React.PropTypes.bool,
 	},
+
 	getDefaultProps() {
 		return {
 			type: 'default'
 		};
 	},
+
 	render() {
 		// classes
 		var componentClass = classNames(

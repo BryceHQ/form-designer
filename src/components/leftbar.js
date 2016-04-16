@@ -1,16 +1,16 @@
 import React from 'react';
-import lang from '../lang.js';
+import lang from '../lang';
 
 import LeftNav from 'material-ui/lib/left-nav';
 import Avatar from 'material-ui/lib/avatar';
 import ListItem from 'material-ui/lib/lists/list-item';
 import Divider from 'material-ui/lib/divider';
 
-import Actions from '../actions/actions.js';
+import Actions from '../actions/actions';
 
-import MenuStore from '../stores/menuStore.js';
+import MenuStore from '../stores/menuStore';
 
-import Menu from './menu/menu.jsx';
+import Menu from './menu/menu';
 
 const styles = {
   avatarContainer: {
@@ -21,13 +21,13 @@ const styles = {
   root: {overflow: 'hidden'},
 };
 
-const Left = React.createClass({
+const LeftBar = React.createClass({
   getDefaultProps() {
     return {open: false};
   },
 
   render() {
-    let {open, menu, user} = this.props;
+    let {open, menu} = this.props;
 
     return (
       <LeftNav
@@ -38,10 +38,6 @@ const Left = React.createClass({
         openRight = {false}
         onRequestChange = {open => Actions.toggleLeft(open.open)}
       >
-        <div style={styles.avatarContainer}
-        >
-          <Avatar src={user.icon} style={styles.avatar}/>
-        </div>
         <Divider/>
 
         <Menu {...menu}/>
@@ -51,4 +47,4 @@ const Left = React.createClass({
 
 });
 
-export default Left;
+export default LeftBar;

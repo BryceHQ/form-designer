@@ -44,14 +44,17 @@
     "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
+    "base64-js": "^1.1.2",
     "classnames": "^2.2.3",
     "flux": "^2.1.1",
     "jquery": "^2.2.3",
+    "js-base64": "^2.1.9",
     "lodash": "^4.11.1",
     "material-ui": "^0.14.4",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
     "react-motion": "^0.4.2",
-    "react-router": "^2.2.2"
+    "react-router": "^2.2.2",
+    "react-tap-event-plugin": "^0.2.1"
   }
 }
