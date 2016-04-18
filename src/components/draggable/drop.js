@@ -1,18 +1,17 @@
 import React from 'react';
-import {Motion, spring} from 'react-motion';
 import _ from 'lodash';
+import classnames from 'classnames';
 
 import Colors from 'material-ui/lib/styles/colors';
 
-function clamp(n, min, max) {
-  return Math.max(Math.min(n, max), min);
-}
+import Actions from '../../actions/actions';
+import Constants from '../../constants/constants';
+import Store from '../../stores/store';
 
-const springConfig = {stiffness: 120, damping: 20};
 
 const Drop = React.createClass({
   propTypes: {
-    uniqueKey: React.PropTypes.string.isRequired,
+    // uniqueKey: React.PropTypes.string.isRequired,
   },
 
   getDefaultProps() {
@@ -22,97 +21,59 @@ const Drop = React.createClass({
 
   getInitialState() {
     return {
-      x: 0,
-      y: 0,
-      isPressed: false,
+      backgroundColor: 'white',
     };
   },
 
-  componentDidMount() {
-    window.addEventListener('touchmove', this._handleTouchMove);
-    window.addEventListener("touchend", this._handleMouseUp);
-    window.addEventListener('mousemove', this._handleMouseMove);
-    window.addEventListener("mouseup", this._handleMouseUp);
-  },
-
-  componentWillUnmount() {
-    window.removeEventListener('touchmove', this._handleTouchMove);
-    window.removeEventListener("touchend", this._handleMouseUp);
-    window.removeEventListener('mousemove', this._handleMouseMove);
-    window.removeEventListener("mouseup", this._handleMouseUp);
-  },
-
   render() {
-    const {children, uniqueKey} = this.props;
-    const {x, y, isPressed} = this.state;
-    const style = (isPressed) ?
-      {
-        scale: spring(1.05, springConfig),
-        shadow: spring(16, springConfig),
-        y: y,
-        x: x,
-      } : {
-        scale: spring(1, springConfig),
-        shadow: spring(1, springConfig),
-        y: spring( 0, springConfig),
-        x: spring( 0, springConfig),
-      };
+    const {children, className, style} = this.props;
+    const {backgroundColor} = this.state;
 
+    var newClass = classnames('drop', className);
+    var props = _.omit(this.props, ['className', 'target', 'row', 'col', 'style']);
+    var dropStyle = {
+      backgroundColor: backgroundColor
+    };
     return (
-      <Motion style={style} key={uniqueKey}>
-        {({scale, shadow, x, y}) =>
-          <div
-            onMouseDown={this._handleMouseDown}
-            onTouchStart={this._handleTouchStart}
-            style={{
-              boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
-              transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
-              WebkitTransform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
-              zIndex: isPressed ? 99 : null,
-            }}>
-            {children}
-          </div>
-        }
-      </Motion>
+      <div ref="target" {...props} className={newClass}
+        onDragOver ={this._handleDragOver}
+        onDrop={this._handleDrop}
+        onDragLeave={this._handleDragLeave}
+        style={_.assign(dropStyle, style)}
+        >
+      </div>
     );
   },
 
-  _handleTouchStart(e) {
-    this._handleMouseDown(e.touches[0]);
+  _handleDrop(event) {
+    this.setState({backgroundColor: 'white'});
+    if(Store.getData().mode === Constants.MODE.DRAG){
+      Actions.endDrag({
+        target: this.props.target,
+        parent: this.props.parent,
+        row: this.props.row,
+        col: this.props.col,
+      });
+    }
+    event.stopPropagation();
   },
 
-  _handleTouchMove(e) {
-    if(!this.state.isPressed) return;
-    e.preventDefault();
-    this._handleMove(e.touches[0]);
+  _handleDragOver(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if(this.state.backgroundColor === 'white'){
+      this.setState({backgroundColor: Colors.lime100});
+    }
   },
 
-  _handleMouseDown({pageX, pageY}) {
-    this._startX = pageX;
-    this._startY = pageY;
-    this.setState({
-      x: 0,
-      y: 0,
-      isPressed: true,
-    });
-
+  _handleDragEnter() {
+    if(Store.getData().mode === Constants.MODE.DRAG && this.state.backgroundColor === 'white'){
+      this.setState({backgroundColor: Colors.lime100});
+    }
   },
-
-  _handleMouseMove(e) {
-    if(!this.state.isPressed) return;
-    e.preventDefault();
-    this._handleMove(e);
-  },
-
-  _handleMove({pageX, pageY}) {
-    this.setState({x: pageX - this._startX, y: pageY - this._startY});
-  },
-
-  _handleMouseUp() {
-    if(this.state.isPressed === true){
-      this.setState({isPressed: false, x: 0, y: 0});
-      this._startX = 0;
-      this._startY = 0;
+  _handleDragLeave() {
+    if(this.state.backgroundColor !== 'white'){
+      this.setState({backgroundColor: 'white'});
     }
   },
 });

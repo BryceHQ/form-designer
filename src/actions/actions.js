@@ -2,29 +2,22 @@ import Dispatcher from '../dispatcher/dispatcher.js';
 import Constants from '../constants/constants.js';
 
 const Action = {
-  //---------------user------------------
-  //sign
-  signIn(data) {
-    if(!data) return;
+  //---------------form------------------
+  //Drag
+  startDrag(data) {
     Dispatcher.dispatch({
-      actionType: Constants.SIGN_IN,
+      actionType: Constants.START_DRAG,
       data: data,
     });
   },
 
-  logout() {
+  endDrag(data) {
     Dispatcher.dispatch({
-      actionType: Constants.LOGOUT,
-    });
-  },
-
-  updateUser(data) {
-    if(!data) return;
-    Dispatcher.dispatch({
-      actionType: Constants.UPDATE_USER,
+      actionType: Constants.END_DRAG,
       data: data,
     });
   },
+
 
   //---------------presentation------------------
   //add
@@ -56,24 +49,16 @@ const Action = {
     });
   },
 
-  transitionChange(transition) {
-    Dispatcher.dispatch({
-      actionType: Constants.TRANSITION_CHANGE,
-      data: transition,
-    });
-  },
-
-  duangChange(duang) {
-    Dispatcher.dispatch({
-      actionType: Constants.DUANG_CHANGE,
-      data: duang,
-    });
-  },
-
   titleChange(title) {
     Dispatcher.dispatch({
       actionType: Constants.TITLE_CHANGE,
       data: title || '',
+    });
+  },
+
+  valueChange() {
+    Dispatcher.dispatch({
+      actionType: Constants.VALUE_CHANGE,
     });
   },
 
@@ -84,17 +69,10 @@ const Action = {
     });
   },
 
-  toggleRight(data) {
+  toggleRight(open, data) {
     Dispatcher.dispatch({
       actionType: Constants.TOGGLE_RIGHT,
-      data: data,
-    });
-  },
-
-  //fullscreen
-  toggleFullscreen() {
-    Dispatcher.dispatch({
-      actionType: Constants.TOGGLE_FULLSCREEN,
+      data: {open: open, data: data},
     });
   },
 
@@ -103,53 +81,6 @@ const Action = {
     Dispatcher.dispatch({
       actionType: Constants.REINSERT,
       data: {from: from, to: to},
-    });
-  },
-  selectSlide(index) {
-    Dispatcher.dispatch({
-      actionType: Constants.SELECT_SLIDE,
-      data: index,
-    });
-  },
-  addSlide() {
-    Dispatcher.dispatch({
-      actionType: Constants.ADD_SLIDE,
-    });
-  },
-  removeSlide() {
-    Dispatcher.dispatch({
-      actionType: Constants.REMOVE_SLIDE,
-    });
-  },
-
-  //slide
-  slide: {
-    next() {
-      Dispatcher.dispatch({
-        actionType: Constants.SLIDE.NEXT
-      });
-    },
-    pre() {
-      Dispatcher.dispatch({
-        actionType: Constants.SLIDE.PRE
-      });
-    },
-  },
-
-  //---------------upload------------------
-  setBackground(url){
-    if(!url) return;
-    Dispatcher.dispatch({
-      actionType: Constants.SET_BACKGROUND,
-      data: url,
-    });
-  },
-
-  setDefaultBackground(url){
-    if(!url) return;
-    Dispatcher.dispatch({
-      actionType: Constants.SET_DEFAULT_BACKGROUND,
-      data: url,
     });
   },
 

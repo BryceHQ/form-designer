@@ -18,10 +18,10 @@ import Constants from '../constants/constants';
 import AppBar from './appbar';
 import LeftBar from './leftbar';
 import Toolbar from './toolbar';
-import Center from './center';
+import Main from './main';
 import ErrorDialog from './error';
 
-const Main = React.createClass({
+const App = React.createClass({
   getInitialState() {
     return Store.getData();
   },
@@ -38,8 +38,7 @@ const Main = React.createClass({
   },
 
   render() {
-    let {presentation, menu, user, bottomMessage, error} = this.state;
-    let {current, mode, leftOpen, rightOpen, title, loading, background} = presentation;
+    let {form, mode, leftOpen, rightOpen, rightData, title, loading, menu, bottomMessage, error} = this.state;
     let snackbar = (
       <Snackbar
         open={!!bottomMessage}
@@ -64,7 +63,7 @@ const Main = React.createClass({
       );
     } else{
       center = (
-        <Center/>
+        <Main data={form} mode={mode} rightOpen={rightOpen} leftOpen={leftOpen} rightData={rightData}/>
       );
     }
 
@@ -85,4 +84,4 @@ const Main = React.createClass({
   },
 });
 
-export default Main;
+export default App;

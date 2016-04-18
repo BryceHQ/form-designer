@@ -8,19 +8,100 @@ import lang from '../lang.js';
 
 import helper from '../helper.js';
 
-import userStore from './userStore.js';
-import presentationStore from './presentationStore.js';
 import menuStore from './menuStore.js';
 
 const CHANGE_EVENT = 'change';
+const MODE = Constants.MODE;
 
 let _config = {};
 
 let _data = {
-  presentation: presentationStore.data,
-  user: userStore.data,
+  leftOpen: false,
+  rightOpen: false,
+  rightData: null,
+  loading: false,
+  mode: MODE.NORMAL,
+  bottomMessage: null,
+  error: null,
   menu: menuStore.data,
+  form: {
+    name: 'Form',
+    children: [],
+  },
 };
+
+let _drag = {};
+
+/*
+* 对当前的target进行转换
+*/
+function getTarget(target, name, attrs) {
+  if(target.name === name) return _.assign({}, target);
+  // Row的child一定是Col
+  if(name === 'Col' && target.name === 'Row'){
+    return target.children;
+  }
+  return _.assign({name: name}, {children: [target], attributes: attrs});
+}
+
+/*
+* 特殊的array splice方法，values可以为数组。
+*/
+function splice(array, index, deleteCount, values){
+  if(values.length){
+    var args = [index, deleteCount];
+    args = args.concat(values);
+    Array.prototype.splice.apply(array, args);
+    return;
+  }
+  array.splice(index, deleteCount, values);
+}
+
+/*
+* 当row的children中为1时，直接移除该row
+*/
+function removeChild(target, index, parentIndex){
+  if(!target)return;
+  var array = target.children;
+  if(array.length === 1){
+    _data.form.children.splice(parentIndex, 1);
+    return;
+  }
+  array.splice(index, 1);
+}
+
+function endDrag({target, parent, row, col}){
+  if(!_drag.target) return;
+
+  var inner = typeof _drag.col === 'number';
+
+  //将某个Row拖拽到它自己上，直接返回
+  var rowObj = inner ? _drag.parent : _drag.target;
+  if(row === _drag.row && typeof row !== 'undefined' && rowObj.children.length === 1) return;
+
+  //target Col
+  if(typeof col === 'number'){
+    removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
+    splice(parent.children, col, 0, getTarget(_drag.target, 'Col', { basis: '20%' }));
+  }
+  //target row
+  else {
+    removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
+    if(!inner && parent){
+      target = parent;
+    }
+    if(typeof row === 'number'){
+      if(inner){
+        splice(target.children, row, 0, getTarget(_drag.target, 'Col'));
+      } else {
+        splice(target.children, row, 0, getTarget(_drag.target, 'Row'));
+      }
+    } else {
+      target.children.push(getTarget(_drag.target, 'Row'));
+    }
+  }
+
+}
 
 function setMessage(message){
   _data.bottomMessage = message;
@@ -44,9 +125,6 @@ const Store = _.assign({}, EventEmitter.prototype, {
     if(config){
       _config = config;
       // init other store
-      if(_config.user){
-        userStore.init(_config.user);
-      }
     }
   },
 
@@ -60,20 +138,7 @@ const Store = _.assign({}, EventEmitter.prototype, {
   },
 
   getData(fileId) {
-    if(fileId){
-      presentationStore.get(fileId, _callback);
-      menuStore.reset();
-      Store.emitChange();
-    }
     return _data;
-  },
-
-  getUser() {
-    return userStore.data;
-  },
-
-  isAuthenticated() {
-    return userStore.data.isAuthenticated;
   },
 
   setMessage: setMessage,
@@ -95,23 +160,22 @@ const Store = _.assign({}, EventEmitter.prototype, {
 // Register callback to handle all updates
 Dispatcher.register((action) => {
   switch (action.actionType) {
-    //---------------user------------------
-    case Constants.SIGN_IN:
-      userStore.signIn(action.data);
+    //---------------drag------------------
+    case Constants.START_DRAG:
+      _.assign(_drag, action.data);
+
+      _data.mode = MODE.DRAG;
       Store.emitChange();
       break;
 
-    case Constants.LOGOUT:
-      userStore.logout(_callback);
-      break;
+    case Constants.END_DRAG:
+      if(action.data !== false){
+        endDrag(action.data);
+      }
 
-    case Constants.UPDATE_USER:
-      userStore.update(action.data, _callback);
-      break;
+      _data.mode = MODE.NORMAL;
 
-    //---------------presentation------------------
-    case Constants.ADD:
-      presentationStore.add(_callback);
+      Store.emitChange();
       break;
 
     case Constants.SAVE:
@@ -129,34 +193,24 @@ Dispatcher.register((action) => {
       presentationStore.contentChange(action.data, _callback);
       break;
 
-    case Constants.TRANSITION_CHANGE:
-      presentationStore.transitionChange(action.data, _callback);
-      Store.emitChange();
-      break;
-
-    case Constants.DUANG_CHANGE:
-      presentationStore.duangChange(action.data, _callback);
-      Store.emitChange();
-      break;
-
     case Constants.TITLE_CHANGE:
       presentationStore.titleChange(action.data, _callback);
       break;
 
+    case Constants.VALUE_CHANGE:
+      Store.emitChange();
+      break;
+
 
     case Constants.TOGGLE_LEFT:
-      presentationStore.toggleLeft(action.data);
+      _data.leftOpen = !_data.leftOpen;
       menuStore.select(null, _callback, true);
       Store.emitChange();
       break;
 
     case Constants.TOGGLE_RIGHT:
-      presentationStore.toggleRight(action.data);
-      Store.emitChange();
-      break;
-
-    case Constants.TOGGLE_FULLSCREEN:
-      presentationStore.fullscreen();
+      _data.rightOpen = !!action.data.open;
+      _data.rightData = action.data.data;
       Store.emitChange();
       break;
 
@@ -165,20 +219,6 @@ Dispatcher.register((action) => {
       presentationStore.reinsert(action.data, _callback);
       Store.emitChange();
       break;
-
-    case Constants.SELECT_SLIDE:
-      presentationStore.selectSlide(action.data);
-      Store.emitChange();
-      break;
-    case Constants.ADD_SLIDE:
-      presentationStore.addSlide(_callback);
-      Store.emitChange();
-      break;
-    case Constants.REMOVE_SLIDE:
-      presentationStore.removeSlide(_callback);
-      Store.emitChange();
-      break;
-
 
     //slide
     case Constants.SLIDE.NEXT:
@@ -194,21 +234,11 @@ Dispatcher.register((action) => {
       break;
 
 
-    //---------------upload------------------
-    case Constants.SET_BACKGROUND:
-      presentationStore.setBackground(action.data, _callback);
-      Store.emitChange();
-      break;
-    case Constants.SET_DEFAULT_BACKGROUND:
-      presentationStore.setDefaultBackground(action.data, _callback);
-      Store.emitChange();
-      break;
-
-
     //---------------menu------------------
     case Constants.MENU_SELECT:
       menuStore.select(action.data, _callback);
       break;
+
 
     //---------------message------------------
     case Constants.SET_MESSAGE:
@@ -247,7 +277,6 @@ var _callback = {
   },
 
   error(data) {
-    debuger;
     _data.error = data.message;
     Store.emitChange();
   },

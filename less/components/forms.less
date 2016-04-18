@@ -1,0 +1,239 @@
+//
+// Forms
+// ==============================
+
+
+
+
+// Labels
+// ------------------------------
+
+.FormLabel {
+	.transition( color @form-animation-duration );
+	color: @form-label-color;
+	display: inline-block;
+	margin: 0 @spacing-sm;
+}
+
+
+
+
+// Groups
+// ------------------------------
+
+.FormField {
+	margin-bottom: @spacing-md;
+	position: relative;
+}
+
+
+
+// Validation
+// ------------------------------
+
+
+// message
+.is-invalid{
+	& .FormLabel {
+			color: @app-danger;
+		}
+	&	.FormInput {
+			border-color: @app-danger;
+
+			&:focus {
+				border-color: @app-danger;
+				box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px fade(@app-danger, 10%);
+			}
+		}
+}
+
+.is-valid{
+	& .FormLabel {
+		color: @app-success;
+	}
+	& .FormInput {
+		border-color: @app-success;
+
+		&:focus {
+			border-color: @app-success;
+			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px fade(@app-success, 10%);
+		}
+	}
+}
+
+.form-validation {
+	.animation( formValidationMessage @form-animation-duration ease );
+	font-size: @font-size-xs;
+	margin-top: .5em;
+	overflow: hidden;
+
+	.is-invalid & {
+		color: @app-danger;
+	}
+	.is-valid & {
+		color: @app-success;
+	}
+}
+
+@-webkit-keyframes formValidationMessage {
+	from { max-height: 0; opacity: 0; }
+	to   { max-height: @font-size-base; opacity: 1; }
+}
+@keyframes formValidationMessage {
+	from { max-height: 0; opacity: 0; }
+	to   { max-height: @font-size-base; opacity: 1; }
+}
+
+
+
+
+// ==============================
+// Field Types
+// ==============================
+
+
+
+
+
+// Checkbox & Radio
+// ------------------------------
+
+.Checkbox,
+.Radio {
+	display: block;
+	margin-bottom: .5em;
+}
+
+// fix alignment with checkbox label
+// margin top is innefective on checkboxes
+.Checkbox__input {
+	position: relative;
+	top: -1px;
+}
+
+.Checkbox__label,
+.Radio__label {
+	margin-left: .5em;
+}
+
+.inline-controls > .Checkbox,
+.inline-controls > .Radio,
+.Checkbox--inline,
+.Radio--inline {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.Checkbox--disabled,
+.Radio--disabled {
+	color: @control-disabled-color;
+}
+
+@media (min-width: @screen-sm) {
+	.Checkbox,
+	.Radio {
+		line-height: @component-height;
+	}
+}
+
+
+
+
+// ==============================
+// Form Types
+// ==============================
+
+
+
+
+
+// Horizontal Form
+// ------------------------------
+
+// 1. ensure stacking on mobile
+// 2. add spacing above the element when it's stacked. no need to remove at
+//    higher break-points because it becomes a table cell, which aren't
+//    effected by margin
+
+.Form--horizontal {
+	.FormLabel {
+		display: block; // 1
+
+		&:not(:first-child) {
+			margin-top: @spacing-md; // 2
+		}
+	}
+}
+
+@media (min-width: @screen-sm) {
+	.Form--horizontal {
+		// Make the wrapper behave like a table
+		.FormField {
+			display: table;
+			table-layout: fixed;
+			width: 100%;
+
+			&.offset-absent-label {
+				padding-left: @form-label-width;
+			}
+		}
+
+		// Fix the label width to allow the field to stretch
+		.FormLabel {
+			display: table-cell;
+			line-height: @component-height;
+			margin-bottom: 0;
+			vertical-align: top;
+			width: @form-label-width;
+
+			&:not(:first-child) {
+				padding-left: 20px;
+			}
+		}
+
+		// reset styles when using rows inside .Form--horizontal
+		.FormRow > .FormField {
+			display: block;
+			margin-bottom: 0;
+			min-width: 0;
+
+			> .FormLabel {
+				display: block;
+			}
+
+			.FormInput {
+				margin: 0;
+				width: 100%;
+			}
+		}
+	}
+}
+
+
+
+// Inline Form
+// ------------------------------
+
+@media (min-width: @screen-sm) {
+	.Form--inline {
+		.Checkbox,
+		.Radio,
+		.FormField {
+			display: inline-block;
+			padding-left: .25em;
+			padding-right: .25em;
+			vertical-align: top;
+
+			&:first-child { padding-left: 0; }
+			&:last-child { padding-right: 0; }
+		}
+		.Checkbox,
+		.Radio {
+			line-height: 2.4em;
+			margin: 0 @input-padding-horizontal;
+		}
+		.FormLabel {
+			.u-hidden-visually();
+		}
+	}
+}

@@ -63,6 +63,7 @@ var menuStore = {
 
 //历史记录
 function history(callback){
+  return;
   var config = Store.getConfig();
   var presentation = Store.getData().presentation;
   if(config){
@@ -90,6 +91,7 @@ function history(callback){
 
 //最近的文件
 function recent(callback){
+  return;
   var config = Store.getConfig();
   var user = Store.getData().user;
   if(config){

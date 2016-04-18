@@ -13,13 +13,17 @@ import lang from '../lang.js';
 import Actions from '../actions/actions.js';
 import Constants from '../constants/constants.js';
 
+import theme from '../theme';
+let {spacing} = theme;
+
 /****************
 * RightTitle Component
 ****************/
+
 const styles = {
   root: {
-    height: Constants.APPBAR_HEIGHT,
-    minHeight: Constants.APPBAR_HEIGHT,
+    height: spacing.appbarHeight,
+    minHeight: spacing.appbarHeight,
     backgroundColor: Colors.blueGrey600,
   },
   btn: {
@@ -29,9 +33,10 @@ const styles = {
     margin: '0px 3px'
   },
   titleStyle: {
-    lineHeight: Constants.APPBAR_HEIGHT,
+    lineHeight: spacing.appbarHeight,
   },
 };
+
 const RightTitle = React.createClass({
   render() {
     return (
@@ -43,18 +48,6 @@ const RightTitle = React.createClass({
             onTouchTap = {this._handleToggleRight}>
             <IconChevronRight/>
           </IconButton>
-        }
-        iconElementRight = {
-          <div>
-            <IconButton tooltip = {lang.button.add} style = {styles.btn}
-              onTouchTap = {this._handleAdd}>
-              <IconAdd color={Colors.white}/>
-            </IconButton>
-            <IconButton tooltip = {lang.button.remove} style = {styles.btn}
-              onTouchTap = {this._handleRemove}>
-              <IconRemove color={Colors.white}/>
-            </IconButton>
-          </div>
         }
       />
     );

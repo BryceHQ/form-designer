@@ -110,7 +110,6 @@ const DraggableList = React.createClass({
                   }}>
                   <Markdown mode = "overview" content = {currentItem.content}
                   />
-                  {inkbar}
                 </div>
               }
             </Motion>

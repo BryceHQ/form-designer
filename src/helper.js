@@ -15,7 +15,11 @@ const helper = {
     if (d <= 30) return langTime.daysago(d || 0);
 
     return langTime.longago;
-  }
+  },
+  guid() {
+    return (+new Date() * 1e6 + Math.floor(Math.random() * 1e6)).toString(
+      36);
+  },
 };
 
 export default helper;
