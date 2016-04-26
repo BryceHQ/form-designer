@@ -34,12 +34,39 @@ const Kit = React.createClass({
           children: [{
             name: 'LabeledInput',
             attributes: {
+              name: '',
               label: '名称',
+              placeholder: '请输入...',
+              required: false,
+              requiredMessage: '该项为必填项',
+              rule: '',
+              invalidMessage: '请输入有效值',
               vertical: true,
               style: {
                 color: 'red',
               },
-            }
+              //内置属性，用来设置属性的特殊属性 editor, hidden
+              _options: {
+                required: {
+                  editor: {type: 'checkbox'},
+                },
+                vertical: {
+                  editor: {type: 'checkbox'},
+                },
+                rule: {
+                  editor: {
+                    type: 'combobox',
+                    options: [{text: '请选择', value: ''},{text:'数字和字母', value:'ASCII'}]
+                  }
+                },
+                requiredMessage: {
+                  hidden: {
+                    targetName: 'required',
+                    targetValues: true,
+                  }
+                }
+              },
+            },
           }]
         }}>
           <Alert type="info">input</Alert>
@@ -48,13 +75,32 @@ const Kit = React.createClass({
           name: 'Col',
           attributes: {basis: '20%'},
           children: [{
-            name: 'LabeledInput',
+            name: 'LabeledRadio',
             attributes: {
-              label: '名称'
-            }
+              name: '',
+              label: '名称',
+              vertical: true,
+              options: [{text: 'click me', value: 'me'}, {text: 'click she', value: 'she'}],
+              optionsVertical: true,
+              style: {
+                color: 'red',
+              },
+              //内置属性，用来设置属性的特殊属性 editor, hidden
+              _options: {
+                vertical: {
+                  editor: {type: 'checkbox'},
+                },
+                optionsVertical: {
+                  editor: {type: 'checkbox'},
+                },
+                style: {
+                  keyEditable: true,
+                }
+              },
+            },
           }]
         }}>
-          <Alert type="error">input</Alert>
+          <Alert type="error">radio</Alert>
         </Drag>
         <Drag mode={mode} target={{
           name: 'Col',

@@ -7,7 +7,9 @@ import React from 'react';
 // Checkbox = require './Checkbox'
 // Multicheckbox = require './Multicheckbox'
 
-import Textbox from '../common/textbox';
+import Textbox from '../common/editor/textbox';
+import Checkbox from '../common/editor/checkbox';
+import Combobox from '../common/editor/combobox';
 
 const Editor = React.createClass({
   getDefaultProps() {
@@ -18,10 +20,22 @@ const Editor = React.createClass({
 
   render() {
     var {type, value, className, onChange} = this.props;
+    var props = _.omit(this.props, ['type']);
 
-    return (
-      <Textbox {...this.props}/>
-    );
+    switch (type.toLowerCase()) {
+      case 'checkbox':
+        return (
+          <Checkbox {...props}/>
+        );
+      case 'combobox':
+        return (
+          <Combobox {...props}/>
+        );
+      default:
+        return (
+          <Textbox {...props}/>
+        );
+    }
 
   },
 });

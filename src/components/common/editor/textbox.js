@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
-import Validatable from '../mixins/validatable';
+import Validatable from '../../mixins/validatable';
 
 const styles = {
 	root: {
@@ -39,18 +39,21 @@ const Textbox = React.createClass({
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.value !== this.state.value){
 			var nextState = {value: nextProps.value};
-			this.validateValue(nextProps.value, nextState);
+			this._validateValue(nextProps.value, nextState);
 			this.setState(nextState);
+		}
+		if(nextProps.onChange !== this.props.onChange){
+			this._debouncedChange = _.debounce(this.props.onChange, 1000);
 		}
 	},
 
-	validateValue(value, nextState){
+	_validateValue(value, nextState){
 		var {rule} = this.props;
 		var valid, type = typeof rule;
 		if(type === 'function'){
 			valid = rule(value);
-		} else if(rule ==='string'){
-			valid = this.validate(rule, value);
+		} else if(type ==='string'){
+			valid = this._validate(rule, value);
 		}
 		if(typeof valid === 'boolean'){
 			nextState.isValid = valid;
@@ -63,9 +66,15 @@ const Textbox = React.createClass({
 	},
 
 	_handleChange(e) {
+		var flag;
 		var value = e.target.value;
+		if(this.props.onBeforeChange){
+			flag = this.props.onBeforeChange(value, this);
+		}
+		if(flag === false) return;
+
 		var nextState = {value};
-		this.validateValue(value, nextState);
+		this._validateValue(value, nextState);
 		if(this._debouncedChange){
 			this._debouncedChange(value, this.state.value);
 		}
@@ -73,7 +82,7 @@ const Textbox = React.createClass({
 		this.setState(nextState);
 
     if(this.props.owner && this.props.target){
-      this.props.owner[this.props.target] = value || '';
+      this.props.owner[this.props.target] = value;
     }
 	},
 
@@ -94,8 +103,9 @@ const Textbox = React.createClass({
 		let {noedit, multiline, className, style, required, placeholder, invalidMessage, requiredMessage} = this.props;
 		let {isValid, value} = this.state;
 		// classes
-		let newClass = classnames(
+		let componentClass = classnames(
 			{
+				'x-textbox': !noedit,
 				'FormInput-noedit': noedit,
 				'FormInput-noedit--multiline': noedit && multiline,
 				'FormInput': !noedit
@@ -138,7 +148,7 @@ const Textbox = React.createClass({
 
 		return (
 			<div className={rootClass} style={styles.root}>
-				<Element className={newClass} ref="input" value={value} placeholder={placeholder} onChange={this._handleChange}/>
+				<Element className={componentClass} ref="input" value={value} placeholder={placeholder} onChange={this._handleChange} style={style}/>
 				{requiredMessageElem}
 				{validationMessageElem}
 			</div>

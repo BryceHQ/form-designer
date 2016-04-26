@@ -16,7 +16,7 @@ const rules = {
 };
 
 const Validatable = {
-  validate(rule, value) {
+  _validate(rule, value) {
     if(rules[rule]){
       return rules[rule](value);
     }

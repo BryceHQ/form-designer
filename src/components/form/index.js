@@ -2,6 +2,7 @@ import Col from './col';
 import Row from './row';
 import Form from './form';
 import LabeledInput from './labeledInput';
+import LabeledRadio from './labeledRadio';
 
 import Alert from '../common/alert';
 
@@ -14,7 +15,8 @@ const form = {
   Col: Col,
   Row: Row,
 
-  LabeledInput: LabeledInput, 
+  LabeledInput: LabeledInput,
+  LabeledRadio: LabeledRadio,
 
   Alert: Alert,
   Drop: Drop,

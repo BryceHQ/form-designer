@@ -69,8 +69,8 @@ const Col = React.createClass({
 	_handleDoubleClick(event) {
 		//col 下面有且仅有一个child
 		var col = this.props.children[0].props.target;
-		var attrs = col.children[0].attributes;
-		Actions.toggleRight(true, attrs);
+
+		Actions.toggleRight(true, col.children[0].attributes);
 	},
 
 });

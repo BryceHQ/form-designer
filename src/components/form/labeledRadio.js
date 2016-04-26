@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
-import Textbox from '../common/editor/textbox';
+import Radio from '../common/editor/radio';
 
 const styles = {
 	root: {
@@ -10,27 +10,26 @@ const styles = {
 	}
 };
 
-const LabeledInput = React.createClass({
+const LabeledRadio = React.createClass({
 
 	propTypes: {
+		options: React.PropTypes.array,
 	},
 
 	getDefaultProps() {
 		return {
-			naem: '',
+			type: 'text',
+			name: '',
 			label: '名称',
-			placeholder: '请输入',
-			required: false,
-	    requiredMessage: '该项为必填项',
-	    rule: '',
-	    invalidMessage: '请输入有效值',
 	    value: '',
 			vertical: false,
+			optionsVertical: false,
+			options: [],
 		};
 	},
 
 	render() {
-		let {label, vertical, style} = this.props;
+		let {label, vertical, style, name, options, optionsVertical} = this.props;
 		let props = _.omit(this.props, ['label', 'vertical', 'style'])
 
 		let labelStyle = {};
@@ -44,13 +43,20 @@ const LabeledInput = React.createClass({
 			labelElem = <lable className="FormLabel" style={labelStyle}>{label}</lable>;
 		}
 
+		var radios = [];
+		options.forEach(function(opt, i){
+			radios.push(
+				<Radio name={name} label={opt.text} value={opt.value} inline={!optionsVertical} key={i}/>
+			);
+		});
+
 		return (
 			<div style={style}>
 				{labelElem}
-				<Textbox {...props} onChange={this.props.onChange}/>
+				{radios}
 			</div>
 		);
 	}
 });
 
-export default LabeledInput;
+export default LabeledRadio;

@@ -15,7 +15,8 @@ const styles = {
   root: {
     // top: spacing.appbarHeight,
     zIndex: 1000,
-    overflow: 'hidden',
+    overflowX: 'hidden',
+    overflowY: 'auto',
   },
   overlay: {
     backgroundColor: 'white',
@@ -32,6 +33,7 @@ const Right = React.createClass({
     let {open, options, mode, rightData} = this.props;
     return (
       <LeftNav
+        className="right"
         style = {styles.root}
         width = {spacing.rightWidth + 100}
         open = {open}

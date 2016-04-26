@@ -24,8 +24,7 @@ const Center = React.createClass({
   render() {
     let {rightOpen, data, mode, style} = this.props;
     return (
-      <Drop className="right" target={data} style={style}
-      >
+      <Drop className="form-container" target={data} style={style}>
         {parser(null, data, true, true)}
       </Drop>
     );
