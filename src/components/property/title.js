@@ -7,9 +7,11 @@ import IconButton from 'material-ui/lib/icon-button';
 import FlatButton from 'material-ui/lib/flat-button';
 
 import IconAdd from 'material-ui/lib/svg-icons/content/add';
-import IconRemove from 'material-ui/lib/svg-icons/content/remove';
+// import IconRemove from 'material-ui/lib/svg-icons/content/remove';
+import IconClear from 'material-ui/lib/svg-icons/content/clear';
+
 import IconArrowDown from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-down';
-import IconArrowUp from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-up';
+import IconArrowRight from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-right';
 
 const styles = {
   btn: {
@@ -18,6 +20,14 @@ const styles = {
     padding: '0px',
     margin: '0px 3px',
     verticalAlign: 'middle',
+  },
+  rightBtn: {
+    width: 18,
+    height: 18,
+    padding: '0px',
+    margin: '0px 3px',
+    verticalAlign: 'middle',
+    float: 'right',
   },
   label: {
     // width: '20px',
@@ -49,9 +59,6 @@ const Title = React.createClass({
     var {text, addable, collaped, removable, style} = this.props;
     var buttons = [];
     var index = 0;
-    if(typeof removable === 'undefined' || removable === null){
-      removable = addable;
-    }
 
     buttons.push(
       <FlatButton
@@ -63,7 +70,7 @@ const Title = React.createClass({
         iconStyle={styles.svg}
         onTouchTap={this._handleTouchTap}
         >
-        {this.props.collaped ? <IconArrowUp color={Colors.grey500} style={styles.svg}/> : <IconArrowDown color={Colors.grey500} style={styles.svg}/>}
+        {this.props.collaped ? <IconArrowRight color={Colors.grey500} style={styles.svg}/> : <IconArrowDown color={Colors.grey500} style={styles.svg}/>}
       </FlatButton>
     );
     if(!collaped){
@@ -71,7 +78,7 @@ const Title = React.createClass({
         buttons.push(
           <IconButton style={styles.btn} iconStyle={styles.svg}
             key={index++}
-            onTouchTap={this._handleAdd}>
+            onTouchTap={this.props.onAdd}>
             <IconAdd color={Colors.grey500}/>
           </IconButton>
         );
@@ -79,10 +86,10 @@ const Title = React.createClass({
 
       if(removable){
         buttons.push(
-          <IconButton style={styles.btn} iconStyle={styles.svg}
+          <IconButton style={styles.rightBtn} iconStyle={styles.svg}
             key={index++}
             onTouchTap={this._handleRemove}>
-            <IconRemove color={Colors.grey500} />
+            <IconClear color={Colors.grey500} />
           </IconButton>
         );
       }
@@ -95,12 +102,10 @@ const Title = React.createClass({
     );
   },
 
-  _handleAdd() {
-
-  },
-
   _handleRemove() {
-
+    if(this.props.onRemove){
+      this.props.onRemove(this.props.index);
+    }
   },
 
   _handleTouchTap(event){

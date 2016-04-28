@@ -31,7 +31,7 @@ const LabeledInput = React.createClass({
 
 	render() {
 		let {label, vertical, style} = this.props;
-		let props = _.omit(this.props, ['label', 'vertical', 'style'])
+		let props = _.omit(this.props, ['label', 'vertical', 'style']);
 
 		let labelStyle = {};
 		if(vertical){
@@ -47,10 +47,54 @@ const LabeledInput = React.createClass({
 		return (
 			<div style={style}>
 				{labelElem}
-				<Textbox {...props} onChange={this.props.onChange}/>
+				<Textbox {...props}/>
 			</div>
 		);
 	}
 });
 
 export default LabeledInput;
+
+const options = {
+	name: 'LabeledInput',
+	attributes: {
+		name: '',
+		label: '名称',
+		placeholder: '请输入...',
+		required: false,
+		requiredMessage: '该项为必填项',
+		rule: '',
+		invalidMessage: '请输入有效值',
+		vertical: false,
+		multiline: false,
+		style: {
+			color: 'red',
+		},
+		//内置属性，用来设置属性的特殊属性 editor, hidden
+		_options: {
+			required: {
+				editor: {type: 'checkbox'},
+			},
+			vertical: {
+				editor: {type: 'checkbox'},
+			},
+			multiline: {
+				editor: {type: 'checkbox'},
+			},
+			rule: {
+				editor: {
+					type: 'combobox',
+					options: [{text: '请选择', value: ''},{text:'数字和字母', value:'ASCII'}]
+				}
+			},
+			requiredMessage: {
+				hidden: {
+					targetName: 'required',
+					targetValues: true,
+				}
+			}
+		},
+	},
+};
+
+export {options};

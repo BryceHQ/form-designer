@@ -45,7 +45,6 @@ const CollapsableField = React.createClass({
   _isHidden(hidden, data){
     if(typeof hidden !== 'object') return hidden;
 
-
     for(var key in data){
       if(!data.hasOwnProperty(key)) continue;
       if(key === hidden.targetName){
@@ -59,64 +58,80 @@ const CollapsableField = React.createClass({
   },
 
   render() {
-    var {data, options, title, onAddChild, onRemoveChild, style, formatter, hiddenKeys} = this.props;
+    var {data, options, title, removable, style, formatter, hiddenKeys, onRemove} = this.props;
     var {collaped} = this.state;
 
     var elems = [];
-    if(!data){
-      return <Field/>;
-    }
+    if(!data) return (<Field/>);
 
     var index = 0;
 
     if(title){
       elems.push(
         <Title text = {title} key = {index++} style={styles.title}
-          data = {data}
-          addable = {options && options.addable}
-          removable = {options && options.removable}
-          collaped = {collaped}
-          onTouchTap = {this._handleClick}
+          index={this.props.index}
+          data={data}
+          addable={options && options.defaultChild}
+          removable={removable}
+          collaped={collaped}
+          onTouchTap={this._handleClick}
+          onAdd={this._handleAdd}
+          onRemove={onRemove || this._handleRemove}
         />
       );
     }
+
     var _options = data._options || {};
     //data = _.omit(data, this.props.hiddenKeys);
     var opt;
     if(!collaped){
-      for(var key in data){
-        if(!data.hasOwnProperty(key) || ~hiddenKeys.indexOf(key)) continue;
-        opt = _options[key];
-        if(typeof data[key] === 'object'){
+      if(_.isArray(data)){
+        var me = this;
+        data.forEach(function(item, i){
           elems.push(
-            <CollapsableField data = {data[key]} options={opt} key = {index++}
-              title = {formatter ? formatter(key) : key}
-              formatter = {this.props.formatter}
-              onChange = {this.handleChange}
-              onBeforeChange = {this.handleBeforeChange}
-              removable = {data.variableChildren}
-              onRemove = {this._onHandleRemove}
+            <CollapsableField data = {item} options={options && options.childOptions} key = {index++}
+              title={formatter ? formatter(options && options.childName) : options && options.childName}
+              removable={options && options.defaultChild}
+              index={i}
+              formatter={me.props.formatter}
+              onRemove={me._handleRemove}
               />
           );
-          continue;
-        }
-        if(this._isHidden(opt && opt.hidden, data) === true) continue;
+        });
+      } else {
+        for(var key in data){
+          if(!data.hasOwnProperty(key) || ~hiddenKeys.indexOf(key)) continue;
+          opt = _options[key];
+          if(typeof data[key] === 'object'){
+            elems.push(
+              <CollapsableField data={data[key]} options={opt} key={index++}
+                title={formatter ? formatter(key) : key}
+                index={key}
+                formatter={this.props.formatter}
+                />
+            );
+            continue;
+          }
+          if(this._isHidden(opt && opt.hidden, data) === true) continue;
 
-        elems.push(
-          <Field label={formatter ? formatter(key) : key} key = {index++}
-            editable={options && options.keyEditable}
-            owner={data}
-            >
-            <Editor
-              onChange = {this._handleChange}
-              autofocus = {data.autofocus}
-              {...(opt && opt.editor)}
-              owner = {data}
-              target = {key}
-              value = {data[key]}
-              />
-          </Field>
-        );
+          elems.push(
+            <Field label={formatter ? formatter(key) : key} key = {index++}
+              editable={options && options.keyEditable}
+              owner={data}
+              index={key}
+              onRemove={this._handleRemove}
+              >
+              <Editor
+                onChange={this._handleChange}
+                autofocus={data.autofocus}
+                {...(opt && opt.editor)}
+                owner={data}
+                target={key}
+                value={data[key]}
+                />
+            </Field>
+          );
+        }
       }
     }
 
@@ -130,11 +145,11 @@ const CollapsableField = React.createClass({
     );
   },
 
-  _onHandleAdd() {
-    Actions.addChild(this.props.data);
+  _handleAdd() {
+    Actions.addChild(this.props.data, this.props.options.defaultChild);
   },
 
-  _onHandleRemove(index) {
+  _handleRemove(index) {
     Actions.removeChild(this.props.data, index);
   },
 

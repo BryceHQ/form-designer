@@ -178,6 +178,30 @@ Dispatcher.register((action) => {
       Store.emitChange();
       break;
 
+    //----------property------------
+    case Constants.ADD_CHILD:
+      var target = action.data.parent;
+      var child = _.assign({}, action.data.child);
+      if(_.isArray(target)){
+        target.push(child);
+      } else {
+        _.assign(target, child);
+      }
+
+      Store.emitChange();
+      break;
+
+    case Constants.REMOVE_CHILD:
+      var {parent, index} = action.data;
+      if(_.isArray(parent)){
+        parent.splice(index, 1);
+      } else {
+        delete parent[index];
+      }
+
+      Store.emitChange();
+      break;
+
     case Constants.SAVE:
       presentationStore.save(_callback);
       break;

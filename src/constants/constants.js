@@ -4,6 +4,10 @@ const constants = {
   START_DRAG: 'START_DRAG',
   END_DRAG: 'END_DRAG',
 
+  //---------------property------------------
+  ADD_CHILD: 'ADD_CHILD',
+  REMOVE_CHILD: 'REMOVE_CHILD',
+
   //---------------presentation------------------
   ADD: 'ADD',
   SAVE: 'SAVE',

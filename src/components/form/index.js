@@ -1,8 +1,10 @@
 import Col from './col';
 import Row from './row';
 import Form from './form';
-import LabeledInput from './labeledInput';
-import LabeledRadio from './labeledRadio';
+import LabeledInput, {options as labeledInputOptions} from './labeledInput';
+import LabeledRadio, {options as labeledRadioOptions} from './labeledRadio';
+import LabeledCheckbox, {options as labeledCheckboxOptions} from './labeledCheckbox';
+import LabeledCombobox, {options as labeledComboboxOptions} from './labeledCombobox';
 
 import Alert from '../common/alert';
 
@@ -17,6 +19,8 @@ const form = {
 
   LabeledInput: LabeledInput,
   LabeledRadio: LabeledRadio,
+  LabeledCheckbox: LabeledCheckbox,
+  LabeledCombobox: LabeledCombobox,
 
   Alert: Alert,
   Drop: Drop,
@@ -25,3 +29,12 @@ const form = {
 };
 
 export default form;
+
+const options = {
+  labeledInput: labeledInputOptions,
+  labeledRadio: labeledRadioOptions,
+  labeledCheckbox: labeledCheckboxOptions,
+  labeledCombobox: labeledComboboxOptions,
+};
+
+export {options};

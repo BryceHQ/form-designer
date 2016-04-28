@@ -7,6 +7,7 @@ const Checkbox = React.createClass({
       return {
         on: true,
         off: false,
+        inline: true,
       };
     },
     getInitialState() {
@@ -62,18 +63,24 @@ const Checkbox = React.createClass({
 
 
     render() {
-      var {className, on} = this.props;
-      var componentClass = classnames('x-checkbox', className);
+      var {label, className, inline, on} = this.props;
+  		var componentClass = classnames('x-checkbox-container', className);
+  		var props = _.omit(this.props, 'className', 'label', 'inline', 'on', 'off');
+      var style = {
+        display: inline ? 'inline-block' : 'block',
+      };
 
       var value = this.state.value || '';
-      var props = _.omit(this.props, ['className', 'on', 'off']);
 
-      return (
-        <input {...props} className = {className} type="checkbox"
-          ref  = "input" checked = {value === on || value.toLowerCase() == on}
-          value = {value} onChange = {this._handleChange}/>
-      );
-
+  		return (
+  			<label className={componentClass} style={style}>
+  				<input {...props} type="checkbox" className="x-checkbox"
+            ref = "input"
+            checked = {value === on || value.toLowerCase() == on}
+            value = {value} onChange = {this._handleChange}/>
+  				{label && <span className="x-checkbox-label">{label}</span>}
+  			</label>
+  		);
     },
 
 });

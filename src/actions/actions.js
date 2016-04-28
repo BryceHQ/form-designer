@@ -20,11 +20,17 @@ const Action = {
 
 
   //---------------presentation------------------
-  //add
-  add(callback){
+  //addChild
+  addChild(parent, child){
     Dispatcher.dispatch({
-      actionType: Constants.ADD,
-      data: { callback: callback },
+      actionType: Constants.ADD_CHILD,
+      data: { parent: parent, child: child },
+    });
+  },
+  removeChild(parent, index){
+    Dispatcher.dispatch({
+      actionType: Constants.REMOVE_CHILD,
+      data: {parent: parent, index: index},
     });
   },
 

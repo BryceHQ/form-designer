@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
-import Radio from '../common/editor/radio';
+import Combobox from '../common/editor/combobox';
 
 const styles = {
 	root: {
@@ -10,10 +10,9 @@ const styles = {
 	}
 };
 
-const LabeledRadio = React.createClass({
+const LabeledCheckbox = React.createClass({
 
 	propTypes: {
-		options: React.PropTypes.array,
 	},
 
 	getDefaultProps() {
@@ -22,14 +21,13 @@ const LabeledRadio = React.createClass({
 			label: '名称',
 	    value: '',
 			vertical: false,
-			optionsVertical: false,
 			options: [],
 		};
 	},
 
 	render() {
-		let {label, vertical, style, name, options, optionsVertical} = this.props;
-		let props = _.omit(this.props, ['label', 'vertical', 'style', 'options', 'optionsVertical']);
+		let {label, vertical, style} = this.props;
+		let props = _.omit(this.props, ['label', 'vertical', 'style']);
 
 		let labelStyle = {};
 		if(vertical){
@@ -42,41 +40,30 @@ const LabeledRadio = React.createClass({
 			labelElem = <lable className="FormLabel" style={labelStyle}>{label}</lable>;
 		}
 
-		var radios = [];
-		options.forEach(function(opt, i){
-			radios.push(
-				<Radio name={name} label={opt.text} value={opt.value} inline={!optionsVertical} key={i}/>
-			);
-		});
-
 		return (
 			<div style={style}>
 				{labelElem}
-				{radios}
+				<Combobox {...props}/>
 			</div>
 		);
 	}
 });
 
-export default LabeledRadio;
+export default LabeledCheckbox;
 
 const options = {
-	name: 'LabeledRadio',
+	name: 'LabeledCombobox',
 	attributes: {
 		name: '',
 		label: '名称',
 		vertical: false,
-		optionsVertical: false,
-		options: [{text: 'click here', value: 'here'}, {text: 'click there', value: 'there'}],
+		options: [{text: '请选择', value: ''}, {text: '选项 1', value: '1'}],
 		style: {
 			color: 'red',
 		},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {
 			vertical: {
-				editor: {type: 'checkbox'},
-			},
-			optionsVertical: {
 				editor: {type: 'checkbox'},
 			},
 			style: {

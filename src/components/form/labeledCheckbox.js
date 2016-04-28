@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
-import Radio from '../common/editor/radio';
+import Checkbox from '../common/editor/checkbox';
 
 const styles = {
 	root: {
@@ -10,7 +10,7 @@ const styles = {
 	}
 };
 
-const LabeledRadio = React.createClass({
+const LabeledCheckbox = React.createClass({
 
 	propTypes: {
 		options: React.PropTypes.array,
@@ -42,26 +42,26 @@ const LabeledRadio = React.createClass({
 			labelElem = <lable className="FormLabel" style={labelStyle}>{label}</lable>;
 		}
 
-		var radios = [];
+		var checkboxes = [];
 		options.forEach(function(opt, i){
-			radios.push(
-				<Radio name={name} label={opt.text} value={opt.value} inline={!optionsVertical} key={i}/>
+			checkboxes.push(
+				<Checkbox name={name} label={opt.text} value={opt.value} inline={!optionsVertical} key={i}/>
 			);
 		});
 
 		return (
 			<div style={style}>
 				{labelElem}
-				{radios}
+				{checkboxes}
 			</div>
 		);
 	}
 });
 
-export default LabeledRadio;
+export default LabeledCheckbox;
 
 const options = {
-	name: 'LabeledRadio',
+	name: 'LabeledCheckbox',
 	attributes: {
 		name: '',
 		label: '名称',
