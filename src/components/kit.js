@@ -8,8 +8,7 @@ import Alert from './common/alert';
 
 import {options} from './form';
 
-import theme from '../theme';
-let {spacing} = theme;
+import {spacing} from '../theme';
 
 
 const styles = {
@@ -29,21 +28,21 @@ const Kit = React.createClass({
     var {mode} = this.props;
     return (
       <div style={styles.root}>
-        <Drag mode={mode} target={{
+        <Drag mode={mode} isCloneTarget={true} target={{
           name: 'Col',
           attributes: {basis: '20%'},
           children: [options.labeledInput]
         }}>
           <Alert type="info">input</Alert>
         </Drag>
-        <Drag mode={mode} target={{
+        <Drag mode={mode} isCloneTarget={true} target={{
           name: 'Col',
           attributes: {basis: '20%'},
           children: [options.labeledRadio]
         }}>
           <Alert type="error">radio</Alert>
         </Drag>
-        <Drag mode={mode} target={{
+        <Drag mode={mode} isCloneTarget={true} target={{
           name: 'Col',
           attributes: {basis: '20%'},
           children: [options.labeledCheckbox]
@@ -51,7 +50,7 @@ const Kit = React.createClass({
           <Alert type="error">checkbox</Alert>
         </Drag>
 
-        <Drag mode={mode} target={{
+        <Drag mode={mode} isCloneTarget={true} target={{
           name: 'Col',
           attributes: {basis: '20%'},
           children: [options.labeledCombobox]

@@ -48,9 +48,9 @@ const Drag = React.createClass({
   },
 
   render() {
-    const {children, uniqueKey, classNane} = this.props;
+    const {children, uniqueKey, target, ...props} = this.props;
     const {x, y, isPressed, width} = this.state;
-    var props = _.omit(this.props, ['children', 'uniqueKey', 'className', 'target']);
+
     if(!isPressed){
       return(
         <div ref="target"

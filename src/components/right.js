@@ -4,10 +4,9 @@ import lang from '../lang.js';
 import LeftNav from 'material-ui/lib/left-nav';
 
 import RightTitle from './rightTitle';
-import CollapsableField from './property/collapsableField';
+import Property from './property';
 
-import theme from '../theme';
-let {spacing} = theme;
+import {spacing} from '../theme';
 
 import Actions from '../actions/actions';
 
@@ -40,8 +39,7 @@ const Right = React.createClass({
         openRight = {true}
         onRequestChange = {open => Actions.toggleRight(open.open)}
       >
-        <RightTitle></RightTitle>
-        <CollapsableField data={rightData}></CollapsableField>
+        <Property data={rightData} open={open}></Property>
       </LeftNav>
     );
   },

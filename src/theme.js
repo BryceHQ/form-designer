@@ -1,3 +1,4 @@
-import theme from './themes/default.js';
+import theme, {spacing} from './themes/default.js';
 
 export default theme;
+export {spacing};

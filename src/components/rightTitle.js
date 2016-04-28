@@ -13,8 +13,8 @@ import lang from '../lang.js';
 import Actions from '../actions/actions.js';
 import Constants from '../constants/constants.js';
 
-import theme from '../theme';
-let {spacing} = theme;
+import {spacing} from '../theme';
+
 
 /****************
 * RightTitle Component

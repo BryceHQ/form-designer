@@ -14,8 +14,8 @@ import DragButton from './draggable/btn';
 import Actions from '../actions/actions';
 
 import lang from '../lang';
-import theme from '../theme';
-let {spacing} = theme;
+
+import {spacing} from '../theme';
 
 const styles = {
   root: {

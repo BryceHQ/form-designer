@@ -1,6 +1,6 @@
 import Dispatcher from '../dispatcher/dispatcher.js';
 import { EventEmitter } from 'events';
-import Constants from '../constants/constants.js';
+import Constants, {Mode} from '../constants/constants.js';
 import _ from 'lodash';
 
 import ajax from '../ajax.js';
@@ -11,7 +11,6 @@ import helper from '../helper.js';
 import menuStore from './menuStore.js';
 
 const CHANGE_EVENT = 'change';
-const MODE = Constants.MODE;
 
 let _config = {};
 
@@ -20,7 +19,7 @@ let _data = {
   rightOpen: false,
   rightData: null,
   loading: false,
-  mode: MODE.NORMAL,
+  mode: Mode.NORMAL,
   bottomMessage: null,
   error: null,
   menu: menuStore.data,
@@ -79,10 +78,11 @@ function endDrag({target, parent, row, col}){
   var rowObj = inner ? _drag.parent : _drag.target;
   if(row === _drag.row && typeof row !== 'undefined' && rowObj.children.length === 1) return;
 
+  var dragTarget = _drag.isCloneTarget ? _.cloneDeep(_drag.target) : _drag.target;
   //target Col
   if(typeof col === 'number'){
     removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
-    splice(parent.children, col, 0, getTarget(_drag.target, 'Col', { basis: '20%' }));
+    splice(parent.children, col, 0, getTarget(dragTarget, 'Col', { basis: '20%' }));
   }
   //target row
   else {
@@ -92,12 +92,12 @@ function endDrag({target, parent, row, col}){
     }
     if(typeof row === 'number'){
       if(inner){
-        splice(target.children, row, 0, getTarget(_drag.target, 'Col'));
+        splice(target.children, row, 0, getTarget(dragTarget, 'Col'));
       } else {
-        splice(target.children, row, 0, getTarget(_drag.target, 'Row'));
+        splice(target.children, row, 0, getTarget(dragTarget, 'Row'));
       }
     } else {
-      target.children.push(getTarget(_drag.target, 'Row'));
+      target.children.push(getTarget(dragTarget, 'Row'));
     }
   }
 
@@ -164,7 +164,7 @@ Dispatcher.register((action) => {
     case Constants.START_DRAG:
       _.assign(_drag, action.data);
 
-      _data.mode = MODE.DRAG;
+      _data.mode = Mode.DRAG;
       Store.emitChange();
       break;
 
@@ -173,7 +173,7 @@ Dispatcher.register((action) => {
         endDrag(action.data);
       }
 
-      _data.mode = MODE.NORMAL;
+      _data.mode = Mode.NORMAL;
 
       Store.emitChange();
       break;

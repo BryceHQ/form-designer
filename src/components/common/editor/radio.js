@@ -17,9 +17,9 @@ var Radio = React.createClass({
 	},
 
 	render() {
-    var {label, className, inline} = this.props;
+    var {label, className, inline, ...props} = this.props;
 		var componentClass = classnames('x-radio-container', className);
-		var props = _.omit(this.props, 'className', 'label', 'inline');
+
     var style = {
       display: inline ? 'inline-block' : 'block',
     };

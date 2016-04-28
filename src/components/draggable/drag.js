@@ -7,12 +7,12 @@ import Colors from 'material-ui/lib/styles/colors';
 
 import Actions from '../../actions/actions';
 import Store from '../../stores/store';
-import Constants from '../../constants/constants';
+import {Mode} from '../../constants/constants';
 
 
 const Drag = React.createClass({
   propTypes: {
-    dragType: React.PropTypes.string,
+    isCloneTarget: React.PropTypes.bool,
     target: React.PropTypes.object,
     index: React.PropTypes.number,
   },
@@ -31,10 +31,10 @@ const Drag = React.createClass({
 
 
   render() {
-    const {children, uniqueKey, className, style} = this.props;
+    const {uniqueKey, className, style, parent, isCloneTarget, row, col, target, ...props} = this.props;
     const {opacity} = this.state;
-    var newClass = classnames('drag', className);
-    var props = _.omit(this.props, ['parent', 'target', 'dragType', 'row', 'col', 'style']);
+    var componentClass = classnames('drag', className);
+
     var dragStyle = {
       boxShadow: `rgba(0, 0, 0, 0.2) 0px 1px 2px 0px`,
       opacity: opacity,
@@ -42,7 +42,7 @@ const Drag = React.createClass({
     return(
       <div ref="target"
         {...props}
-        className={newClass}
+        className={componentClass}
         draggable={true}
         onDragStart={this._handleDragStart}
         onDragEnd={this._handleDragEnd}
@@ -56,7 +56,7 @@ const Drag = React.createClass({
     Actions.startDrag({
       parent: this.props.parent,
       target: this.props.target,
-      dragType: this.props.dragType,
+      isCloneTarget: this.props.isCloneTarget,
       row: this.props.row,
       col: this.props.col,
     });
@@ -64,7 +64,7 @@ const Drag = React.createClass({
   },
 
   _handleDragEnd(event) {
-    if(Store.getData().mode === Constants.MODE.DRAG){
+    if(Store.getData().mode === Mode.DRAG){
       Actions.endDrag(false);
     }
     if(this.state.opacity !== 1){

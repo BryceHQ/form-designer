@@ -40,11 +40,11 @@ const Drop = React.createClass({
   },
 
   render() {
-    const {children, className} = this.props;
-    var newClass = classnames('drop', className);
-    var props = _.omit(this.props, ['className', 'target']);
+    const {children, className, ...props} = this.props;
+    var componentClass = classnames('drop', className);
+
     return (
-      <div ref="target" {...props} className={newClass} onMouseEnter={this._handleMouseEnter} onMouseOut={this._handleMouseOut}></div>
+      <div ref="target" {...props} className={componentClass} onMouseEnter={this._handleMouseEnter} onMouseOut={this._handleMouseOut}></div>
     );
   },
 

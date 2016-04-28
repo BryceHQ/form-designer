@@ -11,8 +11,7 @@ import Right from './right';
 import Center from './center';
 import Kit from './kit';
 
-import theme from '../theme';
-let {spacing} = theme;
+import {spacing} from '../theme';
 
 const Main = React.createClass({
   // componentDidMount() {

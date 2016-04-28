@@ -30,8 +30,7 @@ const LabeledInput = React.createClass({
 	},
 
 	render() {
-		let {label, vertical, style} = this.props;
-		let props = _.omit(this.props, ['label', 'vertical', 'style']);
+		let {label, vertical, ...props} = this.props;
 
 		let labelStyle = {};
 		if(vertical){
@@ -45,7 +44,7 @@ const LabeledInput = React.createClass({
 		}
 
 		return (
-			<div style={style}>
+			<div>
 				{labelElem}
 				<Textbox {...props}/>
 			</div>
@@ -92,7 +91,11 @@ const options = {
 					targetName: 'required',
 					targetValues: true,
 				}
-			}
+			},
+			style: {
+				keyEditable: true,
+				defaultChild: {'':''},
+			},
 		},
 	},
 };

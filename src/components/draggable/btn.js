@@ -6,8 +6,8 @@ import Transitions from 'material-ui/lib/styles/transitions';
 import Popover from 'material-ui/lib/popover/popover';
 import PopoverAnimationFromTop from 'material-ui/lib/popover/popover-animation-from-top';
 
-import theme from '../../theme';
-let {spacing} = theme;
+import {spacing} from '../../theme';
+
 
 const styles = {
   label: {

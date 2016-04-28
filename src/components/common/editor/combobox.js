@@ -61,17 +61,15 @@ const Combobox = React.createClass({
   },
 
   render() {
-    var {className} = this.props;
+    var {className, value, options, ...props} = this.props;
 
-    var options = this.props.options || [];
+    options = options || [];
     var optionElems = [];
     options.forEach(function(opt, i){
       optionElems.push(
         <option key = {i} value = {opt.value}>{opt.text}</option>
       );
     });
-
-    var props = _.omit(this.props, ['className', 'value']);
 
     var componentClass = classnames("x-combobox", "FormInput", className);
     return (

@@ -2,8 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
 
-import theme from '../../theme';
-let {spacing} = theme;
+import {spacing} from '../../theme';
 
 const Row = React.createClass({
 	propTypes: {

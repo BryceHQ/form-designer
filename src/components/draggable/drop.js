@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import Colors from 'material-ui/lib/styles/colors';
 
 import Actions from '../../actions/actions';
-import Constants from '../../constants/constants';
+import {Mode} from '../../constants/constants';
 import Store from '../../stores/store';
 
 
@@ -26,16 +26,16 @@ const Drop = React.createClass({
   },
 
   render() {
-    const {children, className, style} = this.props;
+    const {className, style, target, parent, row, col, ...props} = this.props;
     const {backgroundColor} = this.state;
 
-    var newClass = classnames('drop', className);
-    var props = _.omit(this.props, ['className', 'target', 'row', 'col', 'style']);
+    var componentClass = classnames('drop', className);
+
     var dropStyle = {
       backgroundColor: backgroundColor
     };
     return (
-      <div ref="target" {...props} className={newClass}
+      <div ref="target" {...props} className={componentClass}
         onDragOver ={this._handleDragOver}
         onDrop={this._handleDrop}
         onDragLeave={this._handleDragLeave}
@@ -47,7 +47,7 @@ const Drop = React.createClass({
 
   _handleDrop(event) {
     this.setState({backgroundColor: 'white'});
-    if(Store.getData().mode === Constants.MODE.DRAG){
+    if(Store.getData().mode === Mode.DRAG){
       Actions.endDrag({
         target: this.props.target,
         parent: this.props.parent,
@@ -67,7 +67,7 @@ const Drop = React.createClass({
   },
 
   _handleDragEnter() {
-    if(Store.getData().mode === Constants.MODE.DRAG && this.state.backgroundColor === 'white'){
+    if(Store.getData().mode === Mode.DRAG && this.state.backgroundColor === 'white'){
       this.setState({backgroundColor: Colors.lime100});
     }
   },

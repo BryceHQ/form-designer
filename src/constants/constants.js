@@ -21,12 +21,6 @@ const constants = {
   //overview
   REINSERT: 'REINSERT',
 
-  MODE: {
-    NORMAL: 'normal',
-    DRAG: 'drag',
-    EDITING: 'editing',
-  },
-
   //---------------menu------------------
   MENU_SELECT: 'MENU_SELECT',
 
@@ -37,4 +31,12 @@ const constants = {
   CLEAR_ERROR: 'CLEAR_ERROR',
 };
 
+const mode = {
+  NORMAL: 'normal',
+  DRAG: 'drag',
+  EDITING: 'editing',
+};
+
+
 export default constants;
+export {mode as Mode};

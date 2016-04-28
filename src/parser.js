@@ -6,6 +6,8 @@ import form from './components/form';
 
 import helper from './helper';
 
+import Constants from './constants/constants';
+
 const styles = {
   Row: {
     paddingLeft: '40px',

@@ -63,9 +63,8 @@ const Checkbox = React.createClass({
 
 
     render() {
-      var {label, className, inline, on} = this.props;
+      var {label, className, inline, on, off, ...props} = this.props;
   		var componentClass = classnames('x-checkbox-container', className);
-  		var props = _.omit(this.props, 'className', 'label', 'inline', 'on', 'off');
       var style = {
         display: inline ? 'inline-block' : 'block',
       };

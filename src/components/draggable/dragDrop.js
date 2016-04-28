@@ -15,9 +15,8 @@ const DragDrop = React.createClass({
   },
 
   render() {
-    const {children, row, col, target, parent, style} = this.props;
-    var props = _.omit(this.props, ['children', 'style']);
-
+    const {children, style, ...props} = this.props;
+    const {row, col, target, parent} = props;
     return(
       <Drag {...props}>
         <Drop row={row} col={col} target={target} parent={parent} style={style}>

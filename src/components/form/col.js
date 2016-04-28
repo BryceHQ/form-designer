@@ -5,8 +5,7 @@ import _ from 'lodash';
 import Actions from '../../actions/actions';
 
 
-import theme from '../../theme';
-let {spacing} = theme;
+import {spacing} from '../../theme';
 
 const Col = React.createClass({
 	propTypes: {
@@ -29,7 +28,7 @@ const Col = React.createClass({
 	},
 
 	render() {
-		let { basis, gutter, width, style } = this.props;
+		let { basis, gutter, width, style, ...props } = this.props;
 
 		let columnStyle = {
 			minHeight: 10,
@@ -57,8 +56,6 @@ const Col = React.createClass({
 			columnStyle.width = '100%';
 		}
 
-		let props = _.omit(this.props, 'basis', 'gutter', 'style', 'width');
-
 		return (
 			<div style={_.assign(columnStyle, style)} {...props}
 				onDoubleClick={this._handleDoubleClick}
@@ -70,7 +67,14 @@ const Col = React.createClass({
 		//col 下面有且仅有一个child
 		var col = this.props.children[0].props.target;
 
-		Actions.toggleRight(true, col.children[0].attributes);
+		Actions.toggleRight(true, [{
+				name: 'basic',
+				data: col.children[0].attributes,
+			}, {
+				name: 'data',
+				data: {}
+			}
+		]);
 	},
 
 });
