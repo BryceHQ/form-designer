@@ -59,7 +59,6 @@ const options = {
 		vertical: false,
 		options: [{text: '请选择', value: ''}, {text: '选项 1', value: '1'}],
 		style: {
-			color: 'red',
 		},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {

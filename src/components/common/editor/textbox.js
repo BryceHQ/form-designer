@@ -100,7 +100,7 @@ const Textbox = React.createClass({
 	},
 
 	render() {
-		let {noedit, multiline, className, style, required, placeholder, invalidMessage, requiredMessage} = this.props;
+		let {noedit, multiline, className, style, required, placeholder, invalidMessage, requiredMessage, ...props} = this.props;
 		let {isValid, value} = this.state;
 		// classes
 		let componentClass = classnames(
@@ -148,7 +148,7 @@ const Textbox = React.createClass({
 
 		return (
 			<div className={rootClass} style={styles.root}>
-				<Element className={componentClass} ref="input" value={value} placeholder={placeholder} onChange={this._handleChange} style={style}/>
+				<Element {...props} className={componentClass} ref="input" value={value} placeholder={placeholder} onChange={this._handleChange} style={style}/>
 				{requiredMessageElem}
 				{validationMessageElem}
 			</div>

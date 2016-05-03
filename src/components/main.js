@@ -30,7 +30,7 @@ const Main = React.createClass({
     return (
       <div className = "center">
         <Center data={data} mode={mode} rightOpen={rightOpen}></Center>
-        <Kit></Kit>
+        <Kit mode={mode}></Kit>
         <Right open={rightOpen} rightData={rightData}></Right>
       </div>
     );

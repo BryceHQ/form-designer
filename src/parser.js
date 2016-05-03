@@ -16,10 +16,12 @@ const styles = {
 };
 
 /*
+* @param parent
+* @param json
 * @param rowDraggable
 * @param colDraggable
-* @param index
-*
+* @param row
+* @param col
 */
 function parser(parent, json, rowDraggable, colDraggable, row, col){
   if(!json || !json.name) return;
@@ -75,16 +77,18 @@ function parser(parent, json, rowDraggable, colDraggable, row, col){
     });
   }
 
-
   //children.length ? children : null 对于不能有子节点的元素，react使用 children === null 来判断，否则抛出异常
   return React.createElement(form[json.name] || json.name, json.attributes, children.length ? children : null);
 }
 
 function ensureKey(child){
+  var key = helper.guid();
   if(!child.attributes) {
-    child.attributes = {key: helper.guid()};
+    child.attributes = {key: key};
+    child.attributes.uniqueKey = key;
   } else if(!child.attributes.key){
-    child.attributes.key = helper.guid();
+    child.attributes.key = key;
+    child.attributes.uniqueKey = key;
   }
 }
 

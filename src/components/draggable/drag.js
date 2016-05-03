@@ -64,7 +64,7 @@ const Drag = React.createClass({
   },
 
   _handleDragEnd(event) {
-    if(Store.getData().mode === Mode.DRAG){
+    if(Store.getData().mode.indexOf(Mode.DRAG) === 0){
       Actions.endDrag(false);
     }
     if(this.state.opacity !== 1){

@@ -23,9 +23,23 @@ let _data = {
   bottomMessage: null,
   error: null,
   menu: menuStore.data,
+  title: '测试表单',
+  selectKey: '',
   form: {
     name: 'Form',
+    attributes: {
+      title: '',
+      dataInputs: [],
+      _options: {
+  			dataInputs: {
+  				defaultChild: {name: '', type: '', defaultValue: ''},
+  				//childOptions
+  				childName: 'input',
+  			},
+  		},
+    },
     children: [],
+
   },
 };
 
@@ -74,19 +88,26 @@ function endDrag({target, parent, row, col}){
 
   var inner = typeof _drag.col === 'number';
 
+  //remove
+  if(target === null || typeof target === 'undefined'){
+    removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
+    return;
+  }
+
+
   //将某个Row拖拽到它自己上，直接返回
   var rowObj = inner ? _drag.parent : _drag.target;
   if(row === _drag.row && typeof row !== 'undefined' && rowObj.children.length === 1) return;
 
   var dragTarget = _drag.isCloneTarget ? _.cloneDeep(_drag.target) : _drag.target;
+
+  removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
   //target Col
   if(typeof col === 'number'){
-    removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
     splice(parent.children, col, 0, getTarget(dragTarget, 'Col', { basis: '20%' }));
   }
   //target row
   else {
-    removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
     if(!inner && parent){
       target = parent;
     }
@@ -164,7 +185,11 @@ Dispatcher.register((action) => {
     case Constants.START_DRAG:
       _.assign(_drag, action.data);
 
-      _data.mode = Mode.DRAG;
+      if(action.data.isCloneTarget === true){
+        _data.mode = Mode.DRAG + '.' + Mode.DRAG_KIT;
+      } else {
+        _data.mode = Mode.DRAG;
+      }
       Store.emitChange();
       break;
 
@@ -175,6 +200,14 @@ Dispatcher.register((action) => {
 
       _data.mode = Mode.NORMAL;
 
+      Store.emitChange();
+      break;
+
+    case Constants.SELECT:
+      _data.selectKey = action.data.key;
+      if(_data.rightOpen === true){
+        _data.rightData = action.data.data;
+      }
       Store.emitChange();
       break;
 

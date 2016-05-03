@@ -49,16 +49,27 @@ const Property = React.createClass({
   propTypes: {
     // onClick: React.PropTypes.function.isRequired,
   },
+  getInitialState() {
+    return {
+      value: 0,
+    };
+  },
 
   render() {
-    var {open, data, className, formatter, currentTabIndex} = this.props;
+    var {open, data, className, formatter} = this.props;
+    var {value} = this.state;
     var componentClass = classnames('Tab', className);
 
     var tabs = [];
     if(data && data.length > 0){
+      if(value >= data.length){
+        value = 0;
+      }
+
       data.forEach(function(tab, index){
         tabs.push(
-          <Tab label = {tab.name} key = {index} style={styles.tab}>
+          <Tab label = {tab.name} key = {index} style={styles.tab} value={index}
+          >
             <CollapsableField data = {tab.data} formatter = {formatter}/>
           </Tab>
         );
@@ -75,9 +86,10 @@ const Property = React.createClass({
     }
     return (
       <div>
-        <Tabs className={componentClass} selectedIndex = {currentTabIndex}
+        <Tabs className={componentClass} value={value}
           inkBarStyle={styles.inkBarStyle} tabItemContainerStyle={styles.tabItemContainerStyle}
-          >
+          onChange={this._handleTabChange}
+        >
           {tabs}
         </Tabs>
         {collapseBtn}
@@ -85,6 +97,12 @@ const Property = React.createClass({
     );
   },
 
+  _handleTabChange(value) {
+    // tabs onChange 会注册到div上，比如，我在tab内的一个input中输入内容，会触发这个onChange事件 material ui的bug
+    if(typeof value === 'number'){
+      this.setState({value});
+    }
+  },
 });
 
 export default Property;

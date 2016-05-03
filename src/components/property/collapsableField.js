@@ -25,7 +25,7 @@ const styles = {
 const CollapsableField = React.createClass({
   getDefaultProps() {
     return {
-      hiddenKeys: ['key', '_options'],
+      hiddenKeys: ['key', 'uniqueKey', '_options'],
     };
   },
 
@@ -95,7 +95,7 @@ const CollapsableField = React.createClass({
               index={i}
               formatter={me.props.formatter}
               onRemove={me._handleRemove}
-              />
+            />
           );
         });
       } else {
@@ -108,7 +108,7 @@ const CollapsableField = React.createClass({
                 title={formatter ? formatter(key) : key}
                 index={key}
                 formatter={this.props.formatter}
-                />
+              />
             );
             continue;
           }
@@ -120,7 +120,7 @@ const CollapsableField = React.createClass({
               owner={data}
               index={key}
               onRemove={this._handleRemove}
-              >
+            >
               <Editor
                 onChange={this._handleChange}
                 autofocus={data.autofocus}

@@ -18,6 +18,13 @@ const Action = {
     });
   },
 
+  //select highlight
+  select(data) {
+    Dispatcher.dispatch({
+      actionType: Constants.SELECT,
+      data: data,
+    });
+  },
 
   //---------------presentation------------------
   //addChild

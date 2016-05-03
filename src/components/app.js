@@ -69,7 +69,7 @@ const App = React.createClass({
 
     return (
       <div>
-        <AppBar title={title}>
+        <AppBar title={title} form={form}>
           <LeftBar open = {leftOpen} menu = {menu} />
         </AppBar>
         {center}

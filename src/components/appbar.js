@@ -5,6 +5,7 @@ import Colors from 'material-ui/lib/styles/colors';
 import AppBar from 'material-ui/lib/app-bar';
 import IconButton from 'material-ui/lib/icon-button';
 import RaisedButton from 'material-ui/lib/raised-button';
+import FlatButton from 'material-ui/lib/flat-button';
 
 //icon
 import IconEditor from 'material-ui/lib/svg-icons/editor/mode-edit';
@@ -13,6 +14,8 @@ import IconChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left';
 import IconFullscreen from 'material-ui/lib/svg-icons/navigation/fullscreen';
 import IconNavigationMenu from 'material-ui/lib/svg-icons/navigation/menu';
 import IconActionHelp from 'material-ui/lib/svg-icons/action/help';
+import IconActionVisibility from 'material-ui/lib/svg-icons/action/visibility';
+
 
 //router
 import history from '../history';
@@ -25,13 +28,17 @@ import Store from '../stores/store';
 //common
 import EditableText from '../components/common/editableText';
 
+import {spacing} from '../theme';
+
 const styles = {
   root: {
     zIndex: 500,
-    height: Constants.APPBAR_HEIGHT,
+    height: spacing.appbarHeight,
+    lineHeight: spacing.appbarHeight + 'px',
     minHeight: '40px',
     paddingLeft: '0px',
     backgroundColor: Colors.blueGrey600,
+    verticalAlign: 'middle',
   },
   titleStyle: {
     lineHeight: 'inherit',
@@ -43,16 +50,26 @@ const styles = {
     padding: '0px',
     margin: '0px 3px'
   },
-  avatar: {
-    width: 'inherit',
-    height: 'inherit',
-    padding: '0px',
-    margin: '0px 20px',
+  iconBtn: {
+    width: spacing.appbarHeight,
+    height: spacing.appbarHeight,
+    margin: '0 14px',
+    padding: '5px',
+  },
+  titleBtn: {
+    height: spacing.appbarHeight+'px',
+    verticalAlign: 'top',
   },
   labelStyle: {
     fontSize: 'inherit',
     textTransform: 'inherit',
     padding: '0px 20px',
+    color: 'white',
+  },
+  titleLabel: {
+    fontSize: 20,
+    padding: '0px 20px',
+    color: 'white',
   },
   iconStyleRight: {
     marginRight: '0px',
@@ -67,16 +84,20 @@ const MyAppBar = React.createClass({
     let titleElem = (
       <div>
         <RaisedButton label={lang.name} backgroundColor={Colors.redA100} labelColor={Colors.white}
-        onTouchTap = {this._handleToggleLeft}
-        labelStyle={styles.labelStyle}
-        style={{
-          height: '40px'
-        }}/>
+          onTouchTap = {this._handleToggleLeft}
+          labelStyle={styles.labelStyle}
+          style={styles.titleBtn}/>
 
-        <span className="title">
-          <EditableText value={title} onStartEdit={this._handleStartEditTitle}
-            onEndEdit={this._handleEndEditTitle}/>
-        </span>
+
+        <IconButton style={styles.iconBtn} tooltip={"preview"} iconStyle={styles.svg}
+        >
+          <IconActionVisibility color="white"/>
+        </IconButton>
+        
+        <FlatButton  label={title} backgroundColor={Colors.blueGrey600} labelColor={Colors.white}
+          onTouchTap = {this._handleToggleRight}
+          labelStyle={styles.titleLabel}
+          style={styles.titleBtn}/>
 
       </div>
     );
@@ -107,7 +128,12 @@ const MyAppBar = React.createClass({
   },
 
   _handleToggleRight() {
-    Actions.toggleRight();
+
+    Actions.toggleRight(true, [{
+        name: 'basic',
+        data: this.props.form.attributes,
+      }
+    ]);
   },
 
   _handleStartEditTitle() {

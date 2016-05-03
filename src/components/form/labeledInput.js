@@ -67,7 +67,6 @@ const options = {
 		vertical: false,
 		multiline: false,
 		style: {
-			color: 'red',
 		},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {

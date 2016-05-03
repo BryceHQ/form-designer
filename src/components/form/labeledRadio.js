@@ -69,7 +69,6 @@ const options = {
 		optionsVertical: false,
 		options: [{text: 'click here', value: 'here'}, {text: 'click there', value: 'there'}],
 		style: {
-			color: 'red',
 		},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {

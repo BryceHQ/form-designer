@@ -3,6 +3,7 @@ const constants = {
   //---------------user------------------
   START_DRAG: 'START_DRAG',
   END_DRAG: 'END_DRAG',
+  SELECT: 'SELECT',
 
   //---------------property------------------
   ADD_CHILD: 'ADD_CHILD',
@@ -35,6 +36,7 @@ const mode = {
   NORMAL: 'normal',
   DRAG: 'drag',
   EDITING: 'editing',
+  DRAG_KIT: 'kit',
 };
 
 

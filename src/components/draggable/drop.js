@@ -40,14 +40,14 @@ const Drop = React.createClass({
         onDrop={this._handleDrop}
         onDragLeave={this._handleDragLeave}
         style={_.assign(dropStyle, style)}
-        >
+      >
       </div>
     );
   },
 
   _handleDrop(event) {
     this.setState({backgroundColor: 'white'});
-    if(Store.getData().mode === Mode.DRAG){
+    if(Store.getData().mode.indexOf(Mode.DRAG) === 0){
       Actions.endDrag({
         target: this.props.target,
         parent: this.props.parent,
@@ -67,7 +67,7 @@ const Drop = React.createClass({
   },
 
   _handleDragEnter() {
-    if(Store.getData().mode === Mode.DRAG && this.state.backgroundColor === 'white'){
+    if(Store.getData().mode.indexOf(Mode.DRAG) === 0 && this.state.backgroundColor === 'white'){
       this.setState({backgroundColor: Colors.lime100});
     }
   },

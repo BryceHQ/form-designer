@@ -2,7 +2,6 @@ import React from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
 
-import Drop from '../draggable/drop';
 
 const Form = React.createClass({
 	propTypes: {
@@ -12,8 +11,17 @@ const Form = React.createClass({
 		};
 	},
 	render() {
+		var {title} = this.props;
+		var titleElem;
+		if(title){
+			titleElem = (
+				<h1 style={{textAlign: 'center'}}>{title}</h1>
+			);
+		}
+
 		return (
       <form>
+				{titleElem}
         {this.props.children}
       </form>
 		);
