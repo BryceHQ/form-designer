@@ -19,8 +19,7 @@ const Editor = React.createClass({
   },
 
   render() {
-    var {type, value, className, onChange} = this.props;
-    var props = _.omit(this.props, ['type']);
+    var {type, ...props} = this.props;
 
     switch (type.toLowerCase()) {
       case 'checkbox':

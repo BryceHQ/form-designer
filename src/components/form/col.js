@@ -25,6 +25,7 @@ const Col = React.createClass({
     children: React.PropTypes.node.isRequired,
 		gutter: React.PropTypes.number,
 		style: React.PropTypes.object,
+		mode: React.PropTypes.string,
 	},
 	getDefaultProps () {
 		return {
@@ -33,7 +34,7 @@ const Col = React.createClass({
 	},
 
 	render() {
-		let { basis, gutter, width, style, uniqueKey, children, ...props } = this.props;
+		let { basis, gutter, width, mode, style, uniqueKey, children, ...props } = this.props;
 
 		let columnStyle = {
 			minHeight: 10,
@@ -60,8 +61,19 @@ const Col = React.createClass({
 		if (!columnStyle.width) {
 			columnStyle.width = '100%';
 		}
+		//显示模式下直接返回col
+		if(mode === 'display'){
+			return (
+				<div style={_.assign(columnStyle, style)} {...props}>
+					{children}
+				</div>
+			);
+		}
 
 		if(Store.getData().selectKey == uniqueKey){
+			if(!_.isArray(children)){
+				children = [children];
+			}
 			children.push(
 				<InkBar left = "0" width = "100%" color = {Colors.blue500}
 					key="0"
@@ -81,14 +93,14 @@ const Col = React.createClass({
 
 	_handleDoubleClick(event) {
 		//col 下面有且仅有一个child
-		var col = this.props.children[0].props.target;
+		var col = this.props.children.props.target;
 
 		Actions.toggleRight(true, [{
 				name: 'basic',
-				data: col.children[0].attributes,
+				data: col.attributes,
 			}, {
 				name: 'data',
-				data: {},
+				data: col.attributes.data,
 			}
 		]);
 	},
@@ -96,16 +108,16 @@ const Col = React.createClass({
 	//选中高亮
 	_handleClick(event) {
 		//col 下面有且仅有一个child
-		var col = this.props.children[0].props.target;
+		var col = this.props.children.props.target;
 
 		Actions.select({
 			key: col.attributes.key,
 			data: [{
 				name: 'basic',
-				data: col.children[0].attributes,
+				data: col.attributes,
 			}, {
 				name: 'data',
-				data: {},
+				data: col.attributes.data,
 			}]
 		});
 	},

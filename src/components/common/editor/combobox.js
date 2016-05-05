@@ -12,7 +12,7 @@ const Combobox = React.createClass({
 
   getInitialState() {
     return {
-      value: this.props.value === null || typeof this.props.value === 'undefined' ? '' : this.props.value,
+      value: _.isNil(this.props.value) ? '' : this.props.value,
     };
   },
 
@@ -37,6 +37,43 @@ const Combobox = React.createClass({
     }
   },
 
+  focus() {
+    this.refs.select.focus();
+  },
+
+  render() {
+    var {className, options, owner, target, ...props} = this.props;
+    var {value} = this.state;
+    options = options || [];
+    var optionElems = [];
+    options.forEach(function(opt, i){
+      //当value不存在时，将其设置为第一个option
+      if(i === 0 && (_.isNil(value) || value === '') ){
+        value = opt.value;
+        if(owner && target){
+          owner[target] = value;
+        }
+      }
+      optionElems.push(
+        <option key = {i} value = {opt.value}>{opt.text}</option>
+      );
+    });
+
+    var componentClass = classnames("x-combobox", "FormInput", className);
+    return (
+      <select {...props} className = {componentClass}
+        ref = "select"
+        onChange = {this._handleChange}
+        onDoubleClick = {this.props.onDoubleClick}
+        onClick = {this.props.onClick}
+        value = {value}>
+        {optionElems}
+      </select>
+    );
+  },
+
+
+
   _handleChange(e) {
     var value = e.target.value;
     var flag;
@@ -54,34 +91,6 @@ const Combobox = React.createClass({
     if(this.props.owner && this.props.target){
       this.props.owner[this.props.target] = value || '';
     }
-  },
-
-  focus() {
-    this.refs.select.focus();
-  },
-
-  render() {
-    var {className, value, options, ...props} = this.props;
-
-    options = options || [];
-    var optionElems = [];
-    options.forEach(function(opt, i){
-      optionElems.push(
-        <option key = {i} value = {opt.value}>{opt.text}</option>
-      );
-    });
-
-    var componentClass = classnames("x-combobox", "FormInput", className);
-    return (
-      <select {...props} className = {componentClass}
-        ref = "select"
-        onChange = {this._handleChange}
-        onDoubleClick = {this.props.onDoubleClick}
-        onClick = {this.props.onClick}
-        value = {this.state.value}>
-        {optionElems}
-      </select>
-    );
   },
 });
 

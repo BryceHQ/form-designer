@@ -13,6 +13,10 @@ const rules = {
     }
     return flag;
   },
+  //仅数字
+  number(value) {
+    return !isNaN(value - 0);
+  },
 };
 
 const Validatable = {

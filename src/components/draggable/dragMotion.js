@@ -1,7 +1,6 @@
 import React from 'react';
 import {Motion, spring} from 'react-motion';
 import _ from 'lodash';
-import $ from 'jquery';
 
 import Colors from 'material-ui/lib/styles/colors';
 

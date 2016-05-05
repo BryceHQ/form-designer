@@ -12,7 +12,7 @@ const Checkbox = React.createClass({
     },
     getInitialState() {
       return {
-        value: this.props.value || '',
+        value: _.isNil(this.props.value) ? '' : this.props.value,
       };
     },
 
@@ -38,8 +38,14 @@ const Checkbox = React.createClass({
     },
 
     _handleChange(e) {
-      var flag,
+      var flag, value;
+      var {on, off} = this.props;
+      if(_.isNil(on) || _.isNil(off)){
+        value = e.target.value;
+      } else {
         value = e.target.checked ? this.props.on : this.props.off;
+      }
+
       if(this.props.onBeforeChange){
         flag = this.props.onBeforeChange(value, this.oldValue);
       }
@@ -49,7 +55,7 @@ const Checkbox = React.createClass({
       this.setState({value});
 
       if(this._debouncedChange){
-  			this._debouncedChange(value, this.state.value);
+  			this._debouncedChange(value, this.state.value, e);
   		}
 
       if(this.props.owner && this.props.target){

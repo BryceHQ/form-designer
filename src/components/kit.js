@@ -68,36 +68,34 @@ const Kit = React.createClass({
     var {mode} = this.props;
     return (
       <div ref='container' style={styles.root}>
-        <Drag mode={mode} isCloneTarget={true} target={{
-          name: 'Col',
-          attributes: {basis: '20%'},
-          children: [options.labeledInput]
-        }} title="textbox" style={styles.drag}>
+        <Drag mode={mode} isCloneTarget={true} target={options.labeledTextbox}
+          title="textbox" style={styles.drag}>
           <Textbox disabled={true} placeholder=""/>
         </Drag>
 
-        <Drag mode={mode} isCloneTarget={true} target={{
-          name: 'Col',
-          attributes: {basis: '20%'},
-          children: [options.labeledRadio]
-        }} title="radio" style={styles.drag}>
+        <Drag mode={mode} isCloneTarget={true} target={options.labeledRadio}
+          title="radio" style={styles.drag}>
           <Radio disabled={true}/>
         </Drag>
 
-        <Drag mode={mode} isCloneTarget={true} target={{
-          name: 'Col',
-          attributes: {basis: '20%'},
-          children: [options.labeledCheckbox]
-        }} title="checkbox" style={styles.drag}>
+        <Drag mode={mode} isCloneTarget={true} target={options.labeledCheckbox}
+          title="checkbox" style={styles.drag}>
           <Checkbox disabled={true}/>
         </Drag>
 
-        <Drag mode={mode} isCloneTarget={true} target={{
-          name: 'Col',
-          attributes: {basis: '20%'},
-          children: [options.labeledCombobox]
-        }} title="combobox" style={styles.drag}>
+        <Drag mode={mode} isCloneTarget={true} target={options.labeledCombobox}
+          title="combobox" style={styles.drag}>
           <Combobox disabled={true}/>
+        </Drag>
+
+        <Drag mode={mode} isCloneTarget={true} target={options.labeledDatebox}
+          title="datebox" style={styles.drag}>
+          <Textbox disabled={true} placeholder="日期控件"/>
+        </Drag>
+
+        <Drag mode={mode} isCloneTarget={true} target={options.labeledDateboxRange}
+          title="datebox" style={styles.drag}>
+          <Textbox disabled={true} placeholder="日期范围"/>
         </Drag>
 
         {this.renderDustbin()}

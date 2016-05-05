@@ -1,10 +1,12 @@
 import Col from './col';
 import Row from './row';
 import Form from './form';
-import LabeledInput, {options as labeledInputOptions} from './labeledInput';
+import LabeledTextbox, {options as labeledTextboxOptions} from './labeledTextbox';
 import LabeledRadio, {options as labeledRadioOptions} from './labeledRadio';
 import LabeledCheckbox, {options as labeledCheckboxOptions} from './labeledCheckbox';
 import LabeledCombobox, {options as labeledComboboxOptions} from './labeledCombobox';
+import LabeledDatebox, {options as labeledDateboxOptions} from './labeledDatebox';
+import LabeledDateboxRange, {options as labeledDateboxRangeOptions} from './labeledDateboxRange';
 
 import Alert from '../common/alert';
 
@@ -17,10 +19,12 @@ const form = {
   Col: Col,
   Row: Row,
 
-  LabeledInput: LabeledInput,
+  LabeledTextbox: LabeledTextbox,
   LabeledRadio: LabeledRadio,
   LabeledCheckbox: LabeledCheckbox,
   LabeledCombobox: LabeledCombobox,
+  LabeledDatebox: LabeledDatebox,
+  LabeledDateboxRange: LabeledDateboxRange,
 
   Alert: Alert,
   Drop: Drop,
@@ -31,10 +35,12 @@ const form = {
 export default form;
 
 const options = {
-  labeledInput: labeledInputOptions,
+  labeledTextbox: labeledTextboxOptions,
   labeledRadio: labeledRadioOptions,
   labeledCheckbox: labeledCheckboxOptions,
   labeledCombobox: labeledComboboxOptions,
+  labeledDatebox: labeledDateboxOptions,
+  labeledDateboxRange: labeledDateboxRangeOptions,
 };
 
 export {options};

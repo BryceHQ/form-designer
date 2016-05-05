@@ -11,7 +11,9 @@ const Form = React.createClass({
 		};
 	},
 	render() {
-		var {title} = this.props;
+		var {title, className, style} = this.props;
+		var componentClass = classnames('form-designer', className);
+
 		var titleElem;
 		if(title){
 			titleElem = (
@@ -20,7 +22,7 @@ const Form = React.createClass({
 		}
 
 		return (
-      <form>
+      <form className={componentClass} style={style}>
 				{titleElem}
         {this.props.children}
       </form>

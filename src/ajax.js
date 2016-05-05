@@ -1,4 +1,4 @@
-import $ from 'jquery';
+// import $ from 'jquery';
 import base64 from 'base64-js';
 import _ from 'lodash';
 

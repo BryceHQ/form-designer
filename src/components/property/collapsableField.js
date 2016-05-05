@@ -102,6 +102,18 @@ const CollapsableField = React.createClass({
         for(var key in data){
           if(!data.hasOwnProperty(key) || ~hiddenKeys.indexOf(key)) continue;
           opt = _options[key];
+
+          if(opt && opt.template){
+            if(data.name){
+              var compiled = _.template(opt.template);
+              data[key] = compiled(data);
+            } else {
+              data[key] = '';
+            }
+          }
+
+          if(this._isHidden(opt && opt.hidden, data) === true) continue;
+
           if(typeof data[key] === 'object'){
             elems.push(
               <CollapsableField data={data[key]} options={opt} key={index++}
@@ -112,7 +124,6 @@ const CollapsableField = React.createClass({
             );
             continue;
           }
-          if(this._isHidden(opt && opt.hidden, data) === true) continue;
 
           elems.push(
             <Field label={formatter ? formatter(key) : key} key = {index++}
@@ -123,12 +134,11 @@ const CollapsableField = React.createClass({
             >
               <Editor
                 onChange={this._handleChange}
-                autofocus={data.autofocus}
                 {...(opt && opt.editor)}
                 owner={data}
                 target={key}
                 value={data[key]}
-                />
+              />
             </Field>
           );
         }

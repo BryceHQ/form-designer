@@ -4,6 +4,9 @@
   "description": "Boilerplate for ReactJS project with hot code reloading",
   "scripts": {
     "start": "node server.js",
+    "build": "webpack --config webpack.production.config.js",
+    "release_comment": "-p(压缩js) set NODE_ENV=production(去除react中的warning)",
+    "release": "set NODE_ENV=production && webpack -p --config webpack.production.config.js",
     "lint": "eslint src"
   },
   "repository": {
@@ -31,10 +34,14 @@
     "babel-core": "^6.0.20",
     "babel-eslint": "^4.1.3",
     "babel-loader": "^6.0.1",
+    "babel-plugin-transform-es3-member-expression-literals": "^6.8.0",
+    "babel-plugin-transform-es3-property-literals": "^6.8.0",
+    "babel-polyfill": "^6.8.0",
     "babel-preset-es2015": "^6.0.15",
     "babel-preset-react": "^6.0.15",
     "babel-preset-stage-0": "^6.0.15",
     "css-loader": "^0.23.1",
+    "es3ify-loader": "^0.2.0",
     "eslint-plugin-react": "^3.6.2",
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
@@ -52,6 +59,7 @@
     "lodash": "^4.11.1",
     "material-ui": "^0.14.4",
     "react": "^0.14.8",
+    "react-datepicker": "^0.27.0",
     "react-dom": "^0.14.8",
     "react-motion": "^0.4.2",
     "react-router": "^2.2.2",

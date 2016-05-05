@@ -26,13 +26,14 @@ const Textbox = React.createClass({
 	    rule: '',
 	    invalidMessage: '请输入有效值',
 	    value: '',
+			readOnly: false,
 		};
 	},
 
 	getInitialState() {
 		return {
 			isValid: true,
-	    value: this.props.value || '',
+	    value: _.isNil(this.props.value) ? '' : this.props.value,
 		};
 	},
 
@@ -63,27 +64,6 @@ const Textbox = React.createClass({
 			nextState.isValid = valid.isValid;
 			this.props.invalidMessage = valid.message;
 		}
-	},
-
-	_handleChange(e) {
-		var flag;
-		var value = e.target.value;
-		if(this.props.onBeforeChange){
-			flag = this.props.onBeforeChange(value, this);
-		}
-		if(flag === false) return;
-
-		var nextState = {value};
-		this._validateValue(value, nextState);
-		if(this._debouncedChange){
-			this._debouncedChange(value, this.state.value);
-		}
-
-		this.setState(nextState);
-
-    if(this.props.owner && this.props.target){
-      this.props.owner[this.props.target] = value;
-    }
 	},
 
 	componentDidMount () {
@@ -126,6 +106,9 @@ const Textbox = React.createClass({
 			props.children = props.children || props.value;
 		} else if (multiline) {
 			Element = 'textarea';
+			if(_.isNil(style.verticalAlign)){
+				style.verticalAlign = 'top';
+			}
 		}
 
 		let requiredMessageElem = null;
@@ -153,7 +136,28 @@ const Textbox = React.createClass({
 				{validationMessageElem}
 			</div>
 		);
-	}
+	},
+
+	_handleChange(e) {
+		var flag;
+		var value = e.target.value;
+		if(this.props.onBeforeChange){
+			flag = this.props.onBeforeChange(value, this);
+		}
+		if(flag === false) return;
+
+		var nextState = {value};
+		this._validateValue(value, nextState);
+		if(this._debouncedChange){
+			this._debouncedChange(value, this.state.value);
+		}
+
+		this.setState(nextState);
+
+		if(this.props.owner && this.props.target){
+			this.props.owner[this.props.target] = value;
+		}
+	},
 });
 
 export default Textbox;

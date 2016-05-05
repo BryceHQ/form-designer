@@ -207,8 +207,9 @@ var presentationStore = {
   },
 
   toggleLeft(open) {
-    if(open === null || typeof open === 'undefined'){
-      return _presentation.leftOpen = !_presentation.leftOpen;
+    if(_.isNil(open)){
+      _presentation.leftOpen = !_presentation.leftOpen;
+      return;
     }
     _presentation.leftOpen = !!open;
   },

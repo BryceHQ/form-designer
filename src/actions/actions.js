@@ -26,6 +26,12 @@ const Action = {
     });
   },
 
+  preview() {
+    Dispatcher.dispatch({
+      actionType: Constants.PREVIEW,
+    });
+  },
+
   //---------------presentation------------------
   //addChild
   addChild(parent, child){

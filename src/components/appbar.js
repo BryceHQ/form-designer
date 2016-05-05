@@ -90,10 +90,11 @@ const MyAppBar = React.createClass({
 
 
         <IconButton style={styles.iconBtn} tooltip={"preview"} iconStyle={styles.svg}
+          onTouchTap = {this._handlePreview}
         >
           <IconActionVisibility color="white"/>
         </IconButton>
-        
+
         <FlatButton  label={title} backgroundColor={Colors.blueGrey600} labelColor={Colors.white}
           onTouchTap = {this._handleToggleRight}
           labelStyle={styles.titleLabel}
@@ -135,6 +136,11 @@ const MyAppBar = React.createClass({
       }
     ]);
   },
+
+  _handlePreview() {
+    Actions.preview();
+  },
+
 
   _handleStartEditTitle() {
     this._lastMode = this.props.mode;

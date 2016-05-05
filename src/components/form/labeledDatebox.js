@@ -1,10 +1,14 @@
+/*
+* 日期控件
+*/
+
 import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
 import Actions from '../../actions/actions';
 
-import Radio from '../common/editor/radio';
+import Datebox from '../common/editor/datebox';
 
 import DataBinding from '../mixins/dataBinding';
 import DraggableContainer from '../mixins/draggableContainer';
@@ -12,24 +16,26 @@ import DraggableContainer from '../mixins/draggableContainer';
 const styles = {
 	root: {
 		padding: '2px 0',
-	}
+	},
 };
 
-const LabeledRadio = React.createClass({
-	mixins: [DataBinding, DraggableContainer],
+const LabeledDatebox = React.createClass({
+  mixins: [DataBinding, DraggableContainer],
 
 	propTypes: {
-		options: React.PropTypes.array,
 	},
 
 	getDefaultProps() {
 		return {
 			name: '',
 			label: '名称',
-	    value: '',
+			placeholder: '请输入...',
+			basis: '20%',
+			dateFormat: 'YYYY-MM-DD',
+			todayButton: true,
 			vertical: false,
-			optionsVertical: false,
-			options: [],
+			readOnly: false,
+			showYearDropdown: false,
 
 			dragDrop: true,
 			basic: '20%',
@@ -38,14 +44,18 @@ const LabeledRadio = React.createClass({
 
 	render() {
 		let {
-			value, label, vertical, style, name, options, optionsVertical, dataInputs, data, containerStyle, labelStyle,
+			label, vertical, dataInputs, data, value, style, labelStyle, containerStyle,
 			dragDrop, parent, target, col, row, basis, uniqueKey,
 			...props
 		} = this.props;
 
+		style = _.assign({}, style);
+		labelStyle = _.assign({}, labelStyle);
+		containerStyle = _.assign({}, containerStyle);
 		if(vertical){
 			labelStyle.display = 'block';
 		}
+
 		var children = [];
 		if(label){
 			children.push(
@@ -62,14 +72,10 @@ const LabeledRadio = React.createClass({
 				value = result.value;
 			}
 		}
-		var me = this;
-		options.forEach(function(opt, i){
-			children.push(
-				<Radio name={name} label={opt.text} value={opt.value} checked={opt.value === value}
-					inline={!optionsVertical} key={i}
-					onChange = {me._handleChange}/>
-			);
-		});
+
+		children.push(
+			<Datebox {...props} value={value} onChange={this._handleChange} style={style} key="editor"/>
+		);
 
 		var attributes = {
 			style: containerStyle,
@@ -96,7 +102,8 @@ const LabeledRadio = React.createClass({
 
 	_handleChange(value) {
 		var {dataInputs, data} = this.props;
-    if(dataInputs && data.value){
+    if(data.expression) return;
+    if(data.value){
 			var input = this._findDataInput(dataInputs, data.value);
 			if(input){
         input.value = this._getValueForType(input, value);
@@ -104,34 +111,46 @@ const LabeledRadio = React.createClass({
 			}
     }
 	},
+
 });
 
-export default LabeledRadio;
+export default LabeledDatebox;
 
 const options = {
-	name: 'LabeledRadio',
+	name: 'LabeledDatebox',
 	attributes: {
 		name: '',
 		label: '名称',
+		placeholder: '请选择日期...',
 		basis: '20%',
+		dateFormat: 'YYYY-MM-DD',
+		todayButton: true,
 		vertical: false,
-		optionsVertical: false,
-		options: [{text: 'click here', value: 'here'}, {text: 'click there', value: 'there'}],
-		style: {},
-		containerStyle: {},
-		labelStyle: {},
+		readOnly: false,
+		showYearDropdown: false,
 		data: {
 			value: '',
-      // expression: '',
 			hidden: '',
 			onChange: '',//function name
 		},
+		style: {},
+		containerStyle: {},
+		labelStyle: {},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {
+			required: {
+				editor: {type: 'checkbox'},
+			},
 			vertical: {
 				editor: {type: 'checkbox'},
 			},
-			optionsVertical: {
+			todayButton: {
+				editor: {type: 'checkbox'},
+			},
+			readOnly: {
+				editor: {type: 'checkbox'},
+			},
+			showYearDropdown: {
 				editor: {type: 'checkbox'},
 			},
 			style: {
@@ -145,18 +164,6 @@ const options = {
 			labelStyle: {
 				keyEditable: true,
 				defaultChild: {'':''},
-			},
-			options: {
-				defaultChild: {
-					text: '', value: '',
-					_options: {
-						text: {
-							editor: {autofocus: true}
-						}
-					},
-				},
-				//childOptions
-				childName: 'option',
 			},
 			data: {
 				hidden: true,

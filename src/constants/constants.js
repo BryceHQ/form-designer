@@ -4,6 +4,7 @@ const constants = {
   START_DRAG: 'START_DRAG',
   END_DRAG: 'END_DRAG',
   SELECT: 'SELECT',
+  PREVIEW: 'PREVIEW',
 
   //---------------property------------------
   ADD_CHILD: 'ADD_CHILD',

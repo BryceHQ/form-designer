@@ -1,8 +1,7 @@
 /*
-* app
+* app 入口
 *
 */
-
 import React from 'react';
 import _ from 'lodash';
 

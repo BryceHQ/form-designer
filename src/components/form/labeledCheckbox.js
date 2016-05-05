@@ -2,7 +2,12 @@ import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
+import Actions from '../../actions/actions';
+
 import Checkbox from '../common/editor/checkbox';
+
+import DataBinding from '../mixins/dataBinding';
+import DraggableContainer from '../mixins/draggableContainer';
 
 const styles = {
 	root: {
@@ -11,6 +16,7 @@ const styles = {
 };
 
 const LabeledCheckbox = React.createClass({
+	mixins: [DataBinding, DraggableContainer],
 
 	propTypes: {
 		options: React.PropTypes.array,
@@ -21,41 +27,75 @@ const LabeledCheckbox = React.createClass({
 			name: '',
 			label: '名称',
 	    value: '',
+			on: true,
+			off: false,
 			vertical: false,
 			optionsVertical: false,
-			options: [],
+
+			dragDrop: true,
+			basic: '20%',
 		};
 	},
 
 	render() {
-		let {label, vertical, style, name, options, optionsVertical} = this.props;
-		let props = _.omit(this.props, ['label', 'vertical', 'style', 'options', 'optionsVertical']);
+		let {
+			value, vertical, dataInputs, data, style, containerStyle,
+			dragDrop, parent, target, col, row, basis, uniqueKey,
+			...props
+		} = this.props;
 
-		let labelStyle = {};
-		if(vertical){
-			labelStyle.display = 'block';
+		style = _.assign({}, style);
+		// labelStyle = _.assign({}, labelStyle);
+		containerStyle = _.assign({}, containerStyle);
+
+		var children = [];
+		if(dataInputs && data){
+			var result = this._compute();
+			if(result.hidden === true){
+				containerStyle = _.assign({display: 'none'}, containerStyle);
+			}
+			if(data.value || data.expression){
+				value = result.value;
+			}
 		}
 
-
-		let labelElem = null;
-		if(label){
-			labelElem = <lable className="FormLabel" style={labelStyle}>{label}</lable>;
-		}
-
-		var checkboxes = [];
-		options.forEach(function(opt, i){
-			checkboxes.push(
-				<Checkbox name={name} label={opt.text} value={opt.value} inline={!optionsVertical} key={i}/>
-			);
-		});
-
-		return (
-			<div style={style}>
-				{labelElem}
-				{checkboxes}
-			</div>
+		children.push(
+			<Checkbox {...props} value={value} inline={!vertical} onChange={this._handleChange} style={style} key="editor"/>
 		);
-	}
+
+		var attributes = {
+			style: containerStyle,
+			basis,
+			//
+			// dragDrop: {
+			//
+			// },
+		};
+
+		if(dragDrop){
+			_.assign(attributes, {
+				row: row,
+				col: col,
+				parent: parent,
+				target: target,
+				uniqueKey: uniqueKey,
+			});
+			return this._getDraggableContainer(attributes, children);
+		}
+
+		return this._getContainer(attributes, children);
+	},
+
+	_handleChange(value) {
+		var {dataInputs, data} = this.props;
+    if(data.value){
+			var input = this._findDataInput(dataInputs, data.value);
+			if(input){
+        input.value = this._getValueForType(input, value);
+				Actions.valueChange();
+			}
+    }
+	},
 });
 
 export default LabeledCheckbox;
@@ -65,27 +105,35 @@ const options = {
 	attributes: {
 		name: '',
 		label: '名称',
+		on: true,
+		off: false,
+		basis: '20%',
 		vertical: false,
-		optionsVertical: false,
-		options: [{text: 'click here', value: 'here'}, {text: 'click there', value: 'there'}],
 		style: {
+		},
+		containerStyle: {
+		},
+		data: {
+			value: '',
+			// expression: '',
+			hidden: '',
+			onChange: '',//function name
 		},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {
 			vertical: {
 				editor: {type: 'checkbox'},
 			},
-			optionsVertical: {
-				editor: {type: 'checkbox'},
-			},
 			style: {
 				keyEditable: true,
 				defaultChild: {'':''},
 			},
-			options: {
-				defaultChild: {text: '', value: ''},
-				//childOptions
-				childName: 'option',
+			containerStyle: {
+				keyEditable: true,
+				defaultChild: {'':''},
+			},
+			data: {
+				hidden: true,
 			},
 		},
 	},

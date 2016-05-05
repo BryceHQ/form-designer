@@ -8,7 +8,7 @@ import lang from '../lang.js';
 
 import helper from '../helper.js';
 
-import menuStore from './menuStore.js';
+var menuStore = require('./menuStore.js');
 
 const CHANGE_EVENT = 'change';
 
@@ -32,14 +32,34 @@ let _data = {
       dataInputs: [],
       _options: {
   			dataInputs: {
-  				defaultChild: {name: '', type: '', defaultValue: ''},
+  				defaultChild: {
+            name: '', type: '', defaultValue: '',
+            _options: {
+              name: {
+                editor: {autofocus: true}
+              },
+              type: {
+                editor: {
+        					type: 'combobox',
+        					options: [{
+                    text: '字符串', value: 'string'
+                  },{
+                    text:'数值', value:'int'
+                  },{
+                    text: '布尔值', value: 'bool',
+                  },{
+                    text: '日期', value: 'datetime',
+                  }]
+        				}
+              },
+            }
+          },
   				//childOptions
   				childName: 'input',
   			},
   		},
     },
     children: [],
-
   },
 };
 
@@ -49,10 +69,10 @@ let _drag = {};
 * 对当前的target进行转换
 */
 function getTarget(target, name, attrs) {
-  if(target.name === name) return _.assign({}, target);
+  if(target.name === name) return target;
   // Row的child一定是Col
-  if(name === 'Col' && target.name === 'Row'){
-    return target.children;
+  if(name === 'children'){
+    return target.name === 'Row' ? target.children : target;
   }
   return _.assign({name: name}, {children: [target], attributes: attrs});
 }
@@ -89,7 +109,7 @@ function endDrag({target, parent, row, col}){
   var inner = typeof _drag.col === 'number';
 
   //remove
-  if(target === null || typeof target === 'undefined'){
+  if(_.isNil(target)){
     removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
     return;
   }
@@ -104,7 +124,7 @@ function endDrag({target, parent, row, col}){
   removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
   //target Col
   if(typeof col === 'number'){
-    splice(parent.children, col, 0, getTarget(dragTarget, 'Col', { basis: '20%' }));
+    splice(parent.children, col, 0, getTarget(dragTarget, 'children'));
   }
   //target row
   else {
@@ -113,7 +133,7 @@ function endDrag({target, parent, row, col}){
     }
     if(typeof row === 'number'){
       if(inner){
-        splice(target.children, row, 0, getTarget(dragTarget, 'Col'));
+        splice(target.children, row, 0, getTarget(dragTarget, 'children'));
       } else {
         splice(target.children, row, 0, getTarget(dragTarget, 'Row'));
       }
@@ -122,6 +142,35 @@ function endDrag({target, parent, row, col}){
     }
   }
 
+}
+
+function preview(){
+  if(_config.preview){
+    var form = _.cloneDeepWith(_data.form, function(value, key){
+      if(key && typeof key === 'string' && key.indexOf('_') === 0){
+        return null;
+      }
+    });
+    var inputNames = [], inputTypes = [];
+    form.attributes.dataInputs.forEach(function(input){
+      if(input.name){
+        inputNames.push(input.name);
+        inputTypes.push(input.type);
+      }
+    });
+    ajax.post(
+      _config.preview, {
+        data: {json: JSON.stringify(form), inputNames: inputNames.join(','), inputTypes: inputTypes.join(',')},
+        success(data) {
+          if(!data) return;
+          window.open(_config.preview + '?viewName=' + data);
+        },
+        error(data) {
+          callback.error(data);
+        },
+      }
+    );
+  }
 }
 
 function setMessage(message){
@@ -160,6 +209,17 @@ const Store = _.assign({}, EventEmitter.prototype, {
 
   getData(fileId) {
     return _data;
+  },
+
+  setForm(data, initData) {
+    if(data){
+      data.attributes.dataInputs.forEach(function(input){
+        if(!input || !input.name) return;
+        input.value = initData[input.name];
+      });
+      _data.form = data;
+      this.emitChange();
+    }
   },
 
   setMessage: setMessage,
@@ -209,6 +269,10 @@ Dispatcher.register((action) => {
         _data.rightData = action.data.data;
       }
       Store.emitChange();
+      break;
+
+    case Constants.PREVIEW:
+      preview();
       break;
 
     //----------property------------

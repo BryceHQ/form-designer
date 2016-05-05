@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import $ from 'jquery';
 import classnames from 'classnames';
 
 import Colors from 'material-ui/lib/styles/colors';
