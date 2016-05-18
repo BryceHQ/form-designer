@@ -6,12 +6,9 @@ import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
-import Actions from '../../actions/actions';
-
 import Datebox from '../common/editor/datebox';
 
 import DataBinding from '../mixins/dataBinding';
-import DraggableContainer from '../mixins/draggableContainer';
 
 const styles = {
 	root: {
@@ -19,100 +16,97 @@ const styles = {
 	},
 };
 
-const LabeledDatebox = React.createClass({
-  mixins: [DataBinding, DraggableContainer],
+const LabeledDatebox = function(container){
+	return React.createClass({
+	  mixins: [DataBinding, container],
 
-	propTypes: {
-	},
+		propTypes: {
+		},
 
-	getDefaultProps() {
-		return {
-			name: '',
-			label: '名称',
-			placeholder: '请输入...',
-			basis: '20%',
-			dateFormat: 'YYYY-MM-DD',
-			todayButton: true,
-			vertical: false,
-			readOnly: false,
-			showYearDropdown: false,
+		getDefaultProps() {
+			return {
+				name: '',
+				label: '名称',
+				placeholder: '请输入...',
+				basis: '20%',
+				dateFormat: 'YYYY-MM-DD',
+				todayButton: true,
+				vertical: false,
+				readOnly: false,
+				showYearDropdown: false,
 
-			dragDrop: true,
-			basic: '20%',
-		};
-	},
+				basic: '20%',
+			};
+		},
 
-	render() {
-		let {
-			label, vertical, dataInputs, data, value, style, labelStyle, containerStyle,
-			dragDrop, parent, target, col, row, basis, uniqueKey,
-			...props
-		} = this.props;
+		render() {
+			let {
+				label, vertical, dataInputs, data, value, style, labelStyle, containerStyle,
+				parent, target, col, row, basis, uniqueKey,
+				...props
+			} = this.props;
 
-		style = _.assign({}, style);
-		labelStyle = _.assign({}, labelStyle);
-		containerStyle = _.assign({}, containerStyle);
-		if(vertical){
-			labelStyle.display = 'block';
-		}
+			style = _.assign({}, style);
+			labelStyle = _.assign({}, labelStyle);
+			containerStyle = _.assign({}, containerStyle);
+			if(vertical){
+				labelStyle.display = 'block';
+			}
 
-		var children = [];
-		if(label){
+			var children = [];
+			if(label){
+				children.push(
+					<lable className="FormLabel" style={labelStyle} key="label">{label}</lable>
+				);
+			}
+
+			if(dataInputs && data){
+				var result = this._compute();
+				if(result.hidden === true){
+					containerStyle = _.assign({display: 'none'}, containerStyle);
+				}
+				if(data.value || data.expression){
+					value = result.value;
+				}
+			}
+
 			children.push(
-				<lable className="FormLabel" style={labelStyle} key="label">{label}</lable>
+				<Datebox {...props} value={value} onChange={this._handleChange} style={style} key="editor"/>
 			);
-		}
 
-		if(dataInputs && data){
-			var result = this._compute();
-			if(result.hidden === true){
-				containerStyle = _.assign({display: 'none'}, containerStyle);
-			}
-			if(data.value || data.expression){
-				value = result.value;
-			}
-		}
+			var attributes = {
+				style: containerStyle,
+				basis,
+				row,
+				col,
+				parent,
+				target,
+				uniqueKey,
+				//
+				// dragDrop: {
+				//
+				// },
+			};
 
-		children.push(
-			<Datebox {...props} value={value} onChange={this._handleChange} style={style} key="editor"/>
-		);
+			return this._getContainer(attributes, children);
+		},
 
-		var attributes = {
-			style: containerStyle,
-			basis,
-			//
-			// dragDrop: {
-			//
-			// },
-		};
+		_handleChange(value) {
+			var {dataInputs, data} = this.props;
+	    if(data.expression) return;
+	    if(data.value){
+				var input = this._findDataInput(dataInputs, data.value);
+				if(input){
+	        input.value = this._getValueForType(input, value);
+					if(this.props.emitChange){
+						this.props.emitChange();
+					}
+				}
+	    }
+		},
 
-		if(dragDrop){
-			_.assign(attributes, {
-				row: row,
-				col: col,
-				parent: parent,
-				target: target,
-				uniqueKey: uniqueKey,
-			});
-			return this._getDraggableContainer(attributes, children);
-		}
-
-		return this._getContainer(attributes, children);
-	},
-
-	_handleChange(value) {
-		var {dataInputs, data} = this.props;
-    if(data.expression) return;
-    if(data.value){
-			var input = this._findDataInput(dataInputs, data.value);
-			if(input){
-        input.value = this._getValueForType(input, value);
-				Actions.valueChange();
-			}
-    }
-	},
-
-});
+	});
+};
 
 export default LabeledDatebox;
 

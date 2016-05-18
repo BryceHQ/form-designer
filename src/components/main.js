@@ -25,11 +25,11 @@ const Main = React.createClass({
   // },
 
   render() {
-    let {mode, data, style, rightOpen, rightData} = this.props;
+    let {mode, data, style, rightOpen, rightData, selectKey} = this.props;
 
     return (
       <div className = "center">
-        <Center data={data} mode={mode} rightOpen={rightOpen}></Center>
+        <Center data={data} mode={mode} rightOpen={rightOpen} selectKey={selectKey}></Center>
         <Kit mode={mode}></Kit>
         <Right open={rightOpen} rightData={rightData}></Right>
       </div>

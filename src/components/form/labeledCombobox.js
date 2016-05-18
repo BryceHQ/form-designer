@@ -2,12 +2,9 @@ import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
-import Actions from '../../actions/actions';
-
 import Combobox from '../common/editor/combobox';
 
 import DataBinding from '../mixins/dataBinding';
-import DraggableContainer from '../mixins/draggableContainer';
 
 const styles = {
 	root: {
@@ -15,96 +12,93 @@ const styles = {
 	}
 };
 
-const LabeledCheckbox = React.createClass({
-	mixins: [DataBinding, DraggableContainer],
+const LabeledCheckbox = function(container){
+	return React.createClass({
+		mixins: [DataBinding, container],
 
-	propTypes: {
-	},
+		propTypes: {
+		},
 
-	getDefaultProps() {
-		return {
-			name: '',
-			label: '名称',
-	    value: '',
-			vertical: false,
-			options: [],
+		getDefaultProps() {
+			return {
+				name: '',
+				label: '名称',
+		    value: '',
+				vertical: false,
+				options: [],
 
-			dragDrop: true,
-			basic: '20%',
-		};
-	},
+				basic: '20%',
+			};
+		},
 
-	render() {
-		let {
-			value, label, vertical, dataInputs, data, style, containerStyle, labelStyle,
-			dragDrop, parent, target, col, row, basis, uniqueKey,
-			...props
-		} = this.props;
+		render() {
+			let {
+				value, label, vertical, dataInputs, data, style, containerStyle, labelStyle,
+				parent, target, col, row, basis, uniqueKey,
+				...props
+			} = this.props;
 
-		style = _.assign({}, style);
-		labelStyle = _.assign({}, labelStyle);
-		containerStyle = _.assign({}, containerStyle);
+			style = _.assign({}, style);
+			labelStyle = _.assign({}, labelStyle);
+			containerStyle = _.assign({}, containerStyle);
 
-		if(vertical){
-			labelStyle.display = 'block';
-		}
+			if(vertical){
+				labelStyle.display = 'block';
+			}
 
-		var children = [];
-		if(label){
+			var children = [];
+			if(label){
+				children.push(
+					<lable className="FormLabel" style={labelStyle} key="laebl">{label}</lable>
+				);
+			}
+
+			if(dataInputs && data){
+				var result = this._compute();
+				if(result.hidden === true){
+					containerStyle = _.assign({display: 'none'}, containerStyle);
+				}
+				if(data.value || data.expression){
+					value = result.value;
+				}
+			}
+
 			children.push(
-				<lable className="FormLabel" style={labelStyle} key="laebl">{label}</lable>
+				<Combobox {...props} value={value} onChange={this._handleChange} style={style} key="editor"/>
 			);
-		}
 
-		if(dataInputs && data){
-			var result = this._compute();
-			if(result.hidden === true){
-				containerStyle = _.assign({display: 'none'}, containerStyle);
+			var attributes = {
+				style: containerStyle,
+				basis,
+				row,
+				col,
+				parent,
+				target,
+				uniqueKey,
+				//
+				// dragDrop: {
+				//
+				// },
 			}
-			if(data.value || data.expression){
-				value = result.value;
-			}
-		}
 
-		children.push(
-			<Combobox {...props} value={value} onChange={this._handleChange} style={style} key="editor"/>
-		);
+			return this._getContainer(attributes, children);
+		},
 
-		var attributes = {
-			style: containerStyle,
-			basis,
-			//
-			// dragDrop: {
-			//
-			// },
-		}
+		_handleChange(value) {
+			var {dataInputs, data} = this.props;
+			if(dataInputs && data.value){
+				var input = this._findDataInput(dataInputs, data.value);
+				if(input){
+	        input.value = this._getValueForType(input, value);
+					if(this.props.emitChange){
+						this.props.emitChange();
+					}
+				}
+	    }
+		},
 
-		if(dragDrop){
-			_.assign(attributes, {
-				row: row,
-				col: col,
-				parent: parent,
-				target: target,
-				uniqueKey: uniqueKey,
-			});
-			return this._getDraggableContainer(attributes, children);
-		}
-
-		return this._getContainer(attributes, children);
-	},
-
-	_handleChange(value) {
-		var {dataInputs, data} = this.props;
-		if(dataInputs && data.value){
-			var input = this._findDataInput(dataInputs, data.value);
-			if(input){
-        input.value = this._getValueForType(input, value);
-				Actions.valueChange();
-			}
-    }
-	},
-
-});
+	});
+};
 
 export default LabeledCheckbox;
 

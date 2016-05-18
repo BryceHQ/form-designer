@@ -1,6 +1,4 @@
-import Container from '../mixins/draggableContainer';
-
-import DragDrop from '../draggable/dragDrop';
+import Container from '../mixins/colContainer';
 
 import Col from './col';
 import Row from './row';
@@ -26,7 +24,6 @@ const form = {
   LabeledDatebox: LabeledDatebox(Container),
   LabeledDateboxRange: LabeledDateboxRange(Container),
 
-  DragDrop: DragDrop,
   Alert: Alert,
 };
 

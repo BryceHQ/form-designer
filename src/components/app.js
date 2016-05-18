@@ -37,7 +37,7 @@ const App = React.createClass({
   },
 
   render() {
-    let {form, mode, leftOpen, rightOpen, rightData, title, loading, menu, bottomMessage, error} = this.state;
+    let {form, mode, leftOpen, rightOpen, rightData, title, loading, menu, selectKey, bottomMessage, error} = this.state;
     let snackbar = (
       <Snackbar
         open={!!bottomMessage}
@@ -62,7 +62,8 @@ const App = React.createClass({
       );
     } else{
       center = (
-        <Main data={form} mode={mode} rightOpen={rightOpen} leftOpen={leftOpen} rightData={rightData}/>
+        <Main data={form} mode={mode} rightOpen={rightOpen} leftOpen={leftOpen} rightData={rightData}
+          selectKey={selectKey}/>
       );
     }
 

@@ -22,10 +22,10 @@ const Center = React.createClass({
   },
 
   render() {
-    let {rightOpen, data, mode, style} = this.props;
+    let {rightOpen, data, mode, selectKey, style} = this.props;
     return (
       <Drop className="form-container" target={data} style={style}>
-        {parser(null, data, true)}
+        {parser(null, data, true, selectKey)}
       </Drop>
     );
   },

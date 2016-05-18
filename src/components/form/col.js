@@ -6,9 +6,7 @@ import Colors from 'material-ui/lib/styles/colors';
 import InkBar from 'material-ui/lib/ink-bar';
 
 
-import Actions from '../../actions/actions';
-
-import Store from '../../stores/store';
+// import Actions from '../../actions/actions';
 
 import {spacing} from '../../theme';
 
@@ -34,7 +32,7 @@ const Col = React.createClass({
 	},
 
 	render() {
-		let { basis, gutter, width, mode, style, uniqueKey, children, ...props } = this.props;
+		let { basis, gutter, width, mode, style, uniqueKey, selected, children, ...props } = this.props;
 
 		let columnStyle = {
 			minHeight: 10,
@@ -70,7 +68,7 @@ const Col = React.createClass({
 			);
 		}
 
-		if(Store.getData().selectKey == uniqueKey){
+		if(selected){
 			if(!_.isArray(children)){
 				children = [children];
 			}

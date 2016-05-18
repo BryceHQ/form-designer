@@ -17,7 +17,7 @@ const Row = React.createClass({
 		};
 	},
 	render() {
-		let { gutter, style } = this.props;
+		let { className, gutter, style, target, ...props } = this.props;
 		let rowStyle = {
 			display: 'flex',
 			flexWrap: 'wrap',
@@ -26,11 +26,10 @@ const Row = React.createClass({
 			// marginLeft: (gutter / -2),
 			// marginRight: (gutter / -2),
 		};
-		let className = classnames('Row', this.props.className);
-		let props = _.omit(this.props, ['className', 'gutter', 'style']);
+		let componentClass = classnames('Row', className);
 
 		return (
-			<div {...props} style={_.assign(rowStyle, style)} className={className} />
+			<div {...props} style={_.assign(rowStyle, style)} className={componentClass} />
 		);
 	}
 });

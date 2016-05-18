@@ -3,8 +3,6 @@ import _ from 'lodash';
 
 import Colors from 'material-ui/lib/styles/colors';
 
-import Actions from '../../actions/actions';
-
 import Drag from './drag';
 import Drop from './drop';
 

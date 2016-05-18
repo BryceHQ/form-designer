@@ -4,13 +4,13 @@
 import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
+import moment from'moment';
 
 import Actions from '../../actions/actions';
 
 import Datebox from '../common/editor/datebox';
 
 import DataBinding from '../mixins/dataBinding';
-import DraggableContainer from '../mixins/draggableContainer';
 
 const styles = {
 	root: {
@@ -18,138 +18,152 @@ const styles = {
 	},
 };
 
-const LabeledDateboxRange = React.createClass({
-  mixins: [DataBinding, DraggableContainer],
+const LabeledDateboxRange = function(container){
+	return React.createClass({
+	  mixins: [DataBinding, container],
 
-	propTypes: {
-	},
+		propTypes: {
+		},
 
-	getDefaultProps() {
-		return {
-			naem: '',
-			label: '名称',
-			required: false,
-	    requiredMessage: '该项为必填项',
-	    rule: '',
-	    invalidMessage: '请输入有效值',
-	    value: '',
-			vertical: false,
-			readOnly: false,
+		getDefaultProps() {
+			return {
+				naem: '',
+				label: '名称',
+				required: false,
+		    requiredMessage: '该项为必填项',
+		    rule: '',
+		    invalidMessage: '请输入有效值',
+		    value: '',
+				vertical: false,
+				readOnly: false,
 
-			dragDrop: true,
-			basic: '20%',
-		};
-	},
+				basic: '20%',
+			};
+		},
 
-	render() {
-		let {
-			label, vertical, dataInputs, data, start, end, startPlaceholder, endPlaceholder, style, labelStyle, containerStyle,
-			dragDrop, parent, target, col, row, basis, uniqueKey,
-			...props
-		} = this.props;
+		render() {
+			let {
+				label, vertical, dataInputs, data, start, end, startPlaceholder, endPlaceholder, style, labelStyle, containerStyle,
+				parent, target, col, row, basis, uniqueKey,
+				...props
+			} = this.props;
 
-		style = _.assign({}, style);
-		labelStyle = _.assign({}, labelStyle);
-		containerStyle = _.assign({}, containerStyle);
-		if(vertical){
-			labelStyle.display = 'block';
-		}
+			style = _.assign({}, style);
+			labelStyle = _.assign({}, labelStyle);
+			containerStyle = _.assign({}, containerStyle);
+			if(vertical){
+				labelStyle.display = 'block';
+			}
 
-		var children = [];
-		if(label){
+			var children = [];
+			if(label){
+				children.push(
+					<lable className="FormLabel" style={labelStyle} key="label">{label}</lable>
+				);
+			}
+
+			if(dataInputs && data){
+				var startResult = this._compute({
+					value: data.startValue,
+					expression: data.startExpression,
+					hidden: data.hidden,
+				});
+				if(startResult.hidden === true){
+					containerStyle = _.assign({display: 'none'}, containerStyle);
+				}
+				if(data.startValue || data.startExpression){
+					start = startResult.value;
+				}
+
+				var endResult = this._compute({
+					value: data.endValue,
+					expression: data.endExpression,
+					hidden: data.hidden,
+				});
+				if(data.endValue || data.endExpression){
+					end = endResult.value;
+				}
+			}
+
 			children.push(
-				<lable className="FormLabel" style={labelStyle} key="label">{label}</lable>
+				<Datebox {...props} value={start} startDate={start} endDate={end} onChange={this._handleChangeStart} style={style} placeholder={startPlaceholder} key="start"/>
 			);
-		}
+			children.push(
+				<Datebox {...props} value={end} startDate={start} endDate={end} onChange={this._handleChangeEnd} style={style} placeholder={endPlaceholder} key="end"/>
+			);
 
-		if(dataInputs && data){
-			var startResult = this._compute({
-				value: data.startValue,
-				expression: data.startExpression,
-				hidden: data.hidden,
-			});
-			if(startResult.hidden === true){
-				containerStyle = _.assign({display: 'none'}, containerStyle);
+			var attributes = {
+				style: containerStyle,
+				basis,
+				row,
+				col,
+				parent,
+				target,
+				uniqueKey,
+				//
+				// dragDrop: {
+				//
+				// },
 			}
-			if(data.startValue || data.startExpression){
-				start = startResult.value;
-			}
 
-			var endResult = this._compute({
-				value: data.endValue,
-				expression: data.endExpression,
-				hidden: data.hidden,
-			});
-			if(data.endValue || data.endExpression){
-				end = endResult.value;
-			}
-		}
+			return this._getContainer(attributes, children);
+		},
 
-		children.push(
-			<Datebox {...props} value={start} onChange={this._handleChangeStart} style={style} placeholder={startPlaceholder} key="start"/>
-		);
-		children.push(
-			<Datebox {...props} value={end} onChange={this._handleChangeEnd} style={style} placeholder={endPlaceholder} key="end"/>
-		);
-
-		var attributes = {
-			style: containerStyle,
-			basis,
-			//
-			// dragDrop: {
-			//
-			// },
-		};
-
-		if(dragDrop){
-			_.assign(attributes, {
-				row: row,
-				col: col,
-				parent: parent,
-				target: target,
-				uniqueKey: uniqueKey,
-			});
-			return this._getDraggableContainer(attributes, children);
-		}
-
-		return this._getContainer(attributes, children);
-	},
-
-	_handleChangeStart(value) {
-		var {dataInputs, data} = this.props;
-    if(data.startValue){
-			var input = this._findDataInput(dataInputs, data.startValue);
-			if(input){
-				var otherInput = this._findDataInput(dataInputs, data.endValue);
-				if(otherInput && otherInput.value < value){
-					input.value = otherInput.value;
-					otherInput.value = value;
-				} else {
-					input.value = value;
+		_handleChangeStart(value) {
+			var {dataInputs, data} = this.props;
+	    if(data.startValue){
+				var input = this._findDataInput(dataInputs, data.startValue);
+				if(input){
+					var otherInput = this._findDataInput(dataInputs, data.endValue);
+					if(otherInput && this._getDate(otherInput.value) < value._d){
+						input.value = otherInput.value;
+						otherInput.value = value;
+					} else {
+						input.value = value;
+					}
+					if(this.props.emitChange){
+						this.props.emitChange();
+					}
 				}
-				Actions.valueChange();
-			}
-    }
-	},
+	    }
+		},
 
-	_handleChangeEnd(value) {
-		var {dataInputs, data} = this.props;
-    if(data.endValue){
-			var input = this._findDataInput(dataInputs, data.endValue);
-			if(input){
-				var otherInput = this._findDataInput(dataInputs, data.startValue);
-				if(otherInput && otherInput.value > value){
-					input.value = otherInput.value;
-					otherInput.value = value;
-				} else {
-					input.value = value;
+		_handleChangeEnd(value) {
+			var {dataInputs, data} = this.props;
+	    if(data.endValue){
+				var input = this._findDataInput(dataInputs, data.endValue);
+				if(input){
+					var otherInput = this._findDataInput(dataInputs, data.startValue);
+					if(otherInput && this._getDate(otherInput.value) > value._d){
+						input.value = otherInput.value;
+						otherInput.value = value;
+					} else {
+						input.value = value;
+					}
+					if(this.props.emitChange){
+						this.props.emitChange();
+					}
 				}
-				Actions.valueChange();
-			}
-    }
-	},
+	    }
+		},
 
-});
+		_getDate(date){
+			if(_.isDate(date)){
+				return date;
+			}
+			if(_.isString(date)){
+				var moment = moment(date);
+				if(moment.isValid()){
+					return moment._d;
+				} else {
+					console.error(`error: invalid string to get moment( ${date} )`);
+				}
+			}
+			return date._d;
+		},
+
+	});
+};
 
 export default LabeledDateboxRange;
 

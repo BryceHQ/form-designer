@@ -1,21 +1,16 @@
 /*
 * 表单显示模块 入口
-*
+* 显示模块需要兼容ie8。不使用Flux，material ui
 */
-
 import React from 'react';
 import _ from 'lodash';
 
+import Store from './store';
 
-import Store from '../stores/store';
-import Actions from '../actions/actions';
-
-import Constants from '../constants/constants';
-
-import {parseForm} from '../parser.js';
+import parser from './parser.js';
 
 
-const Display = React.createClass({
+const App = React.createClass({
   getInitialState() {
     return Store.getData();
   },
@@ -32,13 +27,17 @@ const Display = React.createClass({
   },
 
   render() {
-    let {form, mode} = this.state;
+    let {form} = this.state;
 
     return (
       <div>
-        {parseForm(form, form.attributes.dataInputs)}
+        {form ? parser(form, form.attributes.dataInputs, this._emitChange) : null}
       </div>
     );
+  },
+
+  _emitChange() {
+    Store.emitChange();
   },
 
   _onChange() {
@@ -46,4 +45,4 @@ const Display = React.createClass({
   },
 });
 
-export default Display;
+export default App;

@@ -5,7 +5,6 @@
 // import _ from 'lodash';
 // import classnames from 'classnames';
 //
-// import Actions from '../../actions/actions';
 //
 // import Checkbox from '../common/editor/checkbox';
 //

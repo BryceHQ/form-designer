@@ -6,11 +6,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-// import Display from './components/display';
+import Display from './app';
 
-import Store from './stores/store';
+import Store from './store';
 
-require("../less/display.less");
+require("../../less/display.less");
 
 
 //Needed for onTouchTap
@@ -19,6 +19,7 @@ require("../less/display.less");
 //https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
 
-// ReactDOM.render(<Display />, document.getElementById('root'));
+ReactDOM.render(<Display />, document.getElementById('root'));
+
 
 export default Store;

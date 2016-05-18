@@ -11,14 +11,23 @@ var Datebox = React.createClass({
 
   getInitialState() {
     return {
-      value: this._getDate(this.props.value),
+      value: this._getMoment(this.props.value),
+      startDate: this._getMoment(this.props.startDate),
+      endDate: this._getMoment(this.props.endDate),
     };
   },
 
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.value !== this.state.value){
-			this.setState({value: nextProps.value});
+			this.setState({value: this._getMoment(nextProps.value)});
 		}
+    if(nextProps.startDate !== this.state.startDate){
+			this.setState({startDate: this._getMoment(nextProps.startDate)});
+		}
+    if(nextProps.endDate !== this.state.endDate){
+			this.setState({endDate: this._getMoment(nextProps.endDate)});
+		}
+
 		if(nextProps.onChange !== this.props.onChange){
 			this._debouncedChange = _.debounce(this.props.onChange, 1000);
 		}
@@ -32,21 +41,24 @@ var Datebox = React.createClass({
 
   render() {
     var {className, placeholder, todayButton, ...props} = this.props;
-    var {value} = this.state;
+    var {value, startDate, endDate} = this.state;
     todayButton = todayButton === true ? 'today' : null;
     var componentClass = classnames('FormInput', className);
     return (
       <DatePicker {...props} className={componentClass}
         locale="zh-cn"
         selected={value}
+        startDate={startDate}
+        endDate={endDate}
         todayButton={todayButton}
         placeholderText={placeholder}
         onChange={this._handleChange} />
     );
   },
 
-  _getDate(value) {
-    if(_.isDate(value)) return value;
+  _getMoment(value) {
+    if(_.isDate(value)) return moment(value);
+    if(value && _.isDate(value._d)) return value;
     if(_.isString(value)){
       var date = moment(value);
       if(date.isValid()){
