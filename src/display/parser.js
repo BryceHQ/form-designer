@@ -23,7 +23,6 @@ function parseForm(json, dataInputs, emitChange){
 
   json.attributes = _.assign(json.attributes || {}, {
     dataInputs,
-    dragDrop: false,
     emitChange,
   });
 

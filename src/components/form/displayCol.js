@@ -1,18 +1,13 @@
 /*
-* 编辑状态的col，支持选中等操作
+* 显示状态的col
 */
 import React from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
 
-import Colors from 'material-ui/lib/styles/colors';
-import InkBar from 'material-ui/lib/ink-bar';
-
-import Actions from '../../actions/actions';
-
 import {spacing} from '../../theme';
 
-const Col = React.createClass({
+const DisplayCol = React.createClass({
 	propTypes: {
 		basis: React.PropTypes.oneOfType([
 			React.PropTypes.number, // allow pixels
@@ -62,57 +57,12 @@ const Col = React.createClass({
 			columnStyle.width = '100%';
 		}
 
-		if(selected){
-			if(!_.isArray(children)){
-				children = [children];
-			}
-			children.push(
-				<InkBar left = "0" width = "100%" color = {Colors.blue500}
-					key="0"
-				/>
-			);
-		}
-
 		return (
-			<div style={_.assign(columnStyle, style)} {...props}
-				onClick={this._handleClick}
-				onDoubleClick={this._handleDoubleClick}
-			>
+			<div style={_.assign(columnStyle, style)} {...props}>
 				{children}
 			</div>
 		);
 	},
-
-	_handleDoubleClick(event) {
-		//col 下面有且仅有一个child
-		var col = this.props.children.props.target;
-
-		Actions.toggleRight(true, [{
-				name: 'basic',
-				data: col.attributes,
-			}, {
-				name: 'data',
-				data: col.attributes.data,
-			}
-		]);
-	},
-
-	//选中高亮
-	_handleClick(event) {
-		//col 下面有且仅有一个child
-		var col = this.props.children.props.target;
-
-		Actions.select({
-			key: col.attributes.key,
-			data: [{
-				name: 'basic',
-				data: col.attributes,
-			}, {
-				name: 'data',
-				data: col.attributes.data,
-			}]
-		});
-	},
 });
 
-export default Col;
+export default DisplayCol;

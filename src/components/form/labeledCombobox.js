@@ -34,7 +34,7 @@ const LabeledCheckbox = function(container){
 		render() {
 			let {
 				value, label, vertical, dataInputs, data, style, containerStyle, labelStyle,
-				parent, target, col, row, basis, uniqueKey,
+				parent, target, col, row, basis, uniqueKey, selectKey,
 				...props
 			} = this.props;
 
@@ -75,6 +75,7 @@ const LabeledCheckbox = function(container){
 				parent,
 				target,
 				uniqueKey,
+				selectKey,
 				//
 				// dragDrop: {
 				//
