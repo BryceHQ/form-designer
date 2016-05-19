@@ -19,9 +19,9 @@ const styles = {
 * @param parent 当前parse的data的上一级
 * @param json 当前parse的data
 * @param rowDraggable row是否可以拖拽
+* @param selectKey 当前选中的col的key
 * @param row 行号
 * @param col 列号
-* @param selectKey 当前选中的col的key
 */
 function parse(parent, json, rowDraggable, selectKey, row, col){
   if(typeof json === 'string') return json;

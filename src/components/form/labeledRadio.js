@@ -36,7 +36,7 @@ const LabeledRadio = function(container){
 		render() {
 			let {
 				value, label, vertical, style, name, options, optionsVertical, dataInputs, data, containerStyle, labelStyle,
-				parent, target, col, row, basis, uniqueKey,
+				parent, target, col, row, basis, uniqueKey, selectKey,
 				...props
 			} = this.props;
 
@@ -76,6 +76,7 @@ const LabeledRadio = function(container){
 				parent,
 				target,
 				uniqueKey,
+				selectKey,
 				//
 				// dragDrop: {
 				//

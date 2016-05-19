@@ -41,7 +41,7 @@ const LabeledTextbox = function(container){
 		render() {
 			let {
 				label, vertical, dataInputs, data, value, style, labelStyle, containerStyle,
-				parent, target, col, row, basis, uniqueKey,
+				parent, target, col, row, basis, uniqueKey, selectKey,
 				...props
 			} = this.props;
 
@@ -81,6 +81,7 @@ const LabeledTextbox = function(container){
 				parent,
 				target,
 				uniqueKey,
+				selectKey,
 				//
 				// dragDrop: {
 				//

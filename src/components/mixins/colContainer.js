@@ -3,12 +3,12 @@
 */
 import React from 'react';
 
-import Col from '../form/col';
+import Col from '../form/displayCol';
 
 const ColContainer = {
   _getContainer(props, children) {
     return (
-      <Col {...props} mode="display">
+      <Col {...props}>
         {children}
       </Col>
     );

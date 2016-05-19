@@ -44,7 +44,7 @@ const LabeledDateboxRange = function(container){
 		render() {
 			let {
 				label, vertical, dataInputs, data, start, end, startPlaceholder, endPlaceholder, style, labelStyle, containerStyle,
-				parent, target, col, row, basis, uniqueKey,
+				parent, target, col, row, basis, uniqueKey, selectKey,
 				...props
 			} = this.props;
 
@@ -100,6 +100,7 @@ const LabeledDateboxRange = function(container){
 				parent,
 				target,
 				uniqueKey,
+				selectKey,
 				//
 				// dragDrop: {
 				//
