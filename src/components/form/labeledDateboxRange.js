@@ -44,7 +44,7 @@ const LabeledDateboxRange = function(container){
 		render() {
 			let {
 				label, vertical, dataInputs, data, start, end, startPlaceholder, endPlaceholder, style, labelStyle, containerStyle,
-				parent, target, col, row, basis, uniqueKey,
+				parent, target, col, row, basis, uniqueKey, selectKey,
 				...props
 			} = this.props;
 
@@ -100,6 +100,7 @@ const LabeledDateboxRange = function(container){
 				parent,
 				target,
 				uniqueKey,
+				selectKey,
 				//
 				// dragDrop: {
 				//
@@ -152,9 +153,9 @@ const LabeledDateboxRange = function(container){
 				return date;
 			}
 			if(_.isString(date)){
-				var moment = moment(date);
-				if(moment.isValid()){
-					return moment._d;
+				var mom = moment(date);
+				if(mom.isValid()){
+					return mom._d;
 				} else {
 					console.error(`error: invalid string to get moment( ${date} )`);
 				}

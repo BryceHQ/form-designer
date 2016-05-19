@@ -31,6 +31,7 @@ const styles = {
     right: 0,
     width: spacing.rightWidth,
     zIndex: 10,
+    overflowY: 'auto',
   },
   popover: {
     position: 'absolute',

@@ -1,6 +1,6 @@
 import Container from '../mixins/colContainer';
 
-import Col from './col';
+import Col from './displayCol';
 import Row from './row';
 import Form from './form';
 import LabeledTextbox, {options as labeledTextboxOptions} from './labeledTextbox';
@@ -14,7 +14,7 @@ import Alert from '../common/alert';
 
 const form = {
   Form: Form,
-  Col: Col,
+  // Col: Col,
   Row: Row,
 
   LabeledTextbox: LabeledTextbox(Container),
