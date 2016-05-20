@@ -29,16 +29,10 @@ var Datebox = React.createClass({
 			this.setState({endDate: this._getMoment(nextProps.endDate)});
 		}
 
-		if(nextProps.onChange !== this.props.onChange){
-			this._debouncedChange = _.debounce(this.props.onChange, 1000);
-		}
 	},
 
-	componentDidMount () {
-    if(this.props.onChange){
-      this._debouncedChange = _.debounce(this.props.onChange, 1000);
-    }
-	},
+	// componentDidMount () {
+	// },
 
   render() {
     var {className, placeholder, todayButton, ...props} = this.props;
@@ -76,8 +70,8 @@ var Datebox = React.createClass({
 		}
 		if(flag === false) return;
 
-		if(this._debouncedChange){
-			this._debouncedChange(value, this.state.value);
+		if(this.props.onChange){
+			this.props.onChange(value, this.state.value);
 		}
 
 		this.setState({value});

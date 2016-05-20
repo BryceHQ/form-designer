@@ -1,5 +1,6 @@
 /*
-* support ie8
+* react-datepicker@0.27.0
+* support ie8， 依赖 jquery
 */
 import React, { Children, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
