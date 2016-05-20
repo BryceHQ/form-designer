@@ -5,7 +5,7 @@ var Es3ifyPlugin = require('./es3ifyPlugin');
 
 module.exports = {
   entry: {
-    core: "./src/index",
+    // core: "./src/index",
     display: ['babel-polyfill', "./src/display"],
   },
   output: {

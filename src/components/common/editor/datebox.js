@@ -2,7 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
 
-import DatePicker from 'react-datepicker';
+// import DatePicker from 'react-datepicker';
+import DatePicker from '../datebox/datepicker';
 import moment from'moment';
 
 require('react-datepicker/dist/react-datepicker.css');

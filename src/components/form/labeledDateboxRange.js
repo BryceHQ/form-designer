@@ -4,7 +4,7 @@
 import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
-import moment from'moment';
+import moment from 'moment';
 
 import Actions from '../../actions/actions';
 
@@ -153,9 +153,9 @@ const LabeledDateboxRange = function(container){
 				return date;
 			}
 			if(_.isString(date)){
-				var moment = moment(date);
-				if(moment.isValid()){
-					return moment._d;
+				var mom = moment(date);
+				if(mom.isValid()){
+					return mom._d;
 				} else {
 					console.error(`error: invalid string to get moment( ${date} )`);
 				}
