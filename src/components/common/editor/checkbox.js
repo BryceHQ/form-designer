@@ -81,7 +81,7 @@ const Checkbox = React.createClass({
   			<label className={componentClass} style={style}>
   				<input {...props} type="checkbox" className="x-checkbox"
             ref = "input"
-            checked = {value === on || value.toLowerCase() == on}
+            checked = {value === on || value.toLowerCase() === on}
             value = {value} onChange = {this._handleChange}/>
   				{label && <span className="x-checkbox-label">{label}</span>}
   			</label>

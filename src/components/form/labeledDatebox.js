@@ -28,14 +28,13 @@ const LabeledDatebox = function(container){
 				name: '',
 				label: '名称',
 				placeholder: '请输入...',
-				basis: '20%',
 				dateFormat: 'YYYY-MM-DD',
 				todayButton: true,
 				vertical: false,
 				readOnly: false,
 				showYearDropdown: false,
 
-				basic: '20%',
+				basis: '20%',
 			};
 		},
 
@@ -56,7 +55,11 @@ const LabeledDatebox = function(container){
 			var children = [];
 			if(label){
 				children.push(
-					<lable className="FormLabel" style={labelStyle} key="label">{label}</lable>
+					<lable key="label">
+						<span className="FormLabel" style={labelStyle}>
+							{label}
+						</span>
+					</lable>
 				);
 			}
 

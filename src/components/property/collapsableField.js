@@ -101,7 +101,7 @@ const CollapsableField = React.createClass({
       } else {
         for(var key in data){
           if(!data.hasOwnProperty(key) || ~hiddenKeys.indexOf(key)) continue;
-          opt = _options[key];
+          opt = _options[key] || options && options[key];
 
           if(opt && opt.template){
             if(data.name){

@@ -20,7 +20,8 @@ module.exports = {
     loaders: [
       { test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src') },
       { test: /\.less$/, loader: "style!css!less"},
-      { test: /\.css$/, loader: "style-loader!css-loader" }
+      { test: /\.css$/, loader: "style-loader!css-loader" },
+      { test: /\.png$/, loader: "url-loader", query: { mimetype: "image/png" }}
     ]
   }
 };

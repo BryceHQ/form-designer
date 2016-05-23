@@ -117,7 +117,7 @@ function endDrag({target, parent, row, col}){
 
   //将某个Row拖拽到它自己上，直接返回
   var rowObj = inner ? _drag.parent : _drag.target;
-  if(row === _drag.row && typeof row !== 'undefined' && rowObj.children.length === 1) return;
+  if(row === _drag.row && typeof row !== 'undefined' && rowObj.name === 'Row') return;
 
   var dragTarget = _drag.isCloneTarget ? _.cloneDeep(_drag.target) : _drag.target;
 
