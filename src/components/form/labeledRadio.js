@@ -29,7 +29,7 @@ const LabeledRadio = function(container){
 				optionsVertical: false,
 				options: [],
 
-				basic: '20%',
+				basis: '20%',
 			};
 		},
 

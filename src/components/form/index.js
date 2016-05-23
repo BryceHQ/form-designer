@@ -5,6 +5,7 @@ import DragDrop from '../draggable/dragDrop';
 import Col from './col';
 import Row from './row';
 import Form from './form';
+import Datagrid, {options as datagridOptions} from './datagrid';
 import LabeledTextbox, {options as labeledTextboxOptions} from './labeledTextbox';
 import LabeledRadio, {options as labeledRadioOptions} from './labeledRadio';
 import LabeledCheckbox, {options as labeledCheckboxOptions} from './labeledCheckbox';
@@ -18,6 +19,8 @@ const form = {
   Form: Form,
   // Col: Col,
   Row: Row,
+
+  Datagrid: Datagrid(Container),
 
   LabeledTextbox: LabeledTextbox(Container),
   LabeledRadio: LabeledRadio(Container),
@@ -33,6 +36,8 @@ const form = {
 export default form;
 
 const options = {
+  datagrid: datagridOptions,
+
   labeledTextbox: labeledTextboxOptions,
   labeledRadio: labeledRadioOptions,
   labeledCheckbox: labeledCheckboxOptions,

@@ -3,6 +3,7 @@ import Container from '../mixins/colContainer';
 import Col from './displayCol';
 import Row from './row';
 import Form from './form';
+import Datagrid, {options as datagridOptions} from './datagrid';
 import LabeledTextbox, {options as labeledTextboxOptions} from './labeledTextbox';
 import LabeledRadio, {options as labeledRadioOptions} from './labeledRadio';
 import LabeledCheckbox, {options as labeledCheckboxOptions} from './labeledCheckbox';
@@ -17,6 +18,8 @@ const form = {
   // Col: Col,
   Row: Row,
 
+  Datagrid: Datagrid(Container, true),
+
   LabeledTextbox: LabeledTextbox(Container),
   LabeledRadio: LabeledRadio(Container),
   LabeledCheckbox: LabeledCheckbox(Container),
@@ -30,6 +33,7 @@ const form = {
 export default form;
 
 const options = {
+  datagrid: datagridOptions,
   labeledTextbox: labeledTextboxOptions,
   labeledRadio: labeledRadioOptions,
   labeledCheckbox: labeledCheckboxOptions,

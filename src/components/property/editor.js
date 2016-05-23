@@ -1,11 +1,4 @@
 import React from 'react';
-//
-// DefaultEditor = require './DefaultEditor'
-// Combobox = require './Combobox'
-// GlobalizedEditor = require './GlobalizedEditor'
-// Template = require './Template'
-// Checkbox = require './Checkbox'
-// Multicheckbox = require './Multicheckbox'
 
 import Textbox from '../common/editor/textbox';
 import Checkbox from '../common/editor/checkbox';

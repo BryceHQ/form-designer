@@ -37,7 +37,7 @@ const LabeledDateboxRange = function(container){
 				vertical: false,
 				readOnly: false,
 
-				basic: '20%',
+				basis: '20%',
 			};
 		},
 

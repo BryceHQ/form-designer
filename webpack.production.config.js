@@ -1,11 +1,12 @@
 var path = require('path');
 var webpack = require('webpack');
 
-var Es3ifyPlugin = require('./es3ifyPlugin');
+var es3ifyPlugin = require('es3ify-webpack-plugin');
+// var es3ifyPlugin = require('./es3ifyPlugin');
 
 module.exports = {
   entry: {
-    // core: "./src/index",
+    core: "./src/index",
     display: ['babel-polyfill', "./src/display"],
   },
   output: {
@@ -21,12 +22,12 @@ module.exports = {
   // ],
   plugins: [
     // new webpack.optimize.UglifyJsPlugin()
-    new Es3ifyPlugin()
+    new es3ifyPlugin()
   ],
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['es3ify', 'babel'],
+      loaders: ['babel'],
       include: path.join(__dirname, 'src')
     }, {
       test: /\.less$/,
@@ -34,6 +35,11 @@ module.exports = {
     }, {
       test: /\.css$/,
       loader: "style-loader!css-loader"
+    },
+    {
+      test: /\.png$/,
+      loader: "url-loader",
+      query: { mimetype: "image/png" }
     }]
   }
 };

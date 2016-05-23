@@ -106,7 +106,7 @@
           // outside as it can't be known whether it was outside.
           if(source !== document) return;
           eventHandler(evt);
-        }
+        };
       }(ReactDOM.findDOMNode(this), this.handleClickOutside, this.props.outsideClickIgnoreClass || IGNORE_CLASS));
 
       var pos = registeredComponents.length;
@@ -139,10 +139,8 @@
      */
     enableOnClickOutside: function() {
       var fn = this.__outsideClickHandler;
-      if (typeof document !== "undefined") {
-        this.listen(document, "mousedown", fn);
-        this.listen(document, "touchstart", fn);
-      }
+      this.listen(document, "mousedown", fn);
+      this.listen(document, "touchstart", fn);
     },
 
     /**
@@ -151,13 +149,12 @@
      */
     disableOnClickOutside: function() {
       var fn = this.__outsideClickHandler;
-      if (typeof document !== "undefined") {
-        this.unlisten(document, "mousedown", fn);
-        this.unlisten(document, "touchstart", fn);
-      }
+      this.unlisten(document, "mousedown", fn);
+      this.unlisten(document, "touchstart", fn);
     },
 
     listen: function(elem, type, handle) {
+      if (typeof document === "undefined" || document === null) return;
       if (elem.addEventListener)
         elem.addEventListener(type, handle, false);
       else if (elem.attachEvent)
@@ -165,6 +162,7 @@
     },
 
     unlisten: function(elem, type, handle) {
+      if (typeof document === "undefined" || document === null) return;
       if (elem.removeEventListener)
         elem.removeEventListener(type, handle, false);
       else if (elem.detachEvent)

@@ -8,6 +8,8 @@ import Popover from 'material-ui/lib/popover/popover';
 
 import IconDelete from 'material-ui/lib/svg-icons/action/delete';
 
+import Datagrid from 'datagrid';
+
 import Drag from './draggable/drag';
 import Drop from './draggable/drop';
 
@@ -97,6 +99,11 @@ const Kit = React.createClass({
         <Drag mode={mode} isCloneTarget={true} target={options.labeledDateboxRange}
           title="datebox" style={styles.drag}>
           <Textbox disabled={true} placeholder="日期范围"/>
+        </Drag>
+
+        <Drag mode={mode} isCloneTarget={true} target={options.datagrid}
+          title="datagrid" style={styles.drag}>
+          <Datagrid title="表格" pagination={false} fit={false} ></Datagrid>
         </Drag>
 
         {this.renderDustbin()}

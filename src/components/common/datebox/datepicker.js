@@ -1,10 +1,15 @@
 import DateInput from './date_input'
 import Calendar from './calendar'
 import React from 'react'
-import TetherComponent from './tether_component_ie'
+import TetherComponent from './tether_component'
+import TetherComponentIE from './tether_component_ie'
 import classnames from 'classnames'
 import { isSameDay } from './date_utils'
 
+var ReactTetherComponent = TetherComponent;
+if(window.attachEvent){
+  ReactTetherComponent = TetherComponentIE;
+}
 
 var outsideClickIgnoreClass = 'react-datepicker-ignore-onclickoutside'
 
@@ -197,19 +202,19 @@ var DatePicker = React.createClass({
       return calendar
     } else {
       return (
-        <TetherComponent
-            classPrefix={"react-datepicker__tether"}
-            attachment={this.props.popoverAttachment}
-            targetAttachment={this.props.popoverTargetAttachment}
-            targetOffset={this.props.popoverTargetOffset}
-            renderElementTo={this.props.renderCalendarTo}
-            constraints={this.props.tetherConstraints}>
+        <ReactTetherComponent
+          classPrefix={"react-datepicker__tether"}
+          attachment={this.props.popoverAttachment}
+          targetAttachment={this.props.popoverTargetAttachment}
+          targetOffset={this.props.popoverTargetOffset}
+          renderElementTo={this.props.renderCalendarTo}
+          constraints={this.props.tetherConstraints}>
           <div className="react-datepicker__input-container">
             {this.renderDateInput()}
             {this.renderClearButton()}
           </div>
           {calendar}
-        </TetherComponent>
+        </ReactTetherComponent>
       )
     }
   }
