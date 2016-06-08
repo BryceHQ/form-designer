@@ -60,6 +60,7 @@
     "js-base64": "^2.1.9",
     "lodash": "^4.11.1",
     "material-ui": "^0.14.4",
+    "promise": "^7.1.1",
     "react": "^0.14.8",
     "react-datepicker": "^0.27.0",
     "react-dom": "^0.14.8",

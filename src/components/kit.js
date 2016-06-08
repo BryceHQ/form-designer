@@ -103,7 +103,7 @@ const Kit = React.createClass({
 
         <Drag mode={mode} isCloneTarget={true} target={options.datagrid}
           title="datagrid" style={styles.drag}>
-          <Datagrid title="表格" pagination={false} fit={false} ></Datagrid>
+          <Datagrid title="表格" pagination={false} fit={false} toolbar={false}></Datagrid>
         </Drag>
 
         {this.renderDustbin()}

@@ -36,13 +36,14 @@ const FormDatagrid = function(container, isDisplay){
 				multiSelect: false,
         fit: true,
 				fitColumns: true,
+				toolbar: false,
+				inlineEdit: true,
 				rowNumber: true,
 				rowNumberWidth: 20,
         pagination: true,
 				paginationOptions : [10, 20, 30, 40, 50],
 				paginationLabel: 'Displaying {start} to {end} of {total} items',
 				columns: [],
-				inlineEdit: false,
 
 				basic: '20%',
 
@@ -82,7 +83,7 @@ const FormDatagrid = function(container, isDisplay){
 				selectKey,
 			};
       var children = (
-        <Datagrid {...props} data={value} inlineEdit={inlineEdit}
+        <Datagrid {...props} data={{rows: value, total: value.length}} inlineEdit={inlineEdit}
 					onAdd={inlineEdit ? null : this._handleAdd}
 					onEdit={inlineEdit ? null : this._handleEdit}
 					onRemove={inlineEdit ? null : this._handleRemove}></Datagrid>
@@ -132,6 +133,8 @@ const options = {
 		multiSelect: false,
 		fit: true,
 		fitColumns: true,
+		toolbar: false,
+		inlineEdit: true,
 		rowNumber: true,
 		rowNumberWidth: 20,
 		pagination: true,
@@ -175,6 +178,12 @@ const options = {
 				editor: {type: 'checkbox'},
 			},
 			fitColumns: {
+				editor: {type: 'checkbox'},
+			},
+			toolbar: {
+				editor: {type: 'checkbox'},
+			},
+			inlineEdit: {
 				editor: {type: 'checkbox'},
 			},
 			style: {
