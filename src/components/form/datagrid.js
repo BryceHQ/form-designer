@@ -42,6 +42,7 @@ const FormDatagrid = function(container, isDisplay){
 				paginationOptions : [10, 20, 30, 40, 50],
 				paginationLabel: 'Displaying {start} to {end} of {total} items',
 				columns: [],
+				inlineEdit: false,
 
 				basic: '20%',
 
@@ -51,7 +52,7 @@ const FormDatagrid = function(container, isDisplay){
 
 		render() {
 			let {
-				dataInputs, data, style, containerStyle,
+				dataInputs, data, style, containerStyle, inlineEdit,
 				parent, target, col, row, basis, uniqueKey, selectKey,
 				...props
 			} = this.props;
@@ -81,7 +82,10 @@ const FormDatagrid = function(container, isDisplay){
 				selectKey,
 			};
       var children = (
-        <Datagrid {...props} data={value}></Datagrid>
+        <Datagrid {...props} data={value} inlineEdit={inlineEdit}
+					onAdd={inlineEdit ? null : this._handleAdd}
+					onEdit={inlineEdit ? null : this._handleEdit}
+					onRemove={inlineEdit ? null : this._handleRemove}></Datagrid>
       );
 
 			return this._getContainer(attributes, children);
@@ -101,6 +105,17 @@ const FormDatagrid = function(container, isDisplay){
 	    }
 		},
 
+		_handleAdd() {
+
+		},
+
+		_handleEdit(key) {
+
+		},
+
+		_handleRemove(keys) {
+
+		},
 	});
 };
 
