@@ -38,7 +38,7 @@ const Field = React.createClass({
     var labelElem, deleteBtn;
     if(editable){
       labelElem = (
-        <Textbox className="FormLabel" value={label} onChange={this._handleLabelChange} style={{width: '100px'}}/>
+        <Textbox className="FormLabel" value={label} onChange={this._handleLabelChange} style={{width: 100, minWidth: 100}}/>
       );
       deleteBtn = (
         <IconButton style={styles.rightBtn} iconStyle={styles.svg}
