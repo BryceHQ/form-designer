@@ -1,12 +1,21 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Sample App</title>
+    <link href="/external/easyui.css" rel="stylesheet"></link>
+    <link href="/external/icon.css" rel="stylesheet"></link>
   </head>
   <body>
     <div id='root'>
     </div>
 
-    <script src="jquery-1.10.2.js"></script>
+    <script src="/external/jquery-1.10.2.js"></script>
+    <script src="/external/jquery.easyui.min.js"></script>
+    <script>
+      $.context = {};
+    </script>
+    <script src="/external/core.js"></script>
+    <script src="/external/plugins.js"></script>
     <script src="/static/bundle.js"></script>
   </body>
 </html>

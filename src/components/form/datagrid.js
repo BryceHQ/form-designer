@@ -5,6 +5,7 @@
 import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
+import Promise from 'promise';
 
 import Datagrid from 'datagrid';
 
@@ -71,6 +72,7 @@ const FormDatagrid = function(container, isDisplay){
 					value = result.value;
 				}
 			}
+			this._rows = value;
 
 			var attributes = {
 				style: containerStyle,
@@ -85,7 +87,7 @@ const FormDatagrid = function(container, isDisplay){
       var children = (
         <Datagrid {...props} data={{rows: value, total: value.length}} inlineEdit={inlineEdit}
 					onAdd={inlineEdit ? null : this._handleAdd}
-					onEdit={inlineEdit ? null : this._handleEdit}
+					onEndEdit={inlineEdit ? null : this._handleEndEdit}
 					onRemove={inlineEdit ? null : this._handleRemove}></Datagrid>
       );
 
@@ -107,16 +109,75 @@ const FormDatagrid = function(container, isDisplay){
 		},
 
 		_handleAdd() {
-
+			var {inlineEdit, addUrl} = this.props;
+			if(inlineEdit === false && addUrl){
+				var promise = this._popupForm(addUrl, {title: addUrl});
+				promise.then(function(dialog, options){
+					alert('add success');
+				}).catch(function(err, message){
+					console.error(err);
+				});
+			}
 		},
 
-		_handleEdit(key) {
-
+		_handleEndEdit(key) {
+			if(_.isNil(keys) || keys.length === 0) return;
+			var {idField, inlineEdit, editUrl} = this.props;
+			if(inlineEdit === false && editUrl){
+				if(!_.isNil(idField)){
+					key = this._rows[key][idField];
+				}
+				var promise = this._ajax(editUrl, {method: 'post', data: {key: key}});
+				promise.then(function(data){
+					alert('edit success');
+				}).catch(function(err, message){
+					console.error(err);
+				});
+			}
 		},
 
 		_handleRemove(keys) {
-
+			if(_.isNil(keys) || keys.length === 0) return;
+			var {idField, inlineEdit, removeUrl} = this.props;
+			if(inlineEdit === false && removeUrl){
+				var realKeys = keys;
+				if(!_.isNil(idField)){
+					realKeys = [];
+					keys.forEach(function(key){
+						realKeys.push(this._rows[key][idField]);
+					});
+				}
+				var promise = this._ajax(removeUrl, {method: 'post', data: {keys: realKeys.join(',')}});
+				promise.then(function(data){
+					alert('remove success');
+				}).catch(function(err, message){
+					console.error(err);
+				});
+			}
 		},
+
+		_ajax(url, options) {
+			return new Promise(function(resolve, reject){
+				$.ajax(url, $.extend(options, {
+					success(data, status) {
+						resolve(data, status);
+					},
+					error(options, err, message) {
+						reject(err, message);
+					},
+				}));
+			});
+		},
+
+		_popupForm(url, options) {
+			return new Promise(function(resolve, reject){
+				$.showPopupForm(url, $.extend(options, {
+					success(dialog, opts) {
+						resolve(dialog, opts);
+					},
+				}));
+			});
+		}
 	});
 };
 
@@ -134,7 +195,12 @@ const options = {
 		fit: true,
 		fitColumns: true,
 		toolbar: false,
+
 		inlineEdit: true,
+		addUrl: '',
+		editUrl: '',
+		removeUrl: '',
+
 		rowNumber: true,
 		rowNumberWidth: 20,
 		pagination: true,
@@ -183,9 +249,29 @@ const options = {
 			toolbar: {
 				editor: {type: 'checkbox'},
 			},
+
 			inlineEdit: {
 				editor: {type: 'checkbox'},
 			},
+			addUrl: {
+				hidden: {
+					targetName: 'inlineEdit',
+					targetValues: false,
+				}
+			},
+			editUrl: {
+				hidden: {
+					targetName: 'inlineEdit',
+					targetValues: false,
+				}
+			},
+			removeUrl: {
+				hidden: {
+					targetName: 'inlineEdit',
+					targetValues: false,
+				}
+			},
+
 			style: {
 				keyEditable: true,
 				defaultChild: {'':''},
