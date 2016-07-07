@@ -85,11 +85,14 @@ const FormDatagrid = function(container, isDisplay){
 				selectKey,
 			};
       var children = (
-        <Datagrid {...props} data={{rows: value, total: value.length}} inlineEdit={inlineEdit}
+        <Datagrid {...props} data={{rows: value, total: value.length}}
+					inlineEdit={inlineEdit}
+					height={containerStyle.height}
 					onAdd={inlineEdit ? null : this._handleAdd}
 					onEndEdit={inlineEdit ? null : this._handleEndEdit}
-					onRemove={inlineEdit ? null : this._handleRemove}></Datagrid>
-      );
+					onRemove={inlineEdit ? null : this._handleRemove}>
+				</Datagrid>
+			);
 
 			return this._getContainer(attributes, children);
 		},

@@ -74,11 +74,13 @@ function parse(parent, json, rowDraggable, selectKey, row, col){
 */
 function ensureKey(child){
   if(typeof child === 'object'){
-    var key = helper.guid();
+    var key;
     if(!child.attributes) {
+      key = helper.guid();
       child.attributes = {key: key};
       child.attributes.uniqueKey = key;
     } else if(!child.attributes.key){
+      key = helper.guid();
       child.attributes.key = key;
       child.attributes.uniqueKey = key;
     }

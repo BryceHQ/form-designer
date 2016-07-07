@@ -1,5 +1,4 @@
 import { EventEmitter } from 'events';
-import _ from 'lodash';
 
 const CHANGE_EVENT = 'change';
 
