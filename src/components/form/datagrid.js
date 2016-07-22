@@ -220,7 +220,7 @@ const options = {
 			// onChange: '',//function name
 		},
 		style: {},
-		containerStyle: {},
+		containerStyle: {height: '150px'},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {
 			columns: {

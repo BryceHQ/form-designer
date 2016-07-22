@@ -40,7 +40,7 @@ function successHanlde(options){
 }
 
 function errorHandle(options) {
-  var callback = _.pick(options, ['error']);
+  var {error} = options;
   return function (xhr, status, errMsg) {
     var errorHeaderVal = xhr.getResponseHeader("server-error");
 
@@ -50,13 +50,9 @@ function errorHandle(options) {
       try {
         serverError = JSON.parse(base64.fromByteArray(errorHeaderVal));
       } catch (e) {}
-
-      if (serverError) {
-        if(callback.error){
-          callback.error(serverError);
-        }
-      }
-
+    }
+    if(error){
+      error(serverError);
     }
   };
 }

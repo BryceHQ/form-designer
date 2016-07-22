@@ -25,6 +25,8 @@ import {spacing} from '../theme';
 
 import {Mode} from '../constants/constants';
 
+import lang from '../lang';
+
 const styles = {
   root: {
     position: 'absolute',
@@ -34,6 +36,9 @@ const styles = {
     width: spacing.rightWidth,
     zIndex: 10,
     overflowY: 'auto',
+    borderWidth: '0 0 0 1px',
+    borderStyle: 'solid',
+    borderColor: Colors.grey300,
   },
   popover: {
     position: 'absolute',
@@ -52,10 +57,20 @@ const styles = {
   drag: {
     padding: '5px 20px',
     textAlign: 'center',
+    boxShadow: null,
+    borderWidth: '0 0 1px 0',
+    borderStyle: 'solid',
+    borderColor: Colors.grey300,
   },
 };
 
 const Kit = React.createClass({
+  getText(key){
+    if(lang.kit && lang.kit[key]){
+      return lang.kit[key];
+    }
+    return key;
+  },
 
   renderDustbin(){
     if(this.props.mode === Mode.DRAG){
@@ -72,39 +87,35 @@ const Kit = React.createClass({
     return (
       <div ref='container' style={styles.root}>
         <Drag mode={mode} isCloneTarget={true} target={options.labeledTextbox}
-          title="textbox" style={styles.drag}>
+          title={this.getText('textbox')} style={styles.drag}>
           <Textbox disabled={true} placeholder=""/>
         </Drag>
 
         <Drag mode={mode} isCloneTarget={true} target={options.labeledRadio}
-          title="radio" style={styles.drag}>
+          title={this.getText('radio')} style={styles.drag}>
           <Radio disabled={true}/>
         </Drag>
 
         <Drag mode={mode} isCloneTarget={true} target={options.labeledCheckbox}
-          title="checkbox" style={styles.drag}>
+          title={this.getText('checkbox')} style={styles.drag}>
           <Checkbox disabled={true}/>
         </Drag>
 
         <Drag mode={mode} isCloneTarget={true} target={options.labeledCombobox}
-          title="combobox" style={styles.drag}>
+          title={this.getText('combobox')} style={styles.drag}>
           <Combobox disabled={true}/>
         </Drag>
 
         <Drag mode={mode} isCloneTarget={true} target={options.labeledDatebox}
-          title="datebox" style={styles.drag}>
+          title={this.getText('datebox')} style={styles.drag}>
           <Textbox disabled={true} placeholder="日期控件"/>
         </Drag>
 
         <Drag mode={mode} isCloneTarget={true} target={options.labeledDateboxRange}
-          title="datebox" style={styles.drag}>
+          title={this.getText('dateRange')} style={styles.drag}>
           <Textbox disabled={true} placeholder="日期范围"/>
         </Drag>
-
-        <Drag mode={mode} isCloneTarget={true} target={options.datagrid}
-          title="datagrid" style={styles.drag}>
-          <Datagrid title="表格" pagination={false} fit={false} toolbar={false}></Datagrid>
-        </Drag>
+        
 
         {this.renderDustbin()}
       </div>
@@ -113,3 +124,7 @@ const Kit = React.createClass({
 });
 
 export default Kit;
+/*<Drag mode={mode} isCloneTarget={true} target={options.datagrid}
+  title="datagrid" style={styles.drag}>
+  <Datagrid title="表格" pagination={false} fit={false} toolbar={false}></Datagrid>
+</Drag>*/

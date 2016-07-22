@@ -33,8 +33,8 @@ const DisplayCol = React.createClass({
 
 		let columnStyle = {
 			minHeight: 10,
-			// paddingLeft: (gutter / 2),
-			// paddingRight: (gutter / 2),
+			paddingTop: gutter,
+			paddingBottom: gutter,
 		};
 
 		// if no width control is provided fill available space

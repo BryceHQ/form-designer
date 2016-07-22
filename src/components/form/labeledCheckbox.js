@@ -8,7 +8,7 @@ import DataBinding from '../mixins/dataBinding';
 
 const styles = {
 	root: {
-		padding: '2px 0',
+		padding: '2px 8px',
 	}
 };
 
@@ -41,7 +41,7 @@ const LabeledCheckbox = function(container) {
 				...props
 			} = this.props;
 
-			style = _.assign({}, style);
+			style = _.assign(styles.root, style);
 			// labelStyle = _.assign({}, labelStyle);
 			containerStyle = _.assign({}, containerStyle);
 

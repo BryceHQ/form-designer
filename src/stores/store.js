@@ -8,7 +8,7 @@ import lang from '../lang.js';
 
 import helper from '../helper.js';
 
-var menuStore = require('./menuStore.js');
+import menuStore from './menuStore.js';
 
 const CHANGE_EVENT = 'change';
 
@@ -144,7 +144,7 @@ function endDrag({target, parent, row, col}){
 
 }
 
-function preview(){
+function preview(callback){
   if(_config.preview){
     var form = _.cloneDeepWith(_data.form, function(value, key){
       if(key && typeof key === 'string' && key.indexOf('_') === 0){
@@ -152,18 +152,12 @@ function preview(){
       }
     });
     var inputNames = [], inputTypes = [];
-    form.attributes.dataInputs.forEach(function(input){
-      if(input.name){
-        inputNames.push(input.name);
-        inputTypes.push(input.type);
-      }
-    });
     ajax.post(
       _config.preview, {
-        data: {json: JSON.stringify(form), inputNames: inputNames.join(','), inputTypes: inputTypes.join(',')},
+        data: {json: JSON.stringify(form), dataInputs: JSON.stringify(form.attributes.dataInputs), id: _config.id},
         success(data) {
           if(!data) return;
-          window.open(_config.preview + '?viewName=' + data);
+          window.open(_config.preview + '/' + data);
         },
         error(data) {
           callback.error(data);
@@ -172,6 +166,32 @@ function preview(){
     );
   }
 }
+
+function save(isDeploy, isNewVersion, callback){
+  if(_config.save){
+    var form = _data.form;
+    var inputNames = [], inputTypes = [];
+    form.attributes.dataInputs.forEach(function(input){
+      if(input.name){
+        inputNames.push(input.name);
+        inputTypes.push(input.type);
+      }
+    });
+    ajax.post(
+      _config.save, {
+        data: {json: JSON.stringify(form), isDeploy, isNewVersion, dataInputs: JSON.stringify(form.attributes.dataInputs), id: _config.id},
+        success(data) {
+          if(!data) return;
+          callback.success(data);
+        },
+        error(data) {
+          callback.error(data);
+        },
+      }
+    );
+  }
+}
+
 
 function setMessage(message){
   _data.bottomMessage = message;
@@ -271,10 +291,6 @@ Dispatcher.register((action) => {
       Store.emitChange();
       break;
 
-    case Constants.PREVIEW:
-      preview();
-      break;
-
     //----------property------------
     case Constants.ADD_CHILD:
       var target = action.data.parent;
@@ -300,24 +316,22 @@ Dispatcher.register((action) => {
       break;
 
     case Constants.SAVE:
-      presentationStore.save(_callback);
+      var {isDeploy, isNewVersion} = action.data;
+      save(isDeploy, isNewVersion, _callback);
       break;
 
-    case Constants.CHANGE_MODE:
-      presentationStore.changeMode(action.data.mode);
-      if(action.data.withoutEmit !== true){
-        Store.emitChange();
-      }
+    case Constants.PREVIEW:
+      preview();
       break;
 
-    case Constants.CONTENT_CHANGE:
-      presentationStore.contentChange(action.data, _callback);
-      break;
-
-    case Constants.TITLE_CHANGE:
-      presentationStore.titleChange(action.data, _callback);
-      break;
-
+    // case Constants.CONTENT_CHANGE:
+    //   presentationStore.contentChange(action.data, _callback);
+    //   break;
+    //
+    // case Constants.TITLE_CHANGE:
+    //   presentationStore.titleChange(action.data, _callback);
+    //   break;
+    //
     case Constants.VALUE_CHANGE:
       Store.emitChange();
       break;
@@ -334,26 +348,6 @@ Dispatcher.register((action) => {
       _data.rightData = action.data.data;
       Store.emitChange();
       break;
-
-    //overview
-    case Constants.REINSERT:
-      presentationStore.reinsert(action.data, _callback);
-      Store.emitChange();
-      break;
-
-    //slide
-    case Constants.SLIDE.NEXT:
-      if(presentationStore.next() === true){
-        Store.emitChange();
-      }
-      break;
-
-    case Constants.SLIDE.PRE:
-      if(presentationStore.pre() === true){
-        Store.emitChange();
-      }
-      break;
-
 
     //---------------menu------------------
     case Constants.MENU_SELECT:

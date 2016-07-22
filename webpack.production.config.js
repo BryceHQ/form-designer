@@ -11,7 +11,7 @@ module.exports = {
   },
   output: {
     //path: path.join(__dirname, "dist"),
-    path: 'D://job/2016/Form/Form/scripts',
+    path: 'D://job/2015/Demo/WitBPM.Demo.Web/Scripts/witui/form/design',
     filename: "formDesigner.[name].js",
     library: ["FormDesigner", "[name]"],
     libraryTarget: "var",

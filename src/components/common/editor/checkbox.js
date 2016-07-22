@@ -69,16 +69,16 @@ const Checkbox = React.createClass({
 
 
     render() {
-      var {label, className, inline, on, off, ...props} = this.props;
+      var {label, className, inline, on, off, style, ...props} = this.props;
   		var componentClass = classnames('x-checkbox-container', className);
-      var style = {
+      var rootStyle = _.assign({
         display: inline ? 'inline-block' : 'block',
-      };
+      }, style);
 
       var value = this.state.value || '';
 
   		return (
-  			<label className={componentClass} style={style}>
+  			<label className={componentClass} style={rootStyle}>
   				<input {...props} type="checkbox" className="x-checkbox"
             ref = "input"
             checked = {value === on || value.toLowerCase() === on}

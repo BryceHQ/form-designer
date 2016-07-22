@@ -40,6 +40,8 @@ const styles = {
   labelStyle: {
     paddingLeft: 0,
     paddingRight: 0,
+    color: '#777',
+    fontSize: '13px',
   },
   svg: {
     width: 18,
@@ -69,7 +71,7 @@ const Title = React.createClass({
         labelStyle={styles.labelStyle}
         iconStyle={styles.svg}
         onTouchTap={this._handleTouchTap}
-        >
+      >
         {this.props.collaped ? <IconArrowRight color={Colors.grey500} style={styles.svg}/> : <IconArrowDown color={Colors.grey500} style={styles.svg}/>}
       </FlatButton>
     );

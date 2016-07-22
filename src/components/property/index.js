@@ -55,6 +55,13 @@ const Property = React.createClass({
     };
   },
 
+  formatter(key){
+    if(lang.property && lang.property[key]){
+      return lang.property[key];
+    }
+    return key;
+  },
+
   render() {
     var {open, data, className, formatter} = this.props;
     var {value} = this.state;
@@ -66,11 +73,13 @@ const Property = React.createClass({
         value = 0;
       }
 
+      let me = this;
+
       data.forEach(function(tab, index){
         tabs.push(
           <Tab label = {tab.name} key = {index} style={styles.tab} value={index}
           >
-            <CollapsableField data = {tab.data} formatter = {formatter}/>
+            <CollapsableField data = {tab.data} formatter = {formatter || me.formatter}/>
           </Tab>
         );
       });

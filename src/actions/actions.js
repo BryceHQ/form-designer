@@ -48,8 +48,9 @@ const Action = {
   },
 
   //save
-  save(){
+  save(isDeploy, isNewVersion){
     Dispatcher.dispatch({
+      data: {isDeploy, isNewVersion},
       actionType: Constants.SAVE,
     });
   },

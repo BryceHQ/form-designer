@@ -57,6 +57,11 @@ const CollapsableField = React.createClass({
     }
   },
 
+  getText(text){
+    var formatter = this.props.formatter;
+    return formatter ? formatter(text) : text;
+  },
+
   render() {
     var {data, options, title, removable, style, formatter, hiddenKeys, onRemove} = this.props;
     var {collaped} = this.state;
@@ -64,11 +69,11 @@ const CollapsableField = React.createClass({
     var elems = [];
     if(!data) return (<Field/>);
 
-    var index = 0;
-
+    let index = 0;
+    let getText = this.getText; 
     if(title){
       elems.push(
-        <Title text = {title} key = {index++} style={styles.title}
+        <Title text = {getText(title)} key = {index++} style={styles.title}
           index={this.props.index}
           data={data}
           addable={options && options.defaultChild}
@@ -90,7 +95,7 @@ const CollapsableField = React.createClass({
         data.forEach(function(item, i){
           elems.push(
             <CollapsableField data = {item} options={options && options.childOptions} key = {index++}
-              title={formatter ? formatter(options && options.childName) : options && options.childName}
+              title={getText(options && options.childName)}
               removable={options && options.defaultChild}
               index={i}
               formatter={me.props.formatter}
@@ -117,7 +122,7 @@ const CollapsableField = React.createClass({
           if(typeof data[key] === 'object'){
             elems.push(
               <CollapsableField data={data[key]} options={opt} key={index++}
-                title={formatter ? formatter(key) : key}
+                title={getText(key)}
                 index={key}
                 formatter={this.props.formatter}
               />
@@ -126,7 +131,7 @@ const CollapsableField = React.createClass({
           }
 
           elems.push(
-            <Field label={formatter ? formatter(key) : key} key = {index++}
+            <Field label={getText(key)} key = {index++}
               editable={options && options.keyEditable}
               owner={data}
               index={key}

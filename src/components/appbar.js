@@ -14,6 +14,9 @@ import IconChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left';
 import IconFullscreen from 'material-ui/lib/svg-icons/navigation/fullscreen';
 import IconNavigationMenu from 'material-ui/lib/svg-icons/navigation/menu';
 import IconActionHelp from 'material-ui/lib/svg-icons/action/help';
+import IconActionCheck from 'material-ui/lib/svg-icons/action/check-circle';
+import IconActionDone from 'material-ui/lib/svg-icons/action/done';
+import IconActionDoneAll from 'material-ui/lib/svg-icons/action/done-all';
 import IconActionVisibility from 'material-ui/lib/svg-icons/action/visibility';
 
 
@@ -53,12 +56,13 @@ const styles = {
   iconBtn: {
     width: spacing.appbarHeight,
     height: spacing.appbarHeight,
-    margin: '0 14px',
+    // margin: '0 14px',
     padding: '5px',
   },
   titleBtn: {
     height: spacing.appbarHeight+'px',
     verticalAlign: 'top',
+    textTransform: 'none',
   },
   labelStyle: {
     fontSize: 'inherit',
@@ -77,6 +81,9 @@ const styles = {
 };
 
 const MyAppBar = React.createClass({
+  getText(key){
+    return lang.button[key] || key;
+  },
 
   render() {
     var {title, children} = this.props;
@@ -88,8 +95,22 @@ const MyAppBar = React.createClass({
           labelStyle={styles.labelStyle}
           style={styles.titleBtn}/>
 
-
-        <IconButton style={styles.iconBtn} tooltip={"preview"} iconStyle={styles.svg}
+        <IconButton style={styles.iconBtn} tooltip={this.getText('save')} iconStyle={styles.svg}
+          onTouchTap = {this._handleSave}
+        >
+          <IconActionCheck color="white"/>
+        </IconButton>
+        <IconButton style={styles.iconBtn} tooltip={this.getText('release')} iconStyle={styles.svg}
+          onTouchTap = {this._handleRelease}
+        >
+          <IconActionDone color="white"/>
+        </IconButton>
+        <IconButton style={styles.iconBtn} tooltip={this.getText('releaseNew')} iconStyle={styles.svg}
+          onTouchTap = {this._handleReleaseNew}
+        >
+          <IconActionDoneAll color="white"/>
+        </IconButton>
+        <IconButton style={styles.iconBtn} tooltip={this.getText('preview')} iconStyle={styles.svg}
           onTouchTap = {this._handlePreview}
         >
           <IconActionVisibility color="white"/>
@@ -141,6 +162,17 @@ const MyAppBar = React.createClass({
     Actions.preview();
   },
 
+  _handleSave() {
+    Actions.save();
+  },
+
+  _handleRelease() {
+    Actions.save(true);
+  },
+
+  _handleReleaseNew() {
+    Actions.save(true, true);
+  },
 
   _handleStartEditTitle() {
     this._lastMode = this.props.mode;
