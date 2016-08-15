@@ -3,7 +3,6 @@
 */
 
 import React from 'react';
-import _ from 'lodash';
 import classnames from 'classnames';
 
 import Datebox from '../common/editor/datebox';
@@ -45,9 +44,9 @@ const LabeledDatebox = function(container){
 				...props
 			} = this.props;
 
-			style = _.assign({}, style);
-			labelStyle = _.assign({}, labelStyle);
-			containerStyle = _.assign({}, containerStyle);
+			style = Object.assign({}, style);
+			labelStyle = Object.assign({}, labelStyle);
+			containerStyle = Object.assign({}, containerStyle);
 			if(vertical){
 				labelStyle.display = 'block';
 			}
@@ -63,18 +62,22 @@ const LabeledDatebox = function(container){
 				);
 			}
 
-			if(dataInputs && data){
-				var result = this._compute();
-				if(result.hidden === true){
-					containerStyle = _.assign({display: 'none'}, containerStyle);
-				}
-				if(data.value || data.expression){
+			var name = null;
+			if(data){
+				if(dataInputs){
+					var result = this._compute();
+					if(result.hidden === true){
+						containerStyle = Object.assign({display: 'none'}, containerStyle);
+					}
 					value = result.value;
+				}
+				if(!data.computed){
+					name = data.name;
 				}
 			}
 
 			children.push(
-				<Datebox {...props} value={value} onChange={this._handleChange} style={style} key="editor"/>
+				<Datebox {...props} name={name} value={value} onChange={this._handleChange} style={style} key="editor"/>
 			);
 
 			var attributes = {
@@ -96,78 +99,17 @@ const LabeledDatebox = function(container){
 		},
 
 		_handleChange(value) {
-			var {dataInputs, data} = this.props;
-	    if(data.expression) return;
-	    if(data.value){
-				var input = this._findDataInput(dataInputs, data.value);
-				if(input){
-	        input.value = this._getValueForType(input, value);
-					if(this.props.emitChange){
-						this.props.emitChange();
-					}
+			var {data, dataInputs} = this.props;
+			if(data.computed) return;
+			if(data.name && dataInputs){
+				dataInputs[data.name] = this._getValueForType(data.type, value);
+				if(this.props.emitChange){
+					this.props.emitChange();
 				}
-	    }
+			}
 		},
 
 	});
 };
 
 export default LabeledDatebox;
-
-const options = {
-	name: 'LabeledDatebox',
-	attributes: {
-		name: '',
-		label: '名称',
-		placeholder: '请选择日期...',
-		basis: '20%',
-		dateFormat: 'YYYY-MM-DD',
-		todayButton: true,
-		vertical: false,
-		readOnly: false,
-		showYearDropdown: false,
-		data: {
-			value: '',
-			hidden: '',
-			onChange: '',//function name
-		},
-		style: {},
-		containerStyle: {},
-		labelStyle: {},
-		//内置属性，用来设置属性的特殊属性 editor, hidden
-		_options: {
-			required: {
-				editor: {type: 'checkbox'},
-			},
-			vertical: {
-				editor: {type: 'checkbox'},
-			},
-			todayButton: {
-				editor: {type: 'checkbox'},
-			},
-			readOnly: {
-				editor: {type: 'checkbox'},
-			},
-			showYearDropdown: {
-				editor: {type: 'checkbox'},
-			},
-			style: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			containerStyle: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			labelStyle: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			data: {
-				hidden: true,
-			},
-		},
-	},
-};
-
-export {options};

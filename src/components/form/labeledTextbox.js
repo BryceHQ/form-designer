@@ -1,6 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
 import classnames from 'classnames';
+
+import config from '../../config';
 
 import Actions from '../../actions/actions';
 
@@ -23,7 +24,7 @@ const LabeledTextbox = function(container){
 
 		getDefaultProps() {
 			return {
-				naem: '',
+				name: '',
 				label: '名称',
 				placeholder: '请输入',
 				required: false,
@@ -45,9 +46,9 @@ const LabeledTextbox = function(container){
 				...props
 			} = this.props;
 
-			style = _.assign({}, style);
-			labelStyle = _.assign({}, labelStyle);
-			containerStyle = _.assign({}, containerStyle);
+			style = Object.assign({}, style);
+			labelStyle = Object.assign({}, labelStyle);
+			containerStyle = Object.assign({}, containerStyle);
 			if(vertical){
 				labelStyle.display = 'block';
 			}
@@ -59,18 +60,22 @@ const LabeledTextbox = function(container){
 				);
 			}
 
-			if(dataInputs && data){
-				var result = this._compute();
-				if(result.hidden === true){
-					containerStyle = _.assign({display: 'none'}, containerStyle);
-				}
-				if(data.value || data.expression){
+			var name = null;
+			if(data){
+				if(dataInputs){
+					var result = this._compute();
+					if(result.hidden === true){
+						containerStyle = Object.assign({display: 'none'}, containerStyle);
+					}
 					value = result.value;
+				}
+				if(!data.computed){
+					name = data.name;
 				}
 			}
 
 			children.push(
-				<Textbox {...props} value={value} onChange={this._handleChange} style={style} key="editor"/>
+				<Textbox {...props} name={name} value={value} onChange={this._handleChange} style={style} key="editor"/>
 			);
 
 			var attributes = {
@@ -92,15 +97,12 @@ const LabeledTextbox = function(container){
 		},
 
 		_handleChange(value) {
-			var {dataInputs, data} = this.props;
-	    if(data.expression) return;
-	    if(data.value){
-				var input = this._findDataInput(dataInputs, data.value);
-				if(input){
-	        input.value = this._getValueForType(input, value);
-					if(this.props.emitChange){
-						this.props.emitChange();
-					}
+			var {data, dataInputs} = this.props;
+	    if(data.computed) return;
+	    if(data.name && dataInputs){
+				dataInputs[data.name] = this._getValueForType(data.type, value);
+				if(this.props.emitChange){
+					this.props.emitChange();
 				}
 	    }
 		},
@@ -109,73 +111,3 @@ const LabeledTextbox = function(container){
 };
 
 export default LabeledTextbox;
-
-const options = {
-	name: 'LabeledTextbox',
-	attributes: {
-		name: '',
-		label: '名称',
-		placeholder: '请输入...',
-		required: false,
-		requiredMessage: '该项为必填项',
-		rule: '',
-		invalidMessage: '请输入有效值',
-		basis: '20%',
-		vertical: false,
-		multiline: false,
-		readOnly: false,
-		data: {
-			value: '',
-      expression: '',
-			hidden: '',
-			onChange: '',//function name
-		},
-		style: {},
-		containerStyle: {},
-		labelStyle: {},
-		//内置属性，用来设置属性的特殊属性 editor, hidden
-		_options: {
-			required: {
-				editor: {type: 'checkbox'},
-			},
-			vertical: {
-				editor: {type: 'checkbox'},
-			},
-			multiline: {
-				editor: {type: 'checkbox'},
-			},
-			readOnly: {
-				editor: {type: 'checkbox'},
-			},
-			rule: {
-				editor: {
-					type: 'combobox',
-					options: [{text: '请选择', value: ''},{text:'数字', value:'number'},{text:'数字和字母', value:'ASCII'}]
-				}
-			},
-			requiredMessage: {
-				hidden: {
-					targetName: 'required',
-					targetValues: true,
-				}
-			},
-			style: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			containerStyle: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			labelStyle: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			data: {
-				hidden: true,
-			},
-		},
-	},
-};
-
-export {options};

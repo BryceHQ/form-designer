@@ -10,6 +10,8 @@ import Display from './app';
 
 import Store from './store';
 
+import Profile from '../profile';
+
 require("../../less/display.less");
 
 

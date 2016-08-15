@@ -3,13 +3,13 @@ import Container from '../mixins/colContainer';
 import Col from './displayCol';
 import Row from './row';
 import Form from './form';
-import Datagrid, {options as datagridOptions} from './datagrid';
-import LabeledTextbox, {options as labeledTextboxOptions} from './labeledTextbox';
-import LabeledRadio, {options as labeledRadioOptions} from './labeledRadio';
-import LabeledCheckbox, {options as labeledCheckboxOptions} from './labeledCheckbox';
-import LabeledCombobox, {options as labeledComboboxOptions} from './labeledCombobox';
-import LabeledDatebox, {options as labeledDateboxOptions} from './labeledDatebox';
-import LabeledDateboxRange, {options as labeledDateboxRangeOptions} from './labeledDateboxRange';
+import Datagrid from './datagrid';
+import LabeledTextbox from './labeledTextbox';
+import LabeledRadio from './labeledRadio';
+import LabeledCheckbox from './labeledCheckbox';
+import LabeledCombobox from './labeledCombobox';
+import LabeledDatebox from './labeledDatebox';
+import LabeledDateboxRange from './labeledDateboxRange';
 
 import Alert from '../common/alert';
 
@@ -31,15 +31,3 @@ const form = {
 };
 
 export default form;
-
-const options = {
-  datagrid: datagridOptions,
-  labeledTextbox: labeledTextboxOptions,
-  labeledRadio: labeledRadioOptions,
-  labeledCheckbox: labeledCheckboxOptions,
-  labeledCombobox: labeledComboboxOptions,
-  labeledDatebox: labeledDateboxOptions,
-  labeledDateboxRange: labeledDateboxRangeOptions,
-};
-
-export {options};

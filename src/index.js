@@ -6,6 +6,8 @@ import App from './components/app';
 
 import Store from './stores/store';
 
+import Profile from './profile';
+
 require("../less/index.less");
 
 //Needed for onTouchTap

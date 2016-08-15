@@ -3,7 +3,6 @@
 */
 import React from 'react';
 import classnames from 'classnames';
-import _ from 'lodash';
 
 import {spacing} from '../../theme';
 
@@ -58,7 +57,7 @@ const DisplayCol = React.createClass({
 		}
 
 		return (
-			<div style={_.assign(columnStyle, style)} {...props}>
+			<div style={Object.assign(columnStyle, style)} {...props}>
 				{children}
 			</div>
 		);

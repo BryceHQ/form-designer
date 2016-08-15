@@ -10,21 +10,23 @@ const DataBinding = {
     if(data.hidden){
       try{
         var func = this._getFunction(dataInputs, data.hidden);
-        hidden = func(this._toObject(dataInputs));
+        hidden = func(dataInputs);
       } catch(e){
         console.error(`hidden expresssion error, please check data.hidden. ${e.message}`);
       }
     }
 
-    if(data.expression){
-      try{
-        var func1 = this._getFunction(dataInputs, data.expression);
-        value = func1(this._toObject(dataInputs));
-      } catch(e){
-        console.error(`expresssion error, please check data.expresssion. ${e.message}`);
+    if(data.computed){
+      if(data.expression){
+        try{
+          var func1 = this._getFunction(dataInputs, data.expression);
+          value = func1(dataInputs);
+        } catch(e){
+          console.error(`expresssion error, please check data.expresssion. ${e.message}`);
+        }
       }
-    } else if(data.value){
-      var val = this._getValue(dataInputs, data.value);
+    } else if(data.name){
+      var val = dataInputs[data.name];
       if(!_.isNil(val)){
         value = val;
       }
@@ -32,8 +34,8 @@ const DataBinding = {
     return {hidden, value};
   },
 
-  _getValueForType(input, value) {
-    switch(input.type){
+  _getValueForType(type, value) {
+    switch(type){
       case 'bool':
         if(value === 'false') return false;
         return !!value;
@@ -45,44 +47,17 @@ const DataBinding = {
     }
   },
 
-  _getValue(dataInputs, name) {
-    var input = this._findDataInput(dataInputs, name);
-    if(input){
-      return input.value;
-    }
-  },
-
-  _findDataInput(dataInputs, name) {
-    var input;
-    for(var i = 0,l = dataInputs.length; i < l; i++){
-      input = dataInputs[i];
-      if(!input || !input.name) continue;
-      if(input.name === name){
-        return input;
-      }
-    }
-  },
-
   /*
   * 得到可以执行表达式的函数，带有dataInputs中的数据作为function内部的临时变量
   */
   _getFunction(dataInputs, expression){
     var arr = [];
-    dataInputs.forEach(function(input){
-      if(!input || !input.name) return;
-      arr.push(`var ${input.name}=dataInputs.${input.name};`);
-    });
+    for(var key in dataInputs){
+      if(!dataInputs.hasOwnProperty(key)) continue;
+      arr.push(`var ${key} = dataInputs.${key};`);
+    }
     arr.push(`return ${expression};`);
     return new Function('dataInputs', arr.join(''));
-  },
-
-  _toObject(dataInputs){
-    var obj = {};
-    dataInputs.forEach(function(input){
-      if(!input || !input.name) return;
-      obj[input.name] = input.value;
-    });
-    return obj;
   },
 
 };

@@ -3,7 +3,6 @@
 * 显示模块需要兼容ie8。不使用Flux，material ui
 */
 import React from 'react';
-import _ from 'lodash';
 
 import Store from './store';
 
@@ -31,7 +30,7 @@ const App = React.createClass({
 
     return (
       <div>
-        {form ? parser(form, form.attributes.dataInputs, this._emitChange) : null}
+        {form ? parser(form, Store.getDataInputs(), this._emitChange) : null}
       </div>
     );
   },

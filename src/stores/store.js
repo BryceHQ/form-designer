@@ -29,35 +29,6 @@ let _data = {
     name: 'Form',
     attributes: {
       title: '',
-      dataInputs: [],
-      _options: {
-  			dataInputs: {
-  				defaultChild: {
-            name: '', type: '', defaultValue: '',
-            _options: {
-              name: {
-                editor: {autofocus: true}
-              },
-              type: {
-                editor: {
-        					type: 'combobox',
-        					options: [{
-                    text: '字符串', value: 'string'
-                  },{
-                    text:'数值', value:'int'
-                  },{
-                    text: '布尔值', value: 'bool',
-                  },{
-                    text: '日期', value: 'datetime',
-                  }]
-        				}
-              },
-            }
-          },
-  				//childOptions
-  				childName: 'input',
-  			},
-  		},
     },
     children: [],
   },
@@ -151,10 +122,14 @@ function preview(callback){
         return null;
       }
     });
-    var inputNames = [], inputTypes = [];
+    var dataInputs = getDataInputs(form);
     ajax.post(
       _config.preview, {
-        data: {json: JSON.stringify(form), dataInputs: JSON.stringify(form.attributes.dataInputs), id: _config.id},
+        data: {
+          json: JSON.stringify(form),
+          dataInputs: JSON.stringify(dataInputs),
+          id: _config.id
+        },
         success(data) {
           if(!data) return;
           window.open(_config.preview + '/' + data);
@@ -170,16 +145,14 @@ function preview(callback){
 function save(isDeploy, isNewVersion, callback){
   if(_config.save){
     var form = _data.form;
-    var inputNames = [], inputTypes = [];
-    form.attributes.dataInputs.forEach(function(input){
-      if(input.name){
-        inputNames.push(input.name);
-        inputTypes.push(input.type);
-      }
-    });
+    var dataInputs = getDataInputs(form);
     ajax.post(
       _config.save, {
-        data: {json: JSON.stringify(form), isDeploy, isNewVersion, dataInputs: JSON.stringify(form.attributes.dataInputs), id: _config.id},
+        data: {
+          json: JSON.stringify(form), isDeploy, isNewVersion,
+          dataInputs: JSON.stringify(dataInputs),
+          id: _config.id
+        },
         success(data) {
           if(!data) return;
           callback.success(data);
@@ -189,6 +162,49 @@ function save(isDeploy, isNewVersion, callback){
         },
       }
     );
+  }
+}
+
+function getDataInputs(form){
+  if(!form) return;
+  var results = [];
+  var flag = {};
+  parseChildren(form.children);
+  return results;
+
+  function parseChildren(children){
+    if(!children || !children.length) return;
+    children.forEach(function(child){
+      if(!child) return;
+      if(child.attributes && child.attributes.data){
+        var data = child.attributes.data;
+        if(data.computed === false){
+          parseData(data, child.attributes.label);
+        } else if(_.isNil(data.computed)){
+          var {startData, endData} = data;
+          if(startData && startData.computed === false){
+            parseData(startData);
+          }
+          if(endData && endData.computed === false){
+            parseData(endData);
+          }
+        }
+      }
+      parseChildren(child.children);
+    });
+  }
+
+  function parseData(data, displayName){
+    if(flag[data.name] === true){
+      throw new Error('data inputs name duplicate');
+    }
+    flag[data.name] = true;
+    results.push({
+      name: data.name,
+      type: data.type,
+      defaultValue: data.defaultValue,
+      displayName: displayName || data.displayName,
+    });
   }
 }
 
@@ -208,7 +224,6 @@ function setError(error){
 function clearError(){
   _data.error = null;
 }
-
 
 const Store = _.assign({}, EventEmitter.prototype, {
   setConfig(config) {
@@ -233,10 +248,6 @@ const Store = _.assign({}, EventEmitter.prototype, {
 
   setForm(data, initData) {
     if(data){
-      data.attributes.dataInputs.forEach(function(input){
-        if(!input || !input.name) return;
-        input.value = initData[input.name];
-      });
       _data.form = data;
       this.emitChange();
     }
@@ -387,13 +398,15 @@ var _callback = {
   * @param data
   */
   success(data) {
-    _data.bottomMessage = lang.message.successSave;
+    _data.bottomMessage = data.message || lang.message.successSave;
     Store.emitChange();
   },
 
   error(data) {
-    _data.error = data.message;
-    Store.emitChange();
+    if(data.message){
+      _data.error = data.message;
+      Store.emitChange();
+    }
   },
 };
 

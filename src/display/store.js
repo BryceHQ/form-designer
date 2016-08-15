@@ -5,7 +5,11 @@ const CHANGE_EVENT = 'change';
 let _data = {
 };
 
-const Store = _.assign({}, EventEmitter.prototype, {
+let _dataInputs = {
+
+};
+
+const Store = Object.assign({}, EventEmitter.prototype, {
   setConfig(config) {
     if(config){
       _config = config;
@@ -28,13 +32,14 @@ const Store = _.assign({}, EventEmitter.prototype, {
 
   setForm(data, initData) {
     if(data){
-      data.attributes.dataInputs.forEach(function(input){
-        if(!input || !input.name) return;
-        input.value = initData[input.name];
-      });
+      _dataInputs = initData;
       _data.form = data;
       this.emitChange();
     }
+  },
+
+  getDataInputs() {
+    return _dataInputs;
   },
 
   emitChange() {

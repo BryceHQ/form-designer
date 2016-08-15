@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import classnames from 'classnames';
 
 import Checkbox from '../common/editor/checkbox';
@@ -41,23 +40,27 @@ const LabeledCheckbox = function(container) {
 				...props
 			} = this.props;
 
-			style = _.assign(styles.root, style);
-			// labelStyle = _.assign({}, labelStyle);
-			containerStyle = _.assign({}, containerStyle);
-
-			var children = [];
-			if(dataInputs && data){
-				var result = this._compute();
-				if(result.hidden === true){
-					containerStyle = _.assign({display: 'none'}, containerStyle);
-				}
-				if(data.value || data.expression){
+			style = Object.assign(styles.root, style);
+			// labelStyle = Object.assign({}, labelStyle);
+			containerStyle = Object.assign({}, containerStyle);
+			
+			var name = null;
+			if(data){
+				if(dataInputs){
+					var result = this._compute();
+					if(result.hidden === true){
+						containerStyle = Object.assign({display: 'none'}, containerStyle);
+					}
 					value = result.value;
+				}
+				if(!data.computed){
+					name = data.name;
 				}
 			}
 
+			var children = [];
 			children.push(
-				<Checkbox {...props} value={value} inline={!vertical} onChange={this._handleChange} style={style} key="editor"/>
+				<Checkbox {...props} name={name} value={value} inline={!vertical} onChange={this._handleChange} style={style} key="editor"/>
 			);
 
 			var attributes = {
@@ -79,14 +82,12 @@ const LabeledCheckbox = function(container) {
 		},
 
 		_handleChange(value) {
-			var {dataInputs, data} = this.props;
-	    if(data.value){
-				var input = this._findDataInput(dataInputs, data.value);
-				if(input){
-	        input.value = this._getValueForType(input, value);
-					if(this.props.emitChange){
-						this.props.emitChange();
-					}
+			var {data, dataInputs} = this.props;
+	    if(data.computed) return;
+	    if(data.name && dataInputs){
+				dataInputs[data.name] = this._getValueForType(data.type, value);
+				if(this.props.emitChange){
+					this.props.emitChange();
 				}
 	    }
 		},
@@ -94,44 +95,3 @@ const LabeledCheckbox = function(container) {
 };
 
 export default LabeledCheckbox;
-
-const options = {
-	name: 'LabeledCheckbox',
-	attributes: {
-		name: '',
-		label: '名称',
-		on: true,
-		off: false,
-		basis: '20%',
-		vertical: false,
-		style: {
-		},
-		containerStyle: {
-		},
-		data: {
-			value: '',
-			// expression: '',
-			hidden: '',
-			onChange: '',//function name
-		},
-		//内置属性，用来设置属性的特殊属性 editor, hidden
-		_options: {
-			vertical: {
-				editor: {type: 'checkbox'},
-			},
-			style: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			containerStyle: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			data: {
-				hidden: true,
-			},
-		},
-	},
-};
-
-export {options};

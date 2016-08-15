@@ -19,7 +19,7 @@ import Checkbox from './common/editor/checkbox';
 import Combobox from './common/editor/combobox';
 import Radio from './common/editor/radio';
 
-import {options} from './form';
+import options from './form/options';
 
 import {spacing} from '../theme';
 
@@ -115,7 +115,7 @@ const Kit = React.createClass({
           title={this.getText('dateRange')} style={styles.drag}>
           <Textbox disabled={true} placeholder="日期范围"/>
         </Drag>
-        
+
 
         {this.renderDustbin()}
       </div>
