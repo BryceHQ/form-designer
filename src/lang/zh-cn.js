@@ -75,8 +75,6 @@ const lang = {
   property: {
     // common
     title: '标题',
-    name: '名称',
-    type: '类型',
     placeholder: '占位文字',
     defaultValue: '默认值',
     label: '显示文字',
@@ -94,7 +92,11 @@ const lang = {
     labelStyle: '显示文字样式',
 
     //data
+    computed: '是否为计算值',
     value: '值',
+    name: '名称',
+    displayName: '显示名',
+    type: '类型',
     expression: '表达式',
     hidden: '隐藏',
     onChange: '绑定值改变事件',
@@ -113,8 +115,12 @@ const lang = {
     showYearDropdown: '显示下拉年份选择框',
     startPlaceholder: '开始占位文字',
     endPlaceholder: '结束占位文字',
-    startValue: '开始值',
-    endValue: '结束值',
+    startData: '开始值',
+    endData: '结束值',
+
+    //tab
+    basic: '基本属性',
+    data: '数据属性',
   },
 
   default: '# 请输入标题',

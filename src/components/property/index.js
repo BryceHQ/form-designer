@@ -67,19 +67,18 @@ const Property = React.createClass({
     var {value} = this.state;
     var componentClass = classnames('Tab', className);
 
+    formatter = formatter || this.formatter;
     var tabs = [];
     if(data && data.length > 0){
       if(value >= data.length){
         value = 0;
       }
 
-      let me = this;
-
       data.forEach(function(tab, index){
         tabs.push(
-          <Tab label = {tab.name} key = {index} style={styles.tab} value={index}
+          <Tab label = {formatter(tab.name)} key = {index} style={styles.tab} value={index}
           >
-            <CollapsableField data = {tab.data} formatter = {formatter || me.formatter}/>
+            <CollapsableField data = {tab.data} formatter = {formatter}/>
           </Tab>
         );
       });

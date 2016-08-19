@@ -7,7 +7,7 @@ import DataBinding from '../mixins/dataBinding';
 
 const styles = {
 	root: {
-		padding: '2px 8px',
+		padding: '2px 1px',
 	}
 };
 
@@ -35,15 +35,22 @@ const LabeledCheckbox = function(container) {
 
 		render() {
 			let {
-				value, vertical, dataInputs, data, style, containerStyle,
+				value, label, vertical, dataInputs, data, style, labelStyle, containerStyle,
 				parent, target, col, row, basis, uniqueKey, selectKey,
 				...props
 			} = this.props;
 
 			style = Object.assign(styles.root, style);
-			// labelStyle = Object.assign({}, labelStyle);
+			labelStyle = Object.assign({}, labelStyle);
 			containerStyle = Object.assign({}, containerStyle);
-			
+
+			var children = [];
+			if(label){
+				children.push(
+					<lable className="FormLabel" style={labelStyle} key="label">{label}</lable>
+				);
+			}
+
 			var name = null;
 			if(data){
 				if(dataInputs){
@@ -58,7 +65,6 @@ const LabeledCheckbox = function(container) {
 				}
 			}
 
-			var children = [];
 			children.push(
 				<Checkbox {...props} name={name} value={value} inline={!vertical} onChange={this._handleChange} style={style} key="editor"/>
 			);

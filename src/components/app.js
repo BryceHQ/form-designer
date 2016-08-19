@@ -25,15 +25,14 @@ const App = React.createClass({
     return Store.getData();
   },
 
-  componentWillReceiveProps(nextProps) {
-
-  },
-
   componentDidMount() {
     Store.addChangeListener(this._onChange);
+    window.addEventListener("keydown", this._handleKeyDown);
+
   },
   componentWillUnmount() {
     Store.removeChangeListener(this._onChange);
+    window.removeEventListener('keydown', this._handleKeyDown);
   },
 
   render() {
@@ -81,6 +80,14 @@ const App = React.createClass({
 
   _onChange() {
     this.setState(Store.getData());
+  },
+
+  _handleKeyDown(e) {
+    var keyCode = e.keyCode;
+
+    if(keyCode === 46) { // Delete
+      Actions.;
+    }
   },
 });
 
