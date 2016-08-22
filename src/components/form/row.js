@@ -1,37 +1,35 @@
+/*
+* row DragDrop
+*/
 import React from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
 
-import {spacing} from '../../theme';
+import Row from './common/row';
 
-const Row = React.createClass({
+import DragDrop from '../draggable/dragDrop';
+
+const FormRow = React.createClass({
 	propTypes: {
 		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		gutter: React.PropTypes.number,
-		style: React.PropTypes.object,
 	},
 	getDefaultProps () {
 		return {
-			gutter: spacing.gutter,
+			// gutter: spacing.gutter,
 		};
 	},
 	render() {
-		let { className, gutter, style, target, ...props } = this.props;
-		let rowStyle = {
-			display: 'flex',
-			flexWrap: 'wrap',
-			msFlexWrap: 'wrap',
-			WebkitFlexWrap: 'wrap',
-			// marginLeft: (gutter / -2),
-			// marginRight: (gutter / -2),
-		};
+		let { className, target, children, ...props } = this.props;
 		let componentClass = classnames('Row', className);
 
 		return (
-			<div {...props} style={_.assign(rowStyle, style)} className={componentClass} />
+			<DragDrop target={target} style={{paddingLeft: '40px'}}>
+				<Row {...props}>
+					{children}
+				</Row>
+			</DragDrop>
 		);
 	}
 });
 
-export default Row;
+export default FormRow;

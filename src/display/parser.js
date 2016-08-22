@@ -36,13 +36,11 @@ function parseForm(json, dataInputs, emitChange){
 */
 function ensureKey(child){
   if(typeof child === 'object'){
-    var key;
     if(!child.attributes) {
-      key = helper.guid();
-      child.attributes = {key: key};
-      child.attributes.uniqueKey = key;
-    } else if(!child.attributes.key){
-      key = helper.guid();
+      child.attributes = {};
+    }
+    if(!child.attributes.key){
+      var key = helper.guid();
       child.attributes.key = key;
       child.attributes.uniqueKey = key;
     }

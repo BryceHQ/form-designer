@@ -13,11 +13,10 @@ const DragDrop = React.createClass({
   },
 
   render() {
-    const {children, style, ...props} = this.props;
-    const {row, col, target, parent} = props;
+    const {children, target, style, ...props} = this.props;
     return(
-      <Drag {...props}>
-        <Drop row={row} col={col} target={target} parent={parent} style={style}>
+      <Drag target={target} {...props}>
+        <Drop target={target} parent={parent} style={style}>
           {children}
         </Drop>
       </Drag>

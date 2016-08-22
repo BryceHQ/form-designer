@@ -1,7 +1,7 @@
 import Container from '../mixins/colContainer';
 
-import Col from './displayCol';
-import Row from './row';
+import Col from './common/col';
+import Row from './common/row';
 import Form from './form';
 import Datagrid from './datagrid';
 import LabeledTextbox from './labeledTextbox';
@@ -15,7 +15,7 @@ import Alert from '../common/alert';
 
 const form = {
   Form: Form,
-  // Col: Col,
+  Col: Col,
   Row: Row,
 
   Datagrid: Datagrid(Container, true),

@@ -52,13 +52,7 @@ const Drag = React.createClass({
 
   _handleDragStart(event) {
     this.setState({opacity: 0.3});
-    Actions.startDrag({
-      parent: this.props.parent,
-      target: this.props.target,
-      isCloneTarget: this.props.isCloneTarget,
-      row: this.props.row,
-      col: this.props.col,
-    });
+    Actions.startDrag(this.props.target);
     event.stopPropagation();
   },
 

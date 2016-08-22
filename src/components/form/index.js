@@ -17,7 +17,7 @@ import Alert from '../common/alert';
 
 const form = {
   Form: Form,
-  // Col: Col,
+  Col: Col,
   Row: Row,
 
   Datagrid: Datagrid(Container),

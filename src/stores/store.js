@@ -9,6 +9,7 @@ import lang from '../lang.js';
 import helper from '../helper.js';
 
 import menuStore from './menuStore.js';
+import formStore from './formStore.js';
 
 const CHANGE_EVENT = 'change';
 
@@ -25,13 +26,7 @@ let _data = {
   menu: menuStore.data,
   title: '测试表单',
   selectKey: '',
-  form: {
-    name: 'Form',
-    attributes: {
-      title: '',
-    },
-    children: [],
-  },
+  form: formStore.data,
 };
 
 let _drag = {};
@@ -85,7 +80,6 @@ function endDrag({target, parent, row, col}){
     return;
   }
 
-
   //将某个Row拖拽到它自己上，直接返回
   var rowObj = inner ? _drag.parent : _drag.target;
   if(row === _drag.row && typeof row !== 'undefined' && rowObj.name === 'Row') return;
@@ -112,7 +106,6 @@ function endDrag({target, parent, row, col}){
       target.children.push(getTarget(dragTarget, 'Row'));
     }
   }
-
 }
 
 function preview(callback){
@@ -274,19 +267,20 @@ Dispatcher.register((action) => {
   switch (action.actionType) {
     //---------------drag------------------
     case Constants.START_DRAG:
-      _.assign(_drag, action.data);
+      formStore.startDrag(action.data);
+      //_.assign(_drag, action.data);
 
-      if(action.data.isCloneTarget === true){
+      // if(action.data.isCloneTarget === true){
         _data.mode = Mode.DRAG + '.' + Mode.DRAG_KIT;
-      } else {
-        _data.mode = Mode.DRAG;
-      }
+      // } else {
+      // _data.mode = Mode.DRAG;
+      // }
       Store.emitChange();
       break;
 
     case Constants.END_DRAG:
       if(action.data !== false){
-        endDrag(action.data);
+        formStore.endDrag(action.data);
       }
 
       _data.mode = Mode.NORMAL;
@@ -295,21 +289,29 @@ Dispatcher.register((action) => {
       break;
 
     case Constants.SELECT:
-      _data.selectKey = action.data.key;
+      var target = action.data;
       if(_data.rightOpen === true){
-        _data.rightData = action.data.data;
+        var data = target.getData();
+        _data.rightData = [{
+          name: 'basic',
+          data: data,
+        }, {
+          name: 'data',
+          data: data.data,
+        }];
       }
+      formStore.select(target, true);
       Store.emitChange();
       break;
 
     //----------property------------
     case Constants.ADD_CHILD:
-      var target = action.data.parent;
+      var target1 = action.data.parent;
       var child = _.assign({}, action.data.child);
-      if(_.isArray(target)){
+      if(_.isArray(target1)){
         target.push(child);
       } else {
-        _.assign(target, child);
+        _.assign(target1, child);
       }
 
       Store.emitChange();

@@ -1,12 +1,13 @@
 /*
-* 显示状态的col
+* col
 */
 import React from 'react';
 import classnames from 'classnames';
+import _ from 'lodash';
 
-import {spacing} from '../../theme';
+import {spacing} from '../../../theme';
 
-const DisplayCol = React.createClass({
+const Col = React.createClass({
 	propTypes: {
 		basis: React.PropTypes.oneOfType([
 			React.PropTypes.number, // allow pixels
@@ -28,12 +29,14 @@ const DisplayCol = React.createClass({
 	},
 
 	render() {
-		let { basis, gutter, width, mode, style, uniqueKey, selected, children, ...props } = this.props;
+		let { basis, gutter, className, width, mode, style, children, ...props } = this.props;
+
+		let componentClass = classnames('Col', className);
 
 		let columnStyle = {
 			minHeight: 10,
-			paddingTop: gutter,
-			paddingBottom: gutter,
+			// paddingLeft: (gutter / 2),
+			// paddingRight: (gutter / 2),
 		};
 
 		// if no width control is provided fill available space
@@ -57,11 +60,13 @@ const DisplayCol = React.createClass({
 		}
 
 		return (
-			<div style={Object.assign(columnStyle, style)} {...props}>
+			<div {...props}
+				className={componentClass}
+				style={_.assign(columnStyle, style)} >
 				{children}
 			</div>
 		);
 	},
 });
 
-export default DisplayCol;
+export default Col;

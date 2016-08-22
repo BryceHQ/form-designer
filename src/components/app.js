@@ -86,7 +86,7 @@ const App = React.createClass({
     var keyCode = e.keyCode;
 
     if(keyCode === 46) { // Delete
-      Actions.;
+      // Actions.;
     }
   },
 });

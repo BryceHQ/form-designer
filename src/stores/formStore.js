@@ -8,98 +8,112 @@ import Store from './store.js';
 
 import helper from '../helper.js';
 
-let _form = {
-  name: 'Form',
-  attributes: {
-    title: '',
-  },
-  children: [],
+import Control from './control.js';
+
+let _form = new Control('Form');
+
+var _drag;
+var _selected = [];
+
+
+/*
+* extend Control
+*/
+Control.prototype.isSelected = function() {
+  return ~_selected.indexOf(this);
 };
+
+
+function getTarget(target, name){
+  if(target.name === name){
+    return target;
+  }
+  var result;
+  switch (name) {
+    case 'Row':
+      switch (target.name) {
+        case 'Col':
+          result = new Control('Row');
+          result.addChild(target);
+          break;
+        default:
+          result = new Control('Col');
+          result.addChild(target);
+          target = result;
+          result = new Control('Row');
+          result.addChild(target);
+          break;
+      }
+      break;
+    case 'Col':
+      switch (target.name) {
+        case 'Row':
+          result = target.getChildren();
+          break;
+        default:
+          result = new Control('Col');
+          result.addChild(target);
+          break;
+      }
+      break;
+    default:
+      break;
+  }
+  return result;
+}
 
 var formStore = {
   data: _form,
 
-  // init(config) {
-  // },
-  add: add,
-  save(callback) {
-    save(null,callback);
+  createControl(type, parent, data) {
+    return new Control(type, parent, data);
   },
 
-  get(fileId, callback) {
-    if(fileId !== _presentation.fileId){
-      _presentation.loading = true;
-      get(fileId, callback);
-    }
+  startDrag(data) {
+    _drag = data;
   },
 
-  changeMode: changeMode,
+  endDrag(target) {
+    if(!_drag) return;
 
-  contentChange(content, callback) {
-    _presentation.slideGroup[_presentation.current].content = content;
-    autoSave(null, callback);
-  },
-
-
-  toggleLeft(open) {
-    if(_.isNil(open)){
-      _presentation.leftOpen = !_presentation.leftOpen;
+    //remove
+    if(_.isNil(target)){
+      _drag.remove();
       return;
     }
-    _presentation.leftOpen = !!open;
-  },
 
-  //overview
-  reinsert({from, to}, callback) {
-    let arr = _presentation.slideGroup;
-    const val = arr[from];
-    arr.splice(from, 1);
-    arr.splice(to, 0, val);
-    _presentation.current = to;
+    //拖拽到它自己上，直接返回
+    if(target === _drag) return;
 
-    autoSave(null, callback);
-  },
-
-  selectSlide(index){
-    _presentation.current = index;
-  },
-
-  addSlide(callback){
-    _presentation.slideGroup.splice(++_presentation.current, 0, {
-      transition: 'fade',
-      content: lang.default,
-      key: guid(),
-    });
-
-    autoSave(null, callback);
-  },
-
-  removeSlide(callback){
-    //There is one slide at least
-    if(_presentation.slideGroup.length === 1) return;
-    _presentation.slideGroup.splice(_presentation.current, 1);
-    if(_presentation.current > 0){
-      _presentation.current--;
+    var dragTarget ;
+    if(typeof _drag.getType === 'function'){
+      dragTarget = _drag;
+    } else {
+      dragTarget = new Control(_drag.name, null, _.cloneDeep(_drag.target));
     }
-
-    autoSave(null, callback);
-  },
-
-  //slide
-  next() {
-    if(_presentation.current < _presentation.slideGroup.length - 1 ){
-      _presentation.current += 1;
-      return true;
+    dragTarget.remove();
+    //target Col
+    if(target.name === 'Col'){
+      target.parent.addChild(getTarget(dragTarget, 'Col'), target.getIndex());
+    }
+    else if(target.name === 'Row'){
+      target.addChild(getTarget(dragTarget, 'Col'));
+    } else {
+      target.addChild(getTarget(dragTarget, 'Row'));
     }
   },
 
-  pre() {
-    if(_presentation.current > 0){
-      _presentation.current -= 1;
-      return true;
+  select(control, singleSelect){
+    if(singleSelect === true){
+      _selected = [control];
+    } else {
+      _selected.push(control);
     }
   },
 
+  getSelected(){
+    return _selected;
+  },
 };
 
 export default formStore;

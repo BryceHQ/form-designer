@@ -48,12 +48,7 @@ const Drop = React.createClass({
   _handleDrop(event) {
     this.setState({backgroundColor: 'white'});
     if(Store.getData().mode.indexOf(Mode.DRAG) === 0){
-      Actions.endDrag({
-        target: this.props.target,
-        parent: this.props.parent,
-        row: this.props.row,
-        col: this.props.col,
-      });
+      Actions.endDrag(this.props.target);
     }
     event.stopPropagation();
   },

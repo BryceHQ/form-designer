@@ -86,14 +86,14 @@ const LabeledTextbox = function(container){
 				parent,
 				target,
 				uniqueKey,
-				selectKey,
-				//
-				// dragDrop: {
-				//
-				// },
 			};
 
-			return this._getContainer(attributes, children);
+			return (
+				<div>
+					{children}
+				</div>
+			);
+
 		},
 
 		_handleChange(value) {

@@ -12,57 +12,22 @@ import Actions from '../../actions/actions';
 
 import {spacing} from '../../theme';
 
-const Col = React.createClass({
+import Col from './common/col';
+import DragDrop from '../draggable/dragDrop';
+
+const FormCol = React.createClass({
 	propTypes: {
-		basis: React.PropTypes.oneOfType([
-			React.PropTypes.number, // allow pixels
-			React.PropTypes.string, // allow percentage
-		]),
-    width: React.PropTypes.oneOfType([
-			React.PropTypes.number, // allow pixels
-			React.PropTypes.string, // allow percentage
-		]),
     children: React.PropTypes.node.isRequired,
-		gutter: React.PropTypes.number,
-		style: React.PropTypes.object,
-		mode: React.PropTypes.string,
 	},
 	getDefaultProps () {
 		return {
-			gutter: spacing.gutter,
 		};
 	},
 
 	render() {
-		let { basis, gutter, width, mode, style, uniqueKey, selected, children, ...props } = this.props;
+		let { target, children, ...props } = this.props;
 
-		let columnStyle = {
-			minHeight: 10,
-			// paddingLeft: (gutter / 2),
-			// paddingRight: (gutter / 2),
-		};
-
-		// if no width control is provided fill available space
-		if (!basis && !width) {
-			columnStyle.flex = '1 1 auto';
-			columnStyle.msFlex = '1 1 auto';
-			columnStyle.WebkitFlex = '1 1 auto';
-		}
-
-		// set widths / flex-basis
-		if (basis) {
-			columnStyle.flex = '1 0 ' + basis;
-			columnStyle.msFlex = '1 0 ' + basis;
-			columnStyle.WebkitFlex = '1 0 ' + basis;
-		} else {
-			columnStyle.width = width;
-		}
-
-		if (!columnStyle.width) {
-			columnStyle.width = '100%';
-		}
-
-		if(selected){
+		if(target.isSelected()){
 			if(!_.isArray(children)){
 				children = [children];
 			}
@@ -74,12 +39,14 @@ const Col = React.createClass({
 		}
 
 		return (
-			<div style={_.assign(columnStyle, style)} {...props}
+			<Col {...props} basis={'20%'}
 				onClick={this._handleClick}
 				onDoubleClick={this._handleDoubleClick}
 			>
-				{children}
-			</div>
+				<DragDrop target={target}>
+					{children}
+				</DragDrop>
+			</Col>
 		);
 	},
 
@@ -93,26 +60,15 @@ const Col = React.createClass({
 			}, {
 				name: 'data',
 				data: col.attributes.data,
-			}
-		]);
+			}]
+		);
 	},
 
 	//选中高亮
 	_handleClick(event) {
 		//col 下面有且仅有一个child
-		var col = this.props.children.props.target;
-
-		Actions.select({
-			key: col.attributes.key,
-			data: [{
-				name: 'basic',
-				data: col.attributes,
-			}, {
-				name: 'data',
-				data: col.attributes.data,
-			}]
-		});
+		Actions.select(this.props.target);
 	},
 });
 
-export default Col;
+export default FormCol;

@@ -11,7 +11,7 @@ const DraggableCol = {
     var {style, basis, target, parent, selectKey, ...others} = props;
     return (
       <Col {...others} basis={basis} selected={selectKey === others.uniqueKey}>
-        <DragDrop {...others} target={target} parent={parent} style={style} >
+        <DragDrop {...others} target={target} parent={parent} style={style}>
           {children}
         </DragDrop>
       </Col>
