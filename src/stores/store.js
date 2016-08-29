@@ -1,12 +1,14 @@
 import Dispatcher from '../dispatcher/dispatcher.js';
 import { EventEmitter } from 'events';
-import Constants, {Mode} from '../constants/constants.js';
+import Constants, {Mode as ConstantsMode} from '../constants/constants.js';
 import _ from 'lodash';
 
 import ajax from '../ajax.js';
 import lang from '../lang.js';
 
 import helper from '../helper.js';
+
+import Mode from '../core/mode.js';
 
 import menuStore from './menuStore.js';
 import formStore from './formStore.js';
@@ -16,11 +18,9 @@ const CHANGE_EVENT = 'change';
 let _config = {};
 
 let _data = {
-  leftOpen: false,
-  rightOpen: false,
-  rightData: null,
+  property: null,
   loading: false,
-  mode: Mode.NORMAL,
+  mode: new Mode(ConstantsMode.NORMAL),
   bottomMessage: null,
   error: null,
   menu: menuStore.data,
@@ -201,6 +201,14 @@ function getDataInputs(form){
   }
 }
 
+function setMode(mode){
+  mode = mode || ConstantsMode.NORMAL;
+  if(typeof mode === 'string'){
+    _data.mode = new Mode(mode);
+  } else {
+    _data.mode = mode;
+  }
+}
 
 function setMessage(message){
   _data.bottomMessage = message;
@@ -246,6 +254,8 @@ const Store = _.assign({}, EventEmitter.prototype, {
     }
   },
 
+  setMode: setMode,
+
   setMessage: setMessage,
 
   setError: setError,
@@ -267,14 +277,10 @@ Dispatcher.register((action) => {
   switch (action.actionType) {
     //---------------drag------------------
     case Constants.START_DRAG:
-      formStore.startDrag(action.data);
+      formStore.startDrag(action.data.target);
       //_.assign(_drag, action.data);
 
-      // if(action.data.isCloneTarget === true){
-        _data.mode = Mode.DRAG + '.' + Mode.DRAG_KIT;
-      // } else {
-      // _data.mode = Mode.DRAG;
-      // }
+      setMode(ConstantsMode.DRAG + '.' + (action.data.source || ''));
       Store.emitChange();
       break;
 
@@ -283,24 +289,22 @@ Dispatcher.register((action) => {
         formStore.endDrag(action.data);
       }
 
-      _data.mode = Mode.NORMAL;
+      setMode();
 
       Store.emitChange();
       break;
 
     case Constants.SELECT:
-      var target = action.data;
-      if(_data.rightOpen === true){
-        var data = target.getData();
-        _data.rightData = [{
-          name: 'basic',
-          data: data,
-        }, {
-          name: 'data',
-          data: data.data,
-        }];
+      var target = action.data.data;
+      if(_data.mode.equalTo(ConstantsMode.PROPERTY)){
+        _data.property = target.getProperty();
       }
-      formStore.select(target, true);
+      formStore.select(target, action.data.singleSelect);
+      Store.emitChange();
+      break;
+
+    case Constants.REMOVE:
+      formStore.remove(action.data);
       Store.emitChange();
       break;
 
@@ -345,20 +349,33 @@ Dispatcher.register((action) => {
     //   presentationStore.titleChange(action.data, _callback);
     //   break;
     //
+
+    case Constants.CHANGE_MODE:
+      setMode(action.data.mode);
+      Store.emitChange();
+      break;
+
     case Constants.VALUE_CHANGE:
       Store.emitChange();
       break;
 
-
     case Constants.TOGGLE_LEFT:
-      _data.leftOpen = !_data.leftOpen;
+      if(_data.mode.equalTo(ConstantsMode.NORMAL)){
+        setMode(ConstantsMode.MENU);
+      } else {
+        setMode(ConstantsMode.NORMAL);
+      }
       menuStore.select(null, _callback, true);
       Store.emitChange();
       break;
 
     case Constants.TOGGLE_RIGHT:
-      _data.rightOpen = !!action.data.open;
-      _data.rightData = action.data.data;
+      if(_data.mode.equalTo(ConstantsMode.NORMAL)){
+        setMode(ConstantsMode.PROPERTY);
+      } else {
+        setMode(ConstantsMode.NORMAL);
+      }
+      _data.property = action.data.data;
       Store.emitChange();
       break;
 

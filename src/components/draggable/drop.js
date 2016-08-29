@@ -47,7 +47,7 @@ const Drop = React.createClass({
 
   _handleDrop(event) {
     this.setState({backgroundColor: 'white'});
-    if(Store.getData().mode.indexOf(Mode.DRAG) === 0){
+    if(Store.getData().mode.equalTo(Mode.DRAG)){
       Actions.endDrag(this.props.target);
     }
     event.stopPropagation();
@@ -56,13 +56,13 @@ const Drop = React.createClass({
   _handleDragOver(event) {
     event.preventDefault();
     event.stopPropagation();
-    if(this.state.backgroundColor === 'white'){
-      this.setState({backgroundColor: Colors.lime100});
-    }
+    // if(this.state.backgroundColor === 'white'){
+    //   this.setState({backgroundColor: Colors.lime100});
+    // }
   },
 
   _handleDragEnter() {
-    if(Store.getData().mode.indexOf(Mode.DRAG) === 0 && this.state.backgroundColor === 'white'){
+    if(Store.getData().mode.equalTo(Mode.DRAG) && this.state.backgroundColor === 'white'){
       this.setState({backgroundColor: Colors.lime100});
     }
   },

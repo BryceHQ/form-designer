@@ -11,9 +11,8 @@ import CircularProgress from 'material-ui/lib/circular-progress';
 import Store from '../stores/store';
 import Actions from '../actions/actions';
 
-import Constants from '../constants/constants';
+import Constants, {Mode} from '../constants/constants';
 
-// Our custom react component
 import AppBar from './appbar';
 import LeftBar from './leftbar';
 import Toolbar from './toolbar';
@@ -28,7 +27,6 @@ const App = React.createClass({
   componentDidMount() {
     Store.addChangeListener(this._onChange);
     window.addEventListener("keydown", this._handleKeyDown);
-
   },
   componentWillUnmount() {
     Store.removeChangeListener(this._onChange);
@@ -36,7 +34,7 @@ const App = React.createClass({
   },
 
   render() {
-    let {form, mode, leftOpen, rightOpen, rightData, title, loading, menu, selectKey, bottomMessage, error} = this.state;
+    let {form, mode, property, title, loading, menu, selectKey, bottomMessage, error} = this.state;
     let snackbar = (
       <Snackbar
         open={!!bottomMessage}
@@ -61,7 +59,7 @@ const App = React.createClass({
       );
     } else{
       center = (
-        <Main data={form} mode={mode} rightOpen={rightOpen} leftOpen={leftOpen} rightData={rightData}
+        <Main data={form} mode={mode} property={property}
           selectKey={selectKey}/>
       );
     }
@@ -69,7 +67,7 @@ const App = React.createClass({
     return (
       <div>
         <AppBar title={title} form={form}>
-          <LeftBar open = {leftOpen} menu = {menu} />
+          <LeftBar open={mode.equalTo(Mode.MENU)} menu={menu} />
         </AppBar>
         {center}
         {errorElem}
@@ -84,11 +82,43 @@ const App = React.createClass({
 
   _handleKeyDown(e) {
     var keyCode = e.keyCode;
-
-    if(keyCode === 46) { // Delete
-      // Actions.;
+    var {mode} = this.state;
+    if(!mode.equalTo(Mode.NORMAL)){
+      switch (keyCode) {
+        case 27: //esc
+          Actions.changeMode();
+          e.preventDefault();
+          break;
+        default:
+          break;
+      }
+      return;
+    }
+    switch (keyCode) {
+      case 46:// Delete
+        Actions.remove();
+        e.preventDefault();
+        break;
+      case 33: // pg up
+      case 37: // left
+      case 38: // up
+        break;
+      case 32: // space
+      case 34: // pg down
+      case 39: // right
+      case 40: // down
+        //Actions.slide.next();
+        //break;
+      case 79:
+        // overView();
+      case 9: // tab
+        //Actions.toggleRight();
+        break;
+      default:
+        break;
     }
   },
+
 });
 
 export default App;

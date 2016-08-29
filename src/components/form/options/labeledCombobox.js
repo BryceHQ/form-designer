@@ -8,7 +8,6 @@ const options = {
 		vertical: false,
 		options: [{text: '请选择', value: ''}, {text: '选项 1', value: '1'}],
 		style: {},
-		containerStyle: {},
 		labelStyle: {},
 		data: {
 			computed: false,
@@ -55,10 +54,6 @@ const options = {
 				editor: {type: 'checkbox'},
 			},
 			style: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			containerStyle: {
 				keyEditable: true,
 				defaultChild: {'':''},
 			},

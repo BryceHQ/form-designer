@@ -9,7 +9,6 @@ const options = {
 		optionsVertical: false,
 		options: [{text: 'click here', value: 'here'}, {text: 'click there', value: 'there'}],
 		style: {},
-		containerStyle: {},
 		labelStyle: {},
 		data: {
 			computed: false,
@@ -59,10 +58,6 @@ const options = {
 				editor: {type: 'checkbox'},
 			},
 			style: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			containerStyle: {
 				keyEditable: true,
 				defaultChild: {'':''},
 			},

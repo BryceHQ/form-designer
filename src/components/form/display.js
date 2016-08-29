@@ -1,5 +1,3 @@
-import Container from '../mixins/colContainer';
-
 import Col from './common/col';
 import Row from './common/row';
 import Form from './form';
@@ -18,14 +16,14 @@ const form = {
   Col: Col,
   Row: Row,
 
-  Datagrid: Datagrid(Container, true),
+  // Datagrid: Datagrid(Container, true),
 
-  LabeledTextbox: LabeledTextbox(Container),
-  LabeledRadio: LabeledRadio(Container),
-  LabeledCheckbox: LabeledCheckbox(Container),
-  LabeledCombobox: LabeledCombobox(Container),
-  LabeledDatebox: LabeledDatebox(Container),
-  LabeledDateboxRange: LabeledDateboxRange(Container),
+  LabeledTextbox: LabeledTextbox,
+  LabeledRadio: LabeledRadio,
+  LabeledCheckbox: LabeledCheckbox,
+  LabeledCombobox: LabeledCombobox,
+  LabeledDatebox: LabeledDatebox,
+  LabeledDateboxRange: LabeledDateboxRange,
 
   Alert: Alert,
 };

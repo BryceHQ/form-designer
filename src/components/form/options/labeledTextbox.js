@@ -56,7 +56,6 @@ const options = {
 			},
 		},
 		style: {},
-		containerStyle: {},
 		labelStyle: {},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {
@@ -85,10 +84,6 @@ const options = {
 				}
 			},
 			style: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			containerStyle: {
 				keyEditable: true,
 				defaultChild: {'':''},
 			},

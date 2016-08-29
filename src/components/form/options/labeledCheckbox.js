@@ -10,8 +10,6 @@ const options = {
 		vertical: false,
 		style: {
 		},
-		containerStyle: {
-		},
 		data: {
 			computed: false,
 			name: '',
@@ -57,10 +55,6 @@ const options = {
 				editor: {type: 'checkbox'},
 			},
 			style: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			containerStyle: {
 				keyEditable: true,
 				defaultChild: {'':''},
 			},

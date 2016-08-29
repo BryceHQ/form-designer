@@ -76,7 +76,6 @@ const options = {
 			hidden: '',
 		},
 		style: {},
-		containerStyle: {},
 		labelStyle: {},
 		//内置属性，用来设置属性的特殊属性 editor, hidden
 		_options: {
@@ -96,10 +95,6 @@ const options = {
 				editor: {type: 'checkbox'},
 			},
 			style: {
-				keyEditable: true,
-				defaultChild: {'':''},
-			},
-			containerStyle: {
 				keyEditable: true,
 				defaultChild: {'':''},
 			},

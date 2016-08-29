@@ -25,7 +25,7 @@ import {spacing} from '../theme';
 
 import {Mode} from '../constants/constants';
 
-import lang from '../lang';
+import langSupport from './mixins/langSupport';
 
 const styles = {
   root: {
@@ -65,15 +65,10 @@ const styles = {
 };
 
 const Kit = React.createClass({
-  getText(key){
-    if(lang.kit && lang.kit[key]){
-      return lang.kit[key];
-    }
-    return key;
-  },
+  mixins: [langSupport],
 
   renderDustbin(){
-    if(this.props.mode === Mode.DRAG){
+    if(this.props.mode.equalTo(Mode.DRAG, true)){
       return (
         <Drop style={styles.popover}>
           <IconDelete color={Colors.grey200} style={styles.svg}/>
@@ -86,33 +81,33 @@ const Kit = React.createClass({
     var {mode} = this.props;
     return (
       <div ref='container' style={styles.root}>
-        <Drag mode={mode} isCloneTarget={true} target={options.labeledTextbox}
-          title={this.getText('textbox')} style={styles.drag}>
+        <Drag mode={mode} source="kit" target={options.labeledTextbox}
+          title={this._getText('kit.textbox')} style={styles.drag}>
           <Textbox disabled={true} placeholder=""/>
         </Drag>
 
-        <Drag mode={mode} isCloneTarget={true} target={options.labeledRadio}
-          title={this.getText('radio')} style={styles.drag}>
+        <Drag mode={mode} source="kit" target={options.labeledRadio}
+          title={this._getText('kit.radio')} style={styles.drag}>
           <Radio disabled={true}/>
         </Drag>
 
-        <Drag mode={mode} isCloneTarget={true} target={options.labeledCheckbox}
-          title={this.getText('checkbox')} style={styles.drag}>
+        <Drag mode={mode} source="kit" target={options.labeledCheckbox}
+          title={this._getText('kit.checkbox')} style={styles.drag}>
           <Checkbox disabled={true}/>
         </Drag>
 
-        <Drag mode={mode} isCloneTarget={true} target={options.labeledCombobox}
-          title={this.getText('combobox')} style={styles.drag}>
+        <Drag mode={mode} source="kit" target={options.labeledCombobox}
+          title={this._getText('kit.combobox')} style={styles.drag}>
           <Combobox disabled={true}/>
         </Drag>
 
-        <Drag mode={mode} isCloneTarget={true} target={options.labeledDatebox}
-          title={this.getText('datebox')} style={styles.drag}>
+        <Drag mode={mode} source="kit" target={options.labeledDatebox}
+          title={this._getText('kit.datebox')} style={styles.drag}>
           <Textbox disabled={true} placeholder="日期控件"/>
         </Drag>
 
-        <Drag mode={mode} isCloneTarget={true} target={options.labeledDateboxRange}
-          title={this.getText('dateRange')} style={styles.drag}>
+        <Drag mode={mode} source="kit" target={options.labeledDateboxRange}
+          title={this._getText('kit.dateRange')} style={styles.drag}>
           <Textbox disabled={true} placeholder="日期范围"/>
         </Drag>
 

@@ -142,7 +142,7 @@ const MyAppBar = React.createClass({
   },
 
   _changeMode() {
-    Actions.changeMode(this.props.mode === Constants.MODE.MARKDOWN ? Constants.MODE.PRESENTATION : Constants.MODE.MARKDOWN);
+    // Actions.changeMode(this.props.mode === Constants.MODE.MARKDOWN ? Constants.MODE.PRESENTATION : Constants.MODE.MARKDOWN);
   },
 
   _handleToggleLeft() {

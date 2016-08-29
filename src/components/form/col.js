@@ -51,24 +51,14 @@ const FormCol = React.createClass({
 	},
 
 	_handleDoubleClick(event) {
-		//col 下面有且仅有一个child
-		var col = this.props.children.props.target;
-
-		Actions.toggleRight(true, [{
-				name: 'basic',
-				data: col.attributes,
-			}, {
-				name: 'data',
-				data: col.attributes.data,
-			}]
-		);
+		Actions.toggleRight(true, this.props.target.getProperty());
 	},
 
 	//选中高亮
-	_handleClick(event) {
-		//col 下面有且仅有一个child
-		Actions.select(this.props.target);
+	_handleClick(e) {
+		Actions.select(this.props.target, !e.ctrlKey);
 	},
+
 });
 
 export default FormCol;

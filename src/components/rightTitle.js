@@ -11,7 +11,6 @@ import IconRemove from 'material-ui/lib/svg-icons/content/remove';
 import lang from '../lang.js';
 
 import Actions from '../actions/actions.js';
-import Constants from '../constants/constants.js';
 
 import {spacing} from '../theme';
 
@@ -51,14 +50,6 @@ const RightTitle = React.createClass({
         }
       />
     );
-  },
-
-  _handleAdd() {
-    Actions.addSlide();
-  },
-
-  _handleRemove() {
-    Actions.removeSlide();
   },
 
   _handleToggleRight() {

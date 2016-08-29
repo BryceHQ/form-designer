@@ -29,7 +29,7 @@ const Right = React.createClass({
   },
 
   render() {
-    let {open, options, mode, rightData} = this.props;
+    let {open, data} = this.props;
     return (
       <LeftNav
         className="right"
@@ -37,9 +37,9 @@ const Right = React.createClass({
         width = {spacing.rightWidth + 100}
         open = {open}
         openRight = {true}
-        onRequestChange = {open => Actions.toggleRight(open.open)}
+        onRequestChange = {open => Actions.toggleRight()}
       >
-        <Property data={rightData} open={open}></Property>
+        <Property data={data} open={open}></Property>
       </LeftNav>
     );
   },

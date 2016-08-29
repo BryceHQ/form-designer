@@ -2,39 +2,20 @@ import React from 'react';
 import lang from '../lang.js';
 import parser from '../parser.js';
 
-import LeftNav from 'material-ui/lib/left-nav';
-
-import Drop from './draggable/drop';
-import Alert from './common/alert';
-
-import Col from './form/col';
-import Row from './form/row';
-
 import Actions from '../actions/actions';
 
-const styles = {
-
-};
+import Drop from './draggable/drop';
 
 const Center = React.createClass({
-  getDefaultProps() {
-    return {};
-  },
-
   render() {
-    let {rightOpen, data, mode, selectKey, style} = this.props;
+    let {data, mode, style} = this.props;
     return (
-      <Drop className="form-container" target={data} style={style}>
+      <Drop className="center" target={data} style={style}>
         {parser(data)}
       </Drop>
     );
   },
 
-  _handleClick(event){
-    if(this.props.rightOpen){
-      Actions.toggleRight(false);
-    }
-  },
 });
 
 export default Center;

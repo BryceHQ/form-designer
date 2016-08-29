@@ -4,10 +4,10 @@ import Constants from '../constants/constants.js';
 const Action = {
   //---------------form------------------
   //Drag
-  startDrag(data) {
+  startDrag(target, source) {
     Dispatcher.dispatch({
       actionType: Constants.START_DRAG,
-      data: data,
+      data: {target, source},
     });
   },
 
@@ -19,10 +19,17 @@ const Action = {
   },
 
   //select highlight
-  select(data) {
+  select(data, singleSelect) {
     Dispatcher.dispatch({
       actionType: Constants.SELECT,
-      data: data,
+      data: {data, singleSelect},
+    });
+  },
+
+  remove(target) {
+    Dispatcher.dispatch({
+      actionType: Constants.REMOVE,
+      data: target,
     });
   },
 

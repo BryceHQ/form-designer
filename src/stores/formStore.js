@@ -8,18 +8,20 @@ import Store from './store.js';
 
 import helper from '../helper.js';
 
-import Control from './control.js';
+import FormElement from '../core/formElement.js';
 
-let _form = new Control('Form');
+//**不应该直接引用这个文件，破坏了依赖关系。store不依赖components**
+import colOptions from '../components/form/options/col.js';
+
+let _form = new FormElement('Form');
 
 var _drag;
 var _selected = [];
 
-
 /*
-* extend Control
+* extend FormElement
 */
-Control.prototype.isSelected = function() {
+FormElement.prototype.isSelected = function() {
   return ~_selected.indexOf(this);
 };
 
@@ -33,14 +35,14 @@ function getTarget(target, name){
     case 'Row':
       switch (target.name) {
         case 'Col':
-          result = new Control('Row');
+          result = new FormElement('Row');
           result.addChild(target);
           break;
         default:
-          result = new Control('Col');
+          result = new FormElement('Col', _.cloneDeep(colOptions));
           result.addChild(target);
           target = result;
-          result = new Control('Row');
+          result = new FormElement('Row');
           result.addChild(target);
           break;
       }
@@ -51,7 +53,7 @@ function getTarget(target, name){
           result = target.getChildren();
           break;
         default:
-          result = new Control('Col');
+          result = new FormElement('Col', _.cloneDeep(colOptions));
           result.addChild(target);
           break;
       }
@@ -65,8 +67,8 @@ function getTarget(target, name){
 var formStore = {
   data: _form,
 
-  createControl(type, parent, data) {
-    return new Control(type, parent, data);
+  createControl(type, data, parent) {
+    return new FormElement(type, data, parent);
   },
 
   startDrag(data) {
@@ -79,17 +81,18 @@ var formStore = {
     //remove
     if(_.isNil(target)){
       _drag.remove();
+      _selected.length = 0;
       return;
     }
 
     //拖拽到它自己上，直接返回
     if(target === _drag) return;
 
-    var dragTarget ;
+    var dragTarget;
     if(typeof _drag.getType === 'function'){
       dragTarget = _drag;
     } else {
-      dragTarget = new Control(_drag.name, null, _.cloneDeep(_drag.target));
+      dragTarget = new FormElement(_drag.name, _.cloneDeep(_drag));
     }
     dragTarget.remove();
     //target Col
@@ -103,12 +106,22 @@ var formStore = {
     }
   },
 
-  select(control, singleSelect){
+  select(formElement, singleSelect){
     if(singleSelect === true){
-      _selected = [control];
-    } else {
-      _selected.push(control);
+      _selected.length = 0;
     }
+    _selected.push(formElement);
+  },
+
+  remove(formElements){
+    if(!formElements){
+      formElements = _selected.splice(0, _selected.length);
+    }
+    if(!formElements.length){
+      formElements.remove();
+      return;
+    }
+    formElements.forEach(element => element.remove());
   },
 
   getSelected(){

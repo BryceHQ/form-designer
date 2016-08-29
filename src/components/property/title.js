@@ -15,15 +15,16 @@ import IconArrowRight from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-ri
 
 const styles = {
   btn: {
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
     padding: '0px',
     margin: '0px 3px',
     verticalAlign: 'middle',
   },
   rightBtn: {
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
+    // lineHeight: '20px',
     padding: '0px',
     margin: '0px 3px',
     verticalAlign: 'middle',
@@ -31,7 +32,7 @@ const styles = {
   },
   label: {
     // width: '20px',
-    height: '20px',
+    height: 20,
     lineHeight: '20px',
     padding: '0 5px',
     textTransform: null,

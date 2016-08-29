@@ -30,7 +30,7 @@ const Drag = React.createClass({
 
 
   render() {
-    const {uniqueKey, className, style, parent, isCloneTarget, row, col, target, ...props} = this.props;
+    const {className, style, target, source, ...props} = this.props;
     const {opacity} = this.state;
     var componentClass = classnames('drag', className);
 
@@ -52,12 +52,13 @@ const Drag = React.createClass({
 
   _handleDragStart(event) {
     this.setState({opacity: 0.3});
-    Actions.startDrag(this.props.target);
+    var {target, source} = this.props;
+    Actions.startDrag(target, source);
     event.stopPropagation();
   },
 
   _handleDragEnd(event) {
-    if(Store.getData().mode.indexOf(Mode.DRAG) === 0){
+    if(Store.getData().mode.equalTo(Mode.DRAG)){
       Actions.endDrag(false);
     }
     if(this.state.opacity !== 1){

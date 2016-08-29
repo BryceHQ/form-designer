@@ -1,9 +1,9 @@
 /*
  * base class
  */
-class Control {
-  constructor(name, parent, data) {
-    this.type = 'Control';
+class FormElement {
+  constructor(name, data, parent) {
+    this.type = 'FormElement';
     this.name = name;
     this.parent = parent;
     this.data = data || {};
@@ -56,7 +56,6 @@ class Control {
   remove() {
     if (!this.parent) return;
     this.parent.removeChild(this);
-    this.parent = null;
   }
   setData(data) {
     this.data = data;
@@ -69,6 +68,23 @@ class Control {
     return this.parent.getChildren().indexOf(this);
   }
 
+
+	getProperty() {
+    if(this.getChildren().length > 0){
+      var data = this.children[0].getData();
+  		return [{
+  			name: 'basic',
+  			data: data.attributes,
+  		}, {
+  			name: 'col',
+  			data: this.getData().attributes,
+  		},{
+  			name: 'data',
+  			data: data.attributes.data,
+  		}];
+    }
+	}
+
   toReactComponent() {
 
   }
@@ -79,4 +95,4 @@ class Control {
 }
 
 
-export default Control;
+export default FormElement;

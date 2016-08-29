@@ -4,6 +4,7 @@ const constants = {
   START_DRAG: 'START_DRAG',
   END_DRAG: 'END_DRAG',
   SELECT: 'SELECT',
+  REMOVE: 'REMOVE',
   PREVIEW: 'PREVIEW',
 
   //---------------property------------------
@@ -33,13 +34,13 @@ const constants = {
   CLEAR_ERROR: 'CLEAR_ERROR',
 };
 
-const mode = {
-  NORMAL: 'normal',
-  DRAG: 'drag',
-  EDITING: 'editing',
-  DRAG_KIT: 'kit',
+const Mode = {
+  NORMAL: 'NORMAL',
+  DRAG: 'DRAG',
+  MENU: 'MENU',
+  PROPERTY: 'PROPERTY',
 };
 
 
 export default constants;
-export {mode as Mode};
+export {Mode};

@@ -1,5 +1,3 @@
-import Container from '../mixins/draggableContainer';
-
 import DragDrop from '../draggable/dragDrop';
 
 import Col from './col';
@@ -20,14 +18,14 @@ const form = {
   Col: Col,
   Row: Row,
 
-  Datagrid: Datagrid(Container),
+  // Datagrid: Datagrid,
 
-  LabeledTextbox: LabeledTextbox(Container),
-  LabeledRadio: LabeledRadio(Container),
-  LabeledCheckbox: LabeledCheckbox(Container),
-  LabeledCombobox: LabeledCombobox(Container),
-  LabeledDatebox: LabeledDatebox(Container),
-  LabeledDateboxRange: LabeledDateboxRange(Container),
+  LabeledTextbox: LabeledTextbox,
+  LabeledRadio: LabeledRadio,
+  LabeledCheckbox: LabeledCheckbox,
+  LabeledCombobox: LabeledCombobox,
+  LabeledDatebox: LabeledDatebox,
+  LabeledDateboxRange: LabeledDateboxRange,
 
   DragDrop: DragDrop,
   Alert: Alert,
