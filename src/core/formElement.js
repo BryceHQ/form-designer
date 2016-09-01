@@ -12,15 +12,15 @@ class FormElement {
     }
   }
   getChildren() {
-      if (this.children) {
-        return this.children;
-      }
-      this.children = [];
+    if (this.children) {
       return this.children;
     }
-    /*
-     * child 可以为数组也可以为单个元素
-     */
+    this.children = [];
+    return this.children;
+  }
+  /*
+  * child 可以为数组也可以为单个元素
+  */
   addChild(child, index) {
     if (!child) return;
     if (child.length) {
@@ -68,7 +68,6 @@ class FormElement {
     return this.parent.getChildren().indexOf(this);
   }
 
-
 	getProperty() {
     if(this.getChildren().length > 0){
       var data = this.children[0].getData();
@@ -91,6 +90,28 @@ class FormElement {
 
   getType() {
     return this.type;
+  }
+
+  toJson(){
+    var children = this.getChildren().map(child => child.toJson());
+    return {
+      name: this.name,
+      attributes: this.data.attributes,
+      children,
+    };
+  }
+
+  fromJson(json){
+    if(json.children && json.children.length > 0){
+      var parent = this;
+      this.children = json.children.map(child => {
+        var element = new FormElement(child.name, child, parent);
+        return element.fromJson(child);
+      });
+    }
+    this.name = json.name;
+    this.attributes = json.attributes;
+    return this;
   }
 }
 

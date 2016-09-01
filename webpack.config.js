@@ -3,14 +3,19 @@ var webpack = require('webpack');
 
 module.exports = {
   devtool: 'source-map',//eval
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    './src/index'
-  ],
+  entry: {
+    core: [
+      'webpack-dev-server/client?http://localhost:3000',
+      'webpack/hot/only-dev-server',
+      './src/index'
+    ],
+    display: ['./src/display']
+
+  },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: "bundle.[name].js",
+    //filename: 'bundle.js',
     publicPath: '/static/'
   },
   plugins: [

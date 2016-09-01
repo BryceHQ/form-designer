@@ -65,7 +65,13 @@ function getTarget(target, name){
 }
 
 var formStore = {
-  data: _form,
+  getData() {
+    return _form;
+  },
+
+  setData(data) {
+    _form = data;
+  },
 
   createControl(type, data, parent) {
     return new FormElement(type, data, parent);
@@ -127,6 +133,7 @@ var formStore = {
   getSelected(){
     return _selected;
   },
+
 };
 
 export default formStore;

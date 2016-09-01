@@ -15,7 +15,9 @@ import formStore from './formStore.js';
 
 const CHANGE_EVENT = 'change';
 
-let _config = {};
+let _config = {
+  preview: '/json',
+};
 
 let _data = {
   property: null,
@@ -26,91 +28,16 @@ let _data = {
   menu: menuStore.data,
   title: '测试表单',
   selectKey: '',
-  form: formStore.data,
+  form: formStore.getData(),
 };
 
 let _drag = {};
 
-/*
-* 对当前的target进行转换
-*/
-function getTarget(target, name, attrs) {
-  if(target.name === name) return target;
-  // Row的child一定是Col
-  if(name === 'children'){
-    return target.name === 'Row' ? target.children : target;
-  }
-  return _.assign({name: name}, {children: [target], attributes: attrs});
-}
-
-/*
-* 特殊的array splice方法，values可以为数组。
-*/
-function splice(array, index, deleteCount, values){
-  if(values.length){
-    var args = [index, deleteCount];
-    args = args.concat(values);
-    Array.prototype.splice.apply(array, args);
-    return;
-  }
-  array.splice(index, deleteCount, values);
-}
-
-/*
-* 当row的children中为1时，直接移除该row
-*/
-function removeChild(target, index, parentIndex){
-  if(!target)return;
-  var array = target.children;
-  if(array.length === 1){
-    _data.form.children.splice(parentIndex, 1);
-    return;
-  }
-  array.splice(index, 1);
-}
-
-function endDrag({target, parent, row, col}){
-  if(!_drag.target) return;
-
-  var inner = typeof _drag.col === 'number';
-
-  //remove
-  if(_.isNil(target)){
-    removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
-    return;
-  }
-
-  //将某个Row拖拽到它自己上，直接返回
-  var rowObj = inner ? _drag.parent : _drag.target;
-  if(row === _drag.row && typeof row !== 'undefined' && rowObj.name === 'Row') return;
-
-  var dragTarget = _drag.isCloneTarget ? _.cloneDeep(_drag.target) : _drag.target;
-
-  removeChild(_drag.parent, inner ? _drag.col : _drag.row, _drag.row);
-  //target Col
-  if(typeof col === 'number'){
-    splice(parent.children, col, 0, getTarget(dragTarget, 'children'));
-  }
-  //target row
-  else {
-    if(!inner && parent){
-      target = parent;
-    }
-    if(typeof row === 'number'){
-      if(inner){
-        splice(target.children, row, 0, getTarget(dragTarget, 'children'));
-      } else {
-        splice(target.children, row, 0, getTarget(dragTarget, 'Row'));
-      }
-    } else {
-      target.children.push(getTarget(dragTarget, 'Row'));
-    }
-  }
-}
 
 function preview(callback){
   if(_config.preview){
-    var form = _.cloneDeepWith(_data.form, function(value, key){
+    var form = formStore.getData().toJson();
+    form = _.cloneDeepWith(form, function(value, key){
       if(key && typeof key === 'string' && key.indexOf('_') === 0){
         return null;
       }
@@ -125,7 +52,8 @@ function preview(callback){
         },
         success(data) {
           if(!data) return;
-          window.open(_config.preview + '/' + data);
+          //window.open(_config.preview + '/' + data);
+          window.open('/preview');
         },
         error(data) {
           callback.error(data);
@@ -137,7 +65,12 @@ function preview(callback){
 
 function save(isDeploy, isNewVersion, callback){
   if(_config.save){
-    var form = _data.form;
+    var form = formStore.getData().toJson();
+    form = _.cloneDeepWith(form, function(value, key){
+      if(key && typeof key === 'string' && key.indexOf('_') === 0){
+        return null;
+      }
+    });
     var dataInputs = getDataInputs(form);
     ajax.post(
       _config.save, {
@@ -171,15 +104,17 @@ function getDataInputs(form){
       if(!child) return;
       if(child.attributes && child.attributes.data){
         var data = child.attributes.data;
-        if(data.computed === false){
-          parseData(data, child.attributes.label);
-        } else if(_.isNil(data.computed)){
-          var {startData, endData} = data;
-          if(startData && startData.computed === false){
-            parseData(startData);
-          }
-          if(endData && endData.computed === false){
-            parseData(endData);
+        if(data.name){
+          if(data.computed === false){
+            parseData(data, child.attributes.label);
+          } else if(_.isNil(data.computed)){
+            var {startData, endData} = data;
+            if(startData && startData.computed === false){
+              parseData(startData);
+            }
+            if(endData && endData.computed === false){
+              parseData(endData);
+            }
           }
         }
       }

@@ -1,5 +1,8 @@
 import { EventEmitter } from 'events';
 
+import FormElement from '../core/formElement.js';
+
+
 const CHANGE_EVENT = 'change';
 
 let _data = {
@@ -33,7 +36,8 @@ const Store = Object.assign({}, EventEmitter.prototype, {
   setForm(data, initData) {
     if(data){
       _dataInputs = initData;
-      _data.form = data;
+      _data.form = new FormElement('Form');
+      _data.form.fromJson(data);
       this.emitChange();
     }
   },
@@ -52,5 +56,7 @@ const Store = Object.assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 });
+
+window.display = Store;
 
 export default Store;
